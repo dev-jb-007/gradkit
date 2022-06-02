@@ -222,7 +222,12 @@ app.use(function (err, req, res, next) {
 })
 //port
 const port = process.env.PORT || 5000;
-app.listen(5001, () => console.log(`Listening on port ${5001}`));
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+});
+app.listen(5001, () => console.log(`Listening on port ${port}`));
 
 // const secureServer = https.createServer({
 //   key: fs.readFileSync(path.join(__dirname, './cert/key.pem')),
