@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Upload testing</title>
+</head>
+<script>
+    // Initialize the agent at application startup.
+    const fpPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.onload = resolve;
+      script.onerror = reject;
+      script.async = true;
+      script.src = 'https://cdn.jsdelivr.net/npm/'
+        + '@fingerprintjs/fingerprintjs-pro@3/dist/fp.min.js';
+      document.head.appendChild(script);
+    })
+      .then(() => FingerprintJS.load({
+        token: 'O1smlJfqdgCK5jUd2Axo', region: 'ap'
+      }));
+  
+    // Get the visitor identifier when you need it.
+    fpPromise
+      .then(fp => fp.get())
+      .then(result =>{
+          console.log(result.visitorId);
+          document.cookie=`visitorId=${result.visitorId}`;
+      });
+  </script>
+<body>
+    <h1>Upload videos</h1>
+    
+    <form action="/video/upload" method="POST" enctype="multipart/form-data">
+        <label for="video">Upload your video</label>
+        <input type="text" name="videoTitle" placeholder="Video Title">
+        <input type="text" name="videoDesc" placeholder="Video Description">
+        <input type="file" name="video" accept="video/*">
+        <input type="file" name='image' accept="image/*">
+        <button type="submit">Submit</button>
+    </form>
+
+    <h1>Search for your video</h1>
+    <form action="/video/search" method="get">
+        <input type="text" placeholder="Enter text" name="searchText">
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>
