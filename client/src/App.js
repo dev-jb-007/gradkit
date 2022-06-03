@@ -45,7 +45,13 @@ function App() {
 
         <Header />
         <Routes>
-          <Route exact path="/" element={<HomeScreen />} />
+          {isAuthenticatedUser ? 
+          (
+            <Route exact path="/" element={<ProfileScreen />} />
+          ) : (
+            <Route exact path="/" element={<HomeScreen />} />
+          )
+          }
 
           <Route path="/reach-us" element={<ReachUsScreen />} />
 
@@ -64,7 +70,7 @@ function App() {
 
           <Route path="/verify-email/:id" element={<VerifyEmailScreen />} />
 
-          <Route path="/profile" element={<ProfileScreen />} />
+          {/* <Route path="/profile" element={<ProfileScreen />} /> */}
 
           {/* Courses */}
 
@@ -72,7 +78,7 @@ function App() {
 
           <Route path="/course/:id" element={<CourseViewScreen />} />
 
-          <Route path="/video/:id" element={<VideoPlayerScreen />} />
+          <Route path="/video/:vid/:cid" element={<VideoPlayerScreen />} />
 
           {/*  */}
 

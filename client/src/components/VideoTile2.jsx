@@ -1,27 +1,37 @@
 import React from "react";
 import styled from "styled-components/macro";
+import moment from "moment"
 
-const VideoTile2 = () => {
-  const img =
-    "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fthenewcode.com%2Fassets%2Fimages%2Fvanishing-point-2x.jpg&f=1&nofb=1";
+const VideoTile2 = ({video}) => {
+
+  console.log(video)
 
   return (
     <VideoContainer>
-      <img className="video__thumbnail" src={img} alt="" />
+      <img className="video__thumbnail" src={video.thumbnail} alt="" />
 
       <VideoDetails>
         <h4 className="video__title">
-          Lorem ipsum dolor sit amet, conse adipisicing elit.
+          {video.videoTitle}
         </h4>
 
-        <span className="video__uploader__name">Created By</span>
+
+        <p className="video__description">
+            {video?.videoDescription.length > 64
+              ? video?.videoDescription.substring(0, 64) + "..."
+              : video?.videoDescription}
+          </p>
 
         <div className="">
-          <span className="video__views">1M views</span>
+            <span className="video__date">
+              {moment(video?.createdAt).format("Do MMM YYYY")}
+            </span>
 
-          <span>&nbsp;|&nbsp;</span>
+            <span>&nbsp;|&nbsp;</span>
 
-          <span className="video__time">1 year ago</span>
+            <span className="video__time">
+              {moment(video?.createdAt).format("h:mm a")}
+            </span>
         </div>
       </VideoDetails>
     </VideoContainer>
@@ -65,8 +75,19 @@ const VideoDetails = styled.div`
     margin-bottom: 0.8rem;
   }
 
+  .video__description {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0.2rem 0 0.6rem;
+    color: #171717;
+  }
+
+
   @media (max-width: 768px) {
     width: 100%;
+    .video__description {
+      font-size: 1.2rem;
+    }
   }
 `;
 

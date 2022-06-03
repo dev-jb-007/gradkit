@@ -9,8 +9,8 @@ import  axios  from "axios";
 const CourseBlock = ({ course, enroll }) => {
   const { user } = useSelector((state) => state.user);
 
-  const handlePayment = async () => {
-    var id = "629726ebdfde405791fe3a28";
+  const handlePayment = async (course) => {
+    var id = course._id;
     try {
       const url = "/api/video/orders";
       const { data } = await axios.post(url, { id });
@@ -85,7 +85,7 @@ const CourseBlock = ({ course, enroll }) => {
 
       <div className="course__actions">
         {!enroll && (
-          <p className="course__enroll" onClick={handlePayment}>
+          <p className="course__enroll" value={course} onClick={() => handlePayment(course)}>
             Enroll
           </p>
         )}

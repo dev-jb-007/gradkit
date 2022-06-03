@@ -3,10 +3,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 
-const VideoTile = ({ video }) => {
+const VideoTile = ({ video, id }) => {
   return (
     <VideoContainer>
-      <Link to={`/video/${video._id}`}>
+      <Link to={`/video/${video._id}/${id}`}>
         <img className="video__thumbnail" src={video.thumbnail} alt="" />
       </Link>
 

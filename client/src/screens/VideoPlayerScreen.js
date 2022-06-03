@@ -4,17 +4,21 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 import { Loader, VideoPlayer, VideoTile2 } from "../components";
 import { getVideoDetails } from "../redux/actions/videoActions";
+import { getCourseById } from "../redux/actions/courseActions";
 
 const VideoPlayerScreen = () => {
-  const { id } = useParams();
+  const { vid, cid } = useParams();
 
   const dispatch = useDispatch();
+  const {course} = useSelector((state) => state.course)
+
 
   const { video, loading } = useSelector((state) => state.video);
 
   useEffect(() => {
-    dispatch(getVideoDetails(id));
-  }, [dispatch, id]);
+    dispatch(getVideoDetails(vid));
+    dispatch(getCourseById(cid))
+  }, [dispatch, cid, vid]);
 
   return (
     <VideoContainer>
@@ -34,11 +38,10 @@ const VideoPlayerScreen = () => {
 
           <VideoPlaylist>
             <h3 className="related__video-header">Related Videos -</h3>
-            <VideoTile2 />
-            <VideoTile2 />
-            <VideoTile2 />
-            <VideoTile2 />
-            <VideoTile2 />
+            {course?.videos &&
+              course?.videos.map((video, index) => (
+                <VideoTile2 video={video.videoId} key={index} />
+              ))}
           </VideoPlaylist>
         </>
       )}

@@ -153,8 +153,8 @@ exports.signOut = async (req, res, next) => {
 
 exports.getUserDetails = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
-
+    const user = await User.findById(req.user._id).populate('courses').populate({path:'courses',populate:{path:'thumbnail'}});
+    console.log(user)
     res.send({ user });
   } catch (err) {
     next(err);

@@ -13,6 +13,7 @@ const ProfileScreen = () => {
 
   const { user, loading } = useSelector((state) => state.user);
 
+
   return (
     <ProfileSection>
       {loading ? (
@@ -33,8 +34,9 @@ const ProfileScreen = () => {
 
           <h3 className="enrolled__course__header">Enrolled Course</h3>
           <CourseWrapper>
-            <CourseBlock course={course} enroll={true} />
-            <CourseBlock course={course} enroll={true} />
+            {user.courses.map((course, index) => (
+            <CourseBlock course={course} key={index} enroll={true} />
+            ))}
           </CourseWrapper>
         </>
       )}

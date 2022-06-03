@@ -54,7 +54,7 @@ const CourseViewScreen = () => {
           <CoursePlaylist>
           {course?.videos &&
               course?.videos.map((video, index) => (
-                <VideoTile video={video.videoId} key={index} />
+                <VideoTile video={video.videoId} id={course?._id} key={index} />
               ))}
           </CoursePlaylist>
         </>
