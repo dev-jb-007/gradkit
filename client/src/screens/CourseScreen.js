@@ -1,21 +1,23 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/macro";
-import { CourseBlock } from "../components";
+import { CourseBlock, Loader } from "../components";
 import Logo from "../assets/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../redux/actions/courseActions";
 
 const CourseScreen = () => {
   const dispatch = useDispatch();
-  const { courses } = useSelector((state) => state.courses);
+  const { courses, loading } = useSelector((state) => state.courses);
 
   useEffect(() => {
     dispatch(getAllCourses());
   }, [dispatch]);
 
   return (
-    <>
-      <Course>
+    <Course>
+      {loading ? (
+        <Loader />
+      ) : (
         <div className="course__container">
           <div className="course__header">
             <h1 className="course__header__title">Featured Courses</h1>
@@ -32,8 +34,8 @@ const CourseScreen = () => {
               ))}
           </div>
         </div>
-      </Course>
-    </>
+      )}
+    </Course>
   );
 };
 

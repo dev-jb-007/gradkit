@@ -2,8 +2,62 @@ import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
+import logo from "../assets/logo.svg";
+import { useSelector } from "react-redux";
+import  axios  from "axios";
 
 const CourseBlock = ({ course, enroll }) => {
+  const { user } = useSelector((state) => state.user);
+
+  const handlePayment = async () => {
+    var id = "629726ebdfde405791fe3a28";
+    try {
+      const url = "/api/video/orders";
+      const { data } = await axios.post(url, { id });
+      console.log(data);
+      dispalyRazorPay(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dispalyRazorPay = (data) => {
+    var options = {
+      key: process.env.REACT_APP_RAZORPAY_KEY,
+      amount: data.amount,
+      currency: data.currency,
+      name: "COA Course",
+      description: "Purchase COA Course",
+      image: { logo },
+      order_id: data.id,
+
+      handler: async (response) => {
+        try {
+          const verifyUrl = "/api/video/verify-payment";
+          const { data } = await axios.post(verifyUrl, response);
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      prefill: {
+        name: `${user?.name}`,
+        email: `${user?.email}`,
+        contact: "",
+      },
+      // notes: {
+      //   address: "Razorpay Corporate Office",
+      // },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
+  
+
   return (
     <Course>
       <Link to={`/course/${course?._id}`}>
@@ -31,9 +85,9 @@ const CourseBlock = ({ course, enroll }) => {
 
       <div className="course__actions">
         {!enroll && (
-          <Link to="">
-            <p className="course__enroll">Enroll</p>
-          </Link>
+          <p className="course__enroll" onClick={handlePayment}>
+            Enroll
+          </p>
         )}
 
         <Link className="course__preview" to={`/course/${course?._id}`}>

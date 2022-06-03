@@ -4,9 +4,8 @@ const router = express.Router();
 const path = require("path");
 const { isAuth } = require("../helpers/auth_middleware");
 const auth = require("../helpers/jwt-config");
-
 const multer = require("multer");
-
+// router.use(cookieParser());
 //Import Controllers and Helpers for the routes
 const Video = require("../models/video");
 const {
@@ -20,11 +19,14 @@ const {
   getAllCourses,
   checkValidBuy,
   enrollCourse,
+  generateOrderId,
+  verifyPayment
 } = require("../controllers/video");
 // const { textSearch, getVideoById, uploadVideo, deleteVideo, uploadSolution } = require('../controllers/video');
 const { reportSolution } = require("../controllers/solution");
 const { upload, uploadImage } = require("../helpers/multer_connection"); //Multer upload middleware
 const { getUserDetails } = require("../controllers/auth");
+const cookieParser = require("cookie-parser");
 // const { genWatermark } = require("../helpers/watermark-creator");
 
 //Routes
@@ -67,3 +69,5 @@ module.exports = router;
 router.post("/enrollCourse", auth, enrollCourse);
 
 router.get("/:id", auth, getVideoById);
+router.post("/orders",auth, generateOrderId);
+router.post("/verify-payment", verifyPayment);

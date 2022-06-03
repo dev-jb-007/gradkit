@@ -6,7 +6,10 @@ const Image = require("../models/image");
 const { s3 } = require("../helpers/s3_config");
 const question = require("../models/question");
 const Course = require("../models/course");
-
+const razorpay =require("razorpay");
+const crypto=require("crypto");
+const Transaction=require("../models/transaction");
+const User = require("../models/user");
 //Controller to delete video from S3 first and then from DB
 // exports.deleteVideo = async (req, res) => {
 //   await Video.find({ videoId: req.params.videoId }, (err, vid) => {
@@ -400,6 +403,79 @@ exports.getVideoById = async (req, res, next) => {
     let video = await Video.findById(req.params.id);
     res.send(video);
   } catch (err) {
+    next(err);
+  }
+};
+
+exports.generateOrderId = async (req, res, next) => {
+  try {
+    console.log("here");
+    const course = await Course.findById(req.body.id);
+    console.log(course);
+    const instance = new razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+    
+    const options = {
+      amount: course.price * 100,
+      currency: "INR",
+      receipt: crypto.randomBytes(10).toString("hex"),
+    };
+    let temp=new Transaction({
+      reciept:options.receipt,
+      course:course.id,
+      user:req.user._id,
+      amount:course.price,
+      status:'Pending'
+    });
+   
+    await instance.orders.create(options,async (err, order) => {
+      if (err) {
+        console.log(err);
+        temp.status='Failed'
+        await temp.save();
+      } else {
+        console.log(order);
+        temp.orderId=order.id;
+        await temp.save();
+        res.send(order);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+exports.verifyPayment = async (req, res, next) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+    const temp=await Transaction.findOne({orderId:razorpay_order_id});
+    
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
+
+    if (expectedSign === razorpay_signature) {
+      temp.status='Done';
+      let course=await Course.findById(temp.course);
+      course.enrolled.push(temp.user);
+      let user =await User.findById(temp.user);
+      user.courses.push(temp.course);
+      await user.save();
+      await temp.save();
+      await course.save();
+      res.send("Payment Successful");
+    } else {
+      res.send("Invalid Signature");
+    }
+  } catch (err) {
+    console.log(err);
     next(err);
   }
 };

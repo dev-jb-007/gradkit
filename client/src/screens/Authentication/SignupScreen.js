@@ -2,13 +2,19 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Logo from "../../assets/logo.svg";
 import SignImg from "../../assets/atom.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, clearErrors } from "../../redux/actions/userActions";
+import { Loader } from "../../components";
 
 const SignupScreen = () => {
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state) => state.user);
+
+  const history = useNavigate();
+
+  const { error, isAuthenticatedUser, loading } = useSelector(
+    (state) => state.user
+  );
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,57 +31,65 @@ const SignupScreen = () => {
       dispatch(clearErrors());
       return alert;
     }
-  }, [dispatch, error]);
+
+    if (isAuthenticatedUser) {
+      history("/");
+    }
+  }, [dispatch, error, isAuthenticatedUser, history]);
 
   return (
     <SignUpSection>
-      <SignUpContainer>
-        <div className="image__container">
-          <img src={SignImg} alt="" />
-        </div>
-        <div className="form__container">
-          <form onSubmit={registerUser}>
-            <img src={Logo} alt="" className="form__logo" />
+      {loading ? (
+        <Loader />
+      ) : (
+        <SignUpContainer>
+          <div className="image__container">
+            <img src={SignImg} alt="" />
+          </div>
+          <div className="form__container">
+            <form onSubmit={registerUser}>
+              <img src={Logo} alt="" className="form__logo" />
 
-            <h1>Sign Up</h1>
+              <h1>Sign Up</h1>
 
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
 
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
-            <button type="submit" className="form__button">
-              Sign Up
-            </button>
+              <button type="submit" className="form__button">
+                Sign Up
+              </button>
 
-            <div className="form__links">
-              <Link to="/signin">Already signed up?</Link>
-            </div>
-          </form>
-        </div>
-      </SignUpContainer>
+              <div className="form__links">
+                <Link to="/signin">Already signed up?</Link>
+              </div>
+            </form>
+          </div>
+        </SignUpContainer>
+      )}
     </SignUpSection>
   );
 };

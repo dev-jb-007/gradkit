@@ -18,7 +18,7 @@ import VerifyEmailScreen from "./screens/Authentication/VerifyEmailScreen";
 
 import ReachUsScreen from "./screens/ReachUsScreen";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./redux/actions/userActions";
 import { useEffect } from "react";
 import {
@@ -27,8 +27,11 @@ import {
   TermsScreen,
 } from "./screens/Support";
 import UploadScreen from "./screens/UploadScreen";
+import Error404Screen from "./screens/Error404Screen";
 
 function App() {
+  const { user, isAuthenticatedUser } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -79,7 +82,11 @@ function App() {
 
           <Route path="/refund-policy" element={<RefundPolicyScreen />} />
 
-          <Route path="/admin" element={<UploadScreen />} />
+          {isAuthenticatedUser && user && user.role === 2 && (
+            <Route path="/admin" element={<UploadScreen />} />
+          )}
+
+          <Route path="*" element={<Error404Screen />} />
         </Routes>
 
         {/* Footer */}

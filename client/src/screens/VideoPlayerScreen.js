@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
-import { VideoPlayer, VideoTile2 } from "../components";
+import { Loader, VideoPlayer, VideoTile2 } from "../components";
 import { getVideoDetails } from "../redux/actions/videoActions";
 
 const VideoPlayerScreen = () => {
@@ -10,7 +10,7 @@ const VideoPlayerScreen = () => {
 
   const dispatch = useDispatch();
 
-  const { video } = useSelector((state) => state.video);
+  const { video, loading } = useSelector((state) => state.video);
 
   useEffect(() => {
     dispatch(getVideoDetails(id));
@@ -18,24 +18,30 @@ const VideoPlayerScreen = () => {
 
   return (
     <VideoContainer>
-      <VideoWrapper>
-        <VideoPlayer url={video?.videoURL} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <VideoWrapper>
+            <VideoPlayer url={video?.videoURL} />
 
-        <VideoDetails>
-          <h3 className="video__title">{video?.videoTitle}</h3>
+            <VideoDetails>
+              <h3 className="video__title">{video?.videoTitle}</h3>
 
-          {/* <p className="video__description">{video?.videoDescription}</p> */}
-        </VideoDetails>
-      </VideoWrapper>
+              <p className="video__description">{video?.videoDescription}</p>
+            </VideoDetails>
+          </VideoWrapper>
 
-      <VideoPlaylist>
-        <h3 className="related__video-header">Related Videos -</h3>
-        <VideoTile2 />
-        <VideoTile2 />
-        <VideoTile2 />
-        <VideoTile2 />
-        <VideoTile2 />
-      </VideoPlaylist>
+          <VideoPlaylist>
+            <h3 className="related__video-header">Related Videos -</h3>
+            <VideoTile2 />
+            <VideoTile2 />
+            <VideoTile2 />
+            <VideoTile2 />
+            <VideoTile2 />
+          </VideoPlaylist>
+        </>
+      )}
     </VideoContainer>
   );
 };
@@ -61,15 +67,20 @@ const VideoWrapper = styled.div`
 
 const VideoDetails = styled.div`
   padding: 1.4rem 0;
-  border-bottom: 0.2rem solid #e6e6e6;
+  color: var(--font-light-primary);
 
   .video__title {
     font-weight: 600;
     font-size: 2rem;
-    color: var(--font-dark-primary);
+  }
+
+  .video__description {
+    font-size: 1.4rem;
+    margin-top: 0.4rem;
   }
 
   @media (max-width: 768px) {
+    border-bottom: 0.2rem solid #e6e6e6;
     .video__title {
       font-size: 1.6rem;
     }
@@ -84,7 +95,7 @@ const VideoPlaylist = styled.div`
   .related__video-header {
     font-size: 2rem;
     font-weight: 600;
-    margin: 1.4rem 0;
+    margin-bottom: 1.4rem;
   }
 
   @media (max-width: 768px) {
@@ -92,6 +103,7 @@ const VideoPlaylist = styled.div`
 
     .related__video-header {
       font-size: 1.8rem;
+      margin: 1.4rem 0;
     }
   }
 `;

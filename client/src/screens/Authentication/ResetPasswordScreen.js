@@ -11,16 +11,17 @@ import {
   clearMessages,
 } from "../../redux/actions/userActions";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Loader } from "../../components";
 
 const ResetPasswordScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { token } = useParams();
 
-  // const history = useNavigate();
+  const history = useNavigate();
 
-  const { error, loading, message } = useSelector(
+  const { error, message, loading } = useSelector(
     (state) => state.forgotPassword
   );
 
@@ -35,48 +36,53 @@ const ResetPasswordScreen = () => {
     if (error) {
       setTimeout(() => dispatch(clearErrors()), 2000);
     }
+
     if (message) {
       setTimeout(() => dispatch(clearMessages()), 2000);
-      // setTimeout(() => history("/login"), 2000);
+      setTimeout(() => history("/login"), 2000);
     }
-  }, [error, dispatch, message]);
+  }, [error, dispatch, message, history]);
 
   return (
     <ResetPassSection>
-      <ResetPassContainer>
-        <div className="image__container">
-          <img src={SignImg} alt="" />
-        </div>
-        <div className="form__container">
-          <form onSubmit={resetPass}>
-            <img src={Logo} alt="" className="form__logo" />
+      {loading ? (
+        <Loader />
+      ) : (
+        <ResetPassContainer>
+          <div className="image__container">
+            <img src={SignImg} alt="" />
+          </div>
+          <div className="form__container">
+            <form onSubmit={resetPass}>
+              <img src={Logo} alt="" className="form__logo" />
 
-            <h1>Reset Password</h1>
+              <h1>Reset Password</h1>
 
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
-            <label htmlFor="confirm-password">Confirm Password</label>
-            <input
-              type="password"
-              id="confirm-password"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+              <label htmlFor="confirm-password">Confirm Password</label>
+              <input
+                type="password"
+                id="confirm-password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
 
-            <button type="submit" className="form__button">
-              Reset
-            </button>
-          </form>
-        </div>
-      </ResetPassContainer>
+              <button type="submit" className="form__button">
+                Reset
+              </button>
+            </form>
+          </div>
+        </ResetPassContainer>
+      )}
     </ResetPassSection>
   );
 };

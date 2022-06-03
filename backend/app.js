@@ -42,6 +42,7 @@ const app = express();
 // app.use((req, res, next) => {
 //     req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
 // })
+app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -62,16 +63,16 @@ app.use(
 require("./helpers/passport_config");
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cookieParser());
+
 
 
 const addView=require('./helpers/views');
 const nonlogged = require("./models/nonlogged");
 
 //routes middleware
-app.use("/video", videoRoutes);
-app.use("/auth", authRoutes);
-app.use("/question", questionRoutes);
+app.use("/api/video", videoRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/question", questionRoutes);
 
 app.post('/phoneVerify',async (req,res,next)=>{
   let num="+91"+req.body.number;
@@ -231,11 +232,11 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
 });
-https.createServer(httpsOptions, app)
-    .listen(5000, () => {
-        console.log('HTTPS Server started on port 5000');
-    })
-//app.listen(5001, () => console.log(`Listening on port ${port}`));
+// https.createServer(httpsOptions, app)
+//     .listen(5001, () => {
+//         console.log('HTTPS Server started on port 5000');
+//     })
+app.listen(5001, () => console.log(`Listening on port ${port}`));
 
 // const secureServer = https.createServer({
 //   key: fs.readFileSync(path.join(__dirname, './cert/key.pem')),

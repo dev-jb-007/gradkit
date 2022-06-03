@@ -14,7 +14,7 @@ export const getVideoDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: VIDEO_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/video/${id}`);
+    const { data } = await axios.get(`/api/video/${id}`);
 
     dispatch({
       type: VIDEO_DETAILS_SUCCESS,
@@ -45,7 +45,7 @@ export const createVideo = (formData) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/video/devpatel/uploadCourseVideo`,
+      `/api/video/devpatel/uploadCourseVideo`,
       formData,
       config
     );

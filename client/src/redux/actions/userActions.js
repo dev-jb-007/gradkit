@@ -37,7 +37,7 @@ export const login = (email, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/auth/signin`,
+      `/api/auth/signin`,
       { email, password },
       config
     );
@@ -68,7 +68,7 @@ export const register = (name, email, password) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/auth/signup`,
+      `/api/auth/signup`,
       { name, email, password },
       config
     );
@@ -91,7 +91,7 @@ export const verifyUser = (code) => async (dispatch) => {
   try {
     dispatch({ type: VERIFY_USER_REQUEST });
 
-    const { data } = await axios.get(`/auth/signup/${code}`);
+    const { data } = await axios.get(`/api/auth/signup/${code}`);
 
     dispatch({
       type: VERIFY_USER_SUCCESS,
@@ -111,7 +111,7 @@ export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
 
-    const { data } = await axios.get(`/auth/profile`);
+    const { data } = await axios.get(`/api/auth/profile`);
 
     dispatch({
       type: LOAD_USER_SUCCESS,
@@ -129,7 +129,7 @@ export const loadUser = () => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get(`/auth/signout`);
+    await axios.get(`/api/auth/signout`);
 
     dispatch({
       type: USER_LOGOUT_SUCCESS,
@@ -155,7 +155,7 @@ export const forgotPassword = (email) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/auth/forgetPassword`,
+      `/api/auth/forgetPassword`,
       { email },
       config
     );
@@ -177,7 +177,7 @@ export const resetPassword = (token, password) => async (dispatch) => {
     const config = { headers: { "Content-Type": "application/json" } };
 
     const { data } = await axios.post(
-      `/auth/changePassword/${token}`,
+      `/api/auth/changePassword/${token}`,
       { password },
       config
     );

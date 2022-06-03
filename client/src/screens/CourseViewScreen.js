@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
-import { VideoTile } from "../components";
+import { Loader, VideoTile } from "../components";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ const CourseViewScreen = () => {
 
   const { course } = useSelector((state) => state.course);
 
-  const { isAuthenticatedUser } = useSelector((state) => state.user);
+  const { isAuthenticatedUser, loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (!isAuthenticatedUser) {
@@ -29,28 +29,36 @@ const CourseViewScreen = () => {
 
   return (
     <CourseSection>
-      <CourseDetails>
-        <h3 className="course__title">{course?.title}</h3>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <CourseDetails>
+            <h3 className="course__title">{course?.title}</h3>
 
-        <p className="course__description">{course?.description}</p>
+            <p className="course__description">{course?.description}</p>
 
-        <p className="course__semister">Semister - {course?.semister}</p>
+            <p className="course__semister">Semister - {course?.semister}</p>
 
-        <p className="course__subject__code">
-          Subject Code - {course?.subjectCode}
-        </p>
+            <p className="course__subject__code">
+              Subject Code - {course?.subjectCode}
+            </p>
 
-        <p className="course__date">
-          Created at&nbsp;
-          {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
-          {moment(course?.createdAt).format("h:mm a")}
-        </p>
-      </CourseDetails>
+            <p className="course__date">
+              Created at&nbsp;
+              {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
+              {moment(course?.createdAt).format("h:mm a")}
+            </p>
+          </CourseDetails>
 
-      <CoursePlaylist>
-        {course?.videos &&
-          course?.videos.map((video) => <VideoTile video={video.videoId} />)}
-      </CoursePlaylist>
+          <CoursePlaylist>
+          {course?.videos &&
+              course?.videos.map((video, index) => (
+                <VideoTile video={video.videoId} key={index} />
+              ))}
+          </CoursePlaylist>
+        </>
+      )}
     </CourseSection>
   );
 };

@@ -16,8 +16,8 @@ const ContactSection = () => {
             <label htmlFor="email">Email</label>
             <input type="email" id="email" required />
 
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" required />
+            <label htmlFor="message">Message</label>
+            <input type="message" id="message" required />
 
             <button type="submit" className="form__button">
               Send

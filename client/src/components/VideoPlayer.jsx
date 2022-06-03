@@ -13,6 +13,10 @@ const VideoPlayer = ({ url }) => {
         // loop="true"
         height="100%"
         // autoplay="true"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          return false;
+        }}
         controls
         muted={true}
         config={{

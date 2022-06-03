@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Logo from "../../assets/logo.svg";
 import SignImg from "../../assets/atom.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,6 +11,7 @@ import {
   clearMessages,
   forgotPassword,
 } from "../../redux/actions/userActions";
+import { Loader } from "../../components";
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const ForgotPasswordScreen = () => {
 
   const dispatch = useDispatch();
 
-  // const history = useNavigate();
+  const history = useNavigate();
 
   const { error, message, loading } = useSelector(
     (state) => state.forgotPassword
@@ -33,53 +34,59 @@ const ForgotPasswordScreen = () => {
     if (error) {
       setTimeout(() => dispatch(clearErrors()), 2000);
     }
+
     if (message) {
       setTimeout(() => dispatch(clearMessages()), 2000);
-      // setTimeout(() => history("/login"), 2000);
+
+      setTimeout(() => history("/login"), 2000);
     }
-  }, [error, dispatch, message]);
+  }, [error, dispatch, message, history]);
 
   return (
     <ForgotPassSection>
-      <ForgotPassContainer>
-        <div className="form__container">
-          <form onSubmit={forgotPass}>
-            <img src={Logo} alt="" className="form__logo" />
+      {loading ? (
+        <Loader />
+      ) : (
+        <ForgotPassContainer>
+          <div className="form__container">
+            <form onSubmit={forgotPass}>
+              <img src={Logo} alt="" className="form__logo" />
 
-            <h1>Forgot Password</h1>
+              <h1>Forgot Password</h1>
 
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-            <label htmlFor="confirm-email">Confirm Email</label>
-            <input
-              type="email"
-              id="confirm-email"
-              required
-              value={confirmEmail}
-              onChange={(e) => setConfirmEmail(e.target.value)}
-            />
+              <label htmlFor="confirm-email">Confirm Email</label>
+              <input
+                type="email"
+                id="confirm-email"
+                required
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+              />
 
-            <button type="submit" className="form__button">
-              Send
-            </button>
+              <button type="submit" className="form__button">
+                Send
+              </button>
 
-            <div className="form__links">
-              <Link to="/signin">Sign In</Link>
-              <Link to="/signup">Sign Up</Link>
-            </div>
-          </form>
-        </div>
-        <div className="image__container">
-          <img src={SignImg} alt="" />
-        </div>
-      </ForgotPassContainer>
+              <div className="form__links">
+                <Link to="/signin">Sign In</Link>
+                <Link to="/signup">Sign Up</Link>
+              </div>
+            </form>
+          </div>
+          <div className="image__container">
+            <img src={SignImg} alt="" />
+          </div>
+        </ForgotPassContainer>
+      )}
     </ForgotPassSection>
   );
 };

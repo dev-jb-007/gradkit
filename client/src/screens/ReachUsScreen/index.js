@@ -5,7 +5,7 @@ import ContactSection from "./ContactSection";
 const ReachUsScreen = () => {
   return (
     <>
-      {/* <AboutSection /> */}
+      <AboutSection />
       <ContactSection />
     </>
   );

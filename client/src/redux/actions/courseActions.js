@@ -24,7 +24,7 @@ export const createCourse = (formData) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `/video/devpatel/uploadCourse`,
+      `/api/video/devpatel/uploadCourse`,
       formData,
       config
     );
@@ -47,8 +47,8 @@ export const getAllCourses = () => async (dispatch) => {
   try {
     dispatch({ type: COURSE_LIST_REQUEST });
 
-    const { data } = await axios.get(`/video/courses`);
-    console.log(data);
+    const { data } = await axios.get(`/api/video/courses`);
+
     dispatch({
       type: COURSE_LIST_SUCCESS,
       payload: data,
@@ -65,7 +65,7 @@ export const getCourseById = (id) => async (dispatch) => {
   try {
     dispatch({ type: COURSE_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/video/courses/${id}`);
+    const { data } = await axios.get(`/api/video/courses/${id}`);
 
     dispatch({
       type: COURSE_DETAILS_SUCCESS,

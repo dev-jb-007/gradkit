@@ -12,9 +12,21 @@ const AboutSection = () => {
         <div className="text__container">
           <h1>About Us</h1>
 
+          <br />
+
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Repudiandae, quisquam.
+            Repudiandae, quisquam. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Repudiandae, quisquam. Lorem ipsum dolor sit amet
+            consectetur adipisicing elit. Repudiandae, quisquam.
+          </p>
+
+          <br />
+
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Repudiandae, quisquam. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Repudiandae, quisquam. Lorem ipsum dolor sit amet
           </p>
         </div>
       </AboutContainer>
@@ -48,7 +60,6 @@ const AboutContainer = styled.div`
     padding: 2rem;
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
 
     h1 {

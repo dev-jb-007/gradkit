@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import CourseBlock from "../components/CourseBlock";
 import { useSelector } from "react-redux";
+import { Loader } from "../components";
 
 const ProfileScreen = () => {
   const course = {
@@ -10,33 +11,38 @@ const ProfileScreen = () => {
     thumbnail: "https://via.placeholder.com/150",
   };
 
-  const { user } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
 
   return (
     <ProfileSection>
-      <div className="profile__header">
-        <img
-          src="https://images.pexels.com/photos/2179483/pexels-photo-2179483.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          alt="profile"
-        />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className="profile__header">
+            <img
+              src="https://images.pexels.com/photos/2179483/pexels-photo-2179483.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+              alt="profile"
+            />
 
-        <div className="profile__header__info">
-          <h1 className="user__name">{user?.name}</h1>
-          <p className="user__email">{user?.email}</p>
-        </div>
-      </div>
+            <div className="profile__header__info">
+              <h1 className="user__name">{user?.name}</h1>
+              <p className="user__email">{user?.email}</p>
+            </div>
+          </div>
 
-      <h3 className="enrolled__course__header">Enrolled Course</h3>
-      <CourseWrapper>
-        <CourseBlock course={course} enroll={true} />
-        <CourseBlock course={course} enroll={true} />
-      </CourseWrapper>
+          <h3 className="enrolled__course__header">Enrolled Course</h3>
+          <CourseWrapper>
+            <CourseBlock course={course} enroll={true} />
+            <CourseBlock course={course} enroll={true} />
+          </CourseWrapper>
+        </>
+      )}
     </ProfileSection>
   );
 };
 
 const ProfileSection = styled.div`
-  position: relative;
   width: 100%;
   min-height: calc(100vh - 7.6rem);
   padding: 2rem 4rem;

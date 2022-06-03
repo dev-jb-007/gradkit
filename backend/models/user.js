@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
         enum: ['active', 'pending'],
         default: 'pending'
     },
+    courses:[{
+        type:mongoose.SchemaTypes.ObjectId,
+        ref:'course'
+    }],
     hash: String,
     salt: String,
     tokens:[{
