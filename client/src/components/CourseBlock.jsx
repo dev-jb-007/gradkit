@@ -61,7 +61,7 @@ const CourseBlock = ({ course, enroll }) => {
   return (
     <Course>
       <Link to={`/course/${course?._id}`}>
-        <img src={course.thumbnail.imageURL} className="course__image" alt="" />
+        <img src={course?.thumbnail?.imageURL} className="course__image" alt="" />
       </Link>
 
       <div className="course__details">

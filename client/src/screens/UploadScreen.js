@@ -3,7 +3,8 @@ import styled from "styled-components/macro";
 import { useDispatch } from "react-redux";
 import { createVideo } from "../redux/actions/videoActions";
 import { createCourse } from "../redux/actions/courseActions";
-// import { Loader } from "../components";
+import { Loader } from "../components";
+import { useSelector } from "react-redux";
 
 const UploadScreen = () => {
   const dispatch = useDispatch();
@@ -55,9 +56,9 @@ const UploadScreen = () => {
     dispatch(createVideo(videoForm));
   };
 
-  // var { loading } = useSelector((state) => state.addVideo);
+  const { vLoading } = useSelector((state) => state.addVideo);
 
-  // var { loading } = useSelector((state) => state.addCourse);
+  const { cLoading } = useSelector((state) => state.addCourse);
 
   /* Tab Change */
 
@@ -65,9 +66,9 @@ const UploadScreen = () => {
 
   return (
     <UploadSection>
-      {/* {loading ? (
+      {cLoading || vLoading ? (
         <Loader />
-      ) : ( */}
+      ) : (
       <FormContainer>
         <div className="form__changer">
           <button
@@ -254,7 +255,7 @@ const UploadScreen = () => {
           </VideoForm>
         )}
       </FormContainer>
-      {/* )} */}
+      )} 
     </UploadSection>
   );
 };

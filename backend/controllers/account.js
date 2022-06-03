@@ -2,16 +2,16 @@ const uuid = require("uuid").v4;
 const sendMail = require("../helpers/send_mail");
 const Code = require("../models/codes");
 const User = require("../models/user");
-
+const {encryptPassword}=require("../helpers/password_methods");
 exports.generateVerificationMail = async (req, res, next) => {
   try {
     let email = req.body.email;
     let ucode = uuid();
-
+    console.log(email);
     await sendMail(
       email,
       "Please Activate Your Doubt Account",
-      `Click on the link below to activate your account - https://localhost:5001/auth/signup/${ucode}`
+      `Click on the link below to activate your account - https://www.gradkit.in/verify-email/${ucode}`
     );
 
     let code = new Code({ code: ucode, email, codeType: "verify" });
@@ -53,7 +53,7 @@ exports.forgetPassword = async (req, res, next) => {
       sendMail(
         req.body.email,
         "Password Changed",
-        `Please follow this link to reset your password - https://localhost:5001/auth/changePassword/${code}`
+        `Please follow this link to reset your password - https://www.gradkit.in/reset-password/${code}`
       );
       setTimeout(async () => {
         await Pass.findByIdAndDelete(Pcode._id);
@@ -76,7 +76,7 @@ exports.changePassword = async (req, res, next) => {
     let user = await User.findOne({ email: email });
 
     const saltHash = encryptPassword(req.body.password);
-
+    console.log(saltHash);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
     user.salt = salt;

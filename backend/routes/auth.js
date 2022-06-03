@@ -1,7 +1,7 @@
 //Dependencies
 const router = require("express").Router();
 const path = require("path");
-const auth = require("../helpers/jwt-config");
+const {auth} = require("../helpers/jwt-config");
 //Controllers
 const {
   sessionSignUp,

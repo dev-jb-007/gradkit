@@ -9,7 +9,7 @@ const multer = require('multer');
 const { upload, uploadImage } = require('../helpers/multer_connection');
 //Controllers and Helpers
 const { askQuestion, listQuestions } = require("../controllers/question");
-const auth = require("../helpers/jwt-config");
+const {auth} = require("../helpers/jwt-config");
 const { isAuth } = require("../helpers/auth_middleware")
 const { tagGenerator } = require("../helpers/tag_generator");
 const { textSearch, getVideoById, uploadVideo, deleteVideo, uploadSolution } = require('../controllers/video');

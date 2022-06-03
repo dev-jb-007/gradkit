@@ -2,6 +2,7 @@ const User = require("../models/user");
 const Code = require("../models/codes");
 const passport = require("passport");
 
+
 const {
   encryptPassword,
   validatePassword,
@@ -19,7 +20,7 @@ exports.sessionSignUp = (req, res) => {
     salt: salt,
     hash: hash,
   });
-
+  
   newUser.save().then(console.log(newUser));
   res.redirect("/auth/signin");
 };
@@ -27,7 +28,7 @@ exports.sessionSignUp = (req, res) => {
 exports.jwtSignUp = async (req, res, next) => {
   try {
     console.log(req.body);
-    console.log(req.data);
+    // console.log(req.data);
     const saltHash = encryptPassword(req.body.password);
 
     const salt = saltHash.salt;
@@ -82,19 +83,23 @@ exports.jwtSignIn = async (req, res, next) => {
   try {
     const body = req.body;
     console.log(req.body);
-
     const user = await User.findOne({
       email: body.email,
-    });
-
+    }).populate('courses').populate({path:'courses',populate:{path:'thumbnail'}});
+    
     const salt = user.salt;
     const hash = user.hash;
 
     const found = validatePassword(body.password, salt, hash);
-    // console.log(found);
+    console.log(found);
 
     if (found) {
       if (user.activationStatus === "active") {
+        console.log(user.tokens);
+        if(user.tokens.length!==0)
+        {
+          throw new Error('Already Signed On Another Account');
+        }
         let token = await user.createAuthToken();
         res.cookie("jwt", token, {
           expires: new Date(Date.now() + 5000000000),
@@ -109,6 +114,7 @@ exports.jwtSignIn = async (req, res, next) => {
       throw new Error("Enter Valid Credantials");
     }
   } catch (err) {
+    // console.log(err);
     err.status = 403;
     next(err);
   }

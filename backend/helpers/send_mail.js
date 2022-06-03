@@ -32,7 +32,7 @@ async function main(email, subject, message) {
     secure: false, // true for 465, false for other ports
     auth: {
       user: "doubt.co923@gmail.com", // generated ethereal user
-      pass: "cupnptsauadzujnc", // generated ethereal password
+      pass: "yghwxshptssxslmm", // generated ethereal password
     },
   });
 

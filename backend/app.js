@@ -24,6 +24,9 @@ const authRoutes = require("./routes/auth");
 const questionRoutes = require("./routes/question");
 const generalRoutes = require("./routes/general");
 const cookieParser = require("cookie-parser");
+const errorMiddleware = require("./middlewares/error")
+
+
 //db connection
 mongoose.connect("" + process.env.MONGODB_URL, {}, () => {
   console.log("Connected to DB");
@@ -215,6 +218,9 @@ app.get('/addview',async(req,res,next)=>{
 })
 
 
+// 
+// app.use(errorMiddleware);
+
 
 
 
@@ -222,9 +228,21 @@ app.get('/addview',async(req,res,next)=>{
 // -------------------------------------------------------------------
 
 
+
+// Handling uncaught error
+// process.on("uncaughtException", (err) => {
+//   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+//   console.log(err.name, err.message);
+//   process.exit(1);
+// });
+
+
 app.use(function (err, req, res, next) {
-  res.status(err.status||500).send({status:err.status||500,error:err.message});
-})
+  console.log(err);
+  res.status(err.status).send({status:err.status,error:err.message});
+});
+
+
 //port
 const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, "../client/build")));
@@ -244,3 +262,20 @@ app.listen(5001, () => console.log(`Listening on port ${port}`));
 // }, app);
 
 // secureServer.listen(port, () => console.log(`Secure server 🚀🔑 on port ${port}`))
+
+
+// Unhandled Promise Rejection
+// process.on("unhandledRejection", (err) => {
+//   console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+//   console.log(err.name, err.message);
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });
+
+// process.on("SIGTERM", () => {
+//   console.log("👋 SIGTERM RECEIVED. Shutting down gracefully");
+//   server.close(() => {
+//     console.log("💥 Process terminated!");
+//   });
+// });

@@ -16,20 +16,20 @@ export const createCourseReducer = (state = { course: {} }, action) => {
     case COURSE_CREATE_REQUEST:
       return {
         ...state,
-        loading: true,
+        cLoading: true,
       };
 
     case COURSE_CREATE_SUCCESS:
       return {
         ...state,
-        loading: false,
+        cLoading: false,
         course: action.payload,
       };
 
     case COURSE_CREATE_FAIL:
       return {
         ...state,
-        loading: false,
+        cLoading: false,
         error: action.payload,
       };
 

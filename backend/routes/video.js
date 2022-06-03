@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const { isAuth } = require("../helpers/auth_middleware");
-const auth = require("../helpers/jwt-config");
+const {auth, isAdmin} = require("../helpers/jwt-config");
 const multer = require("multer");
 // router.use(cookieParser());
 //Import Controllers and Helpers for the routes
@@ -47,11 +47,13 @@ router.get("/search", textSearch);
 // router.get('/:videoId', getVideoById);
 router.post(
   "/devpatel/uploadCourse",
+  auth,isAdmin,
   upload.fields([{ name: "image", maxCount: 1 }]),
   uploadCourse
 ); //Middleware uploads to S3 while controllers update DB
 router.post(
   "/devpatel/uploadCourseVideo",
+  auth,isAdmin,
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "video", maxCount: 1 },

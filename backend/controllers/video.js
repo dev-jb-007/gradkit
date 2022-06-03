@@ -409,8 +409,11 @@ exports.getVideoById = async (req, res, next) => {
 
 exports.generateOrderId = async (req, res, next) => {
   try {
-    console.log("here");
     const course = await Course.findById(req.body.id);
+    if(course.enrolled.includes(req.user._id))
+    {
+      throw new Error('Already Bought That Course');
+    }
     console.log(course);
     const instance = new razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
@@ -472,6 +475,8 @@ exports.verifyPayment = async (req, res, next) => {
       await course.save();
       res.send("Payment Successful");
     } else {
+      temp.status='Fail';
+      await temp.save();
       res.send("Invalid Signature");
     }
   } catch (err) {

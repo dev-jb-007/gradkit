@@ -88,7 +88,7 @@ function App() {
 
           <Route path="/refund-policy" element={<RefundPolicyScreen />} />
 
-          {isAuthenticatedUser && user && user.role === 2 && (
+          {isAuthenticatedUser && user && user.role >= 1 && (
             <Route path="/admin" element={<UploadScreen />} />
           )}
 

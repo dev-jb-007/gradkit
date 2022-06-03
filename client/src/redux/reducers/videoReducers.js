@@ -43,18 +43,18 @@ export const addVideoReducer = (state = { video: {} }, action) => {
     case VIDEO_ADD_REQUEST:
       return {
         ...state,
-        loading: true,
+        vLoading: true,
       };
     case VIDEO_ADD_SUCCESS:
       return {
         ...state,
-        loading: false,
+        vLoading: false,
         video: action.payload,
       };
     case VIDEO_ADD_FAIL:
       return {
         ...state,
-        loading: false,
+        vLoading: false,
         error: action.payload,
       };
     case CLEAR_ERRORS:
