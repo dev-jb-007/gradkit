@@ -15,6 +15,10 @@ const Solution=require('./models/solution');
 const client=require("twilio")(process.env.ACCOUNT_SID,process.env.AUTH_TOKEN);
 // const client=require("twilio")(process.env.ACCOUNT_SID,process.env.AUTH_TOKEN);
 //import routes
+const httpsOptions = {
+    cert:fs.readFileSync(path.join(__dirname, 'certificate.pem')),
+    key:fs.readFileSync(path.join(__dirname, 'privatekay.pem'))
+}
 const videoRoutes = require("./routes/video");
 const authRoutes = require("./routes/auth");
 const questionRoutes = require("./routes/question");
@@ -227,7 +231,11 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
 });
-app.listen(5001, () => console.log(`Listening on port ${port}`));
+https.createServer(httpsOptions, app)
+    .listen(5000, () => {
+        console.log('HTTPS Server started on port 5000');
+    })
+//app.listen(5001, () => console.log(`Listening on port ${port}`));
 
 // const secureServer = https.createServer({
 //   key: fs.readFileSync(path.join(__dirname, './cert/key.pem')),
