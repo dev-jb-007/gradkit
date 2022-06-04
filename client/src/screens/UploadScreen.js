@@ -159,7 +159,7 @@ const UploadScreen = () => {
               onChange={(e) => setCThumbnail(e.target.files[0])}
             />
 
-            <button disabled={!this.state.value} className="form__button" type="submit"
+            <button  className="form__button" type="submit"
             >
               Upload
             </button>
