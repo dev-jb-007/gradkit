@@ -1,7 +1,8 @@
 const User = require("../models/user");
 const Code = require("../models/codes");
 const passport = require("passport");
-
+const catchAsync = require("../utils/catchAsync");
+const ErrorHandler = require("../utils/errorHandler");
 
 const {
   encryptPassword,
@@ -20,38 +21,34 @@ exports.sessionSignUp = (req, res) => {
     salt: salt,
     hash: hash,
   });
-  
+
   newUser.save().then(console.log(newUser));
   res.redirect("/auth/signin");
 };
 
-exports.jwtSignUp = async (req, res, next) => {
-  try {
-    console.log(req.body);
-    // console.log(req.data);
-    const saltHash = encryptPassword(req.body.password);
+exports.jwtSignUp = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  // console.log(req.data);
+  const saltHash = encryptPassword(req.body.password);
 
-    const salt = saltHash.salt;
-    const hash = saltHash.hash;
+  const salt = saltHash.salt;
+  const hash = saltHash.hash;
 
-    const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      salt: salt,
-      hash: hash,
-    });
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    salt: salt,
+    hash: hash,
+  });
 
-    let token = await user.createAuthToken();
-    res.cookie("jwt", token, {
-      expires: new Date(Date.now() + 5000000000),
-      httpOnly: true,
-    });
-    // console.log("log1");
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
+  // let token = await user.createAuthToken();
+  // res.cookie("jwt", token, {
+  //   expires: new Date(Date.now() + 5000000000),
+  //   httpOnly: true,
+  // });
+  // console.log("log1");
+  next();
+});
 
 exports.verifySignUp = async (req, res, next) => {
   try {
@@ -79,26 +76,31 @@ exports.verifySignUp = async (req, res, next) => {
   }
 };
 
-exports.jwtSignIn = async (req, res, next) => {
-  try {
-    const body = req.body;
-    console.log(req.body);
-    const user = await User.findOne({
-      email: body.email,
-    }).populate('courses').populate({path:'courses',populate:{path:'thumbnail'}});
-    
+exports.jwtSignIn = catchAsync(async (req, res, next) => {
+  const body = req.body;
+  console.log(req.body);
+  const user = await User.findOne({
+    email: body.email,
+  })
+    .populate("courses")
+    .populate({ path: "courses", populate: { path: "thumbnail" } });
+
+  if (!user) {
+    return next(new ErrorHandler("Enter valid Credantials", 403));
+  } else {
     const salt = user.salt;
     const hash = user.hash;
-
     const found = validatePassword(body.password, salt, hash);
     console.log(found);
 
     if (found) {
       if (user.activationStatus === "active") {
         console.log(user.tokens);
-        if(user.tokens.length!==0)
-        {
-          throw new Error('Already Signed On Another Account');
+        if (user.tokens.length !== 1) {
+          // throw new Error("Already Signed On Another Account");
+          return next(
+            new ErrorHandler("Already Signed On Another Account", 403)
+          );
         }
         let token = await user.createAuthToken();
         res.cookie("jwt", token, {
@@ -106,19 +108,19 @@ exports.jwtSignIn = async (req, res, next) => {
           httpOnly: true,
         });
 
-        res.send({ status: "true", user: user });
+        res.status(200).json({ user });
       } else if (user.activationStatus !== "active") {
-        throw new Error("Please verify account through mail.");
+        // throw new Error("Please verify account through mail.");
+        return next(
+          new ErrorHandler("Please verify account through mail.", 403)
+        );
       }
     } else {
-      throw new Error("Enter Valid Credantials");
+      // throw new Error("Enter Valid Credantials");
+      return next(new ErrorHandler("Enter Valid Credantials", 403));
     }
-  } catch (err) {
-    // console.log(err);
-    err.status = 403;
-    next(err);
   }
-};
+});
 
 exports.sessionSignIn = (req, res, next) => {
   passport.authenticate("local", function (err, user, info) {
@@ -157,12 +159,14 @@ exports.signOut = async (req, res, next) => {
   }
 };
 
-exports.getUserDetails = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user._id).populate('courses').populate({path:'courses',populate:{path:'thumbnail'}});
-    console.log(user)
-    res.send({ user });
-  } catch (err) {
-    next(err);
+exports.getUserDetails = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id)
+    .populate("courses")
+    .populate({ path: "courses", populate: { path: "thumbnail" } });
+
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
   }
-};
+
+  res.status(200).json({ user });
+});

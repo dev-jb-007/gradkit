@@ -10,14 +10,13 @@ const VideoPlayerScreen = () => {
   const { vid, cid } = useParams();
 
   const dispatch = useDispatch();
-  const {course} = useSelector((state) => state.course)
-
+  const { course } = useSelector((state) => state.course);
 
   const { video, loading } = useSelector((state) => state.video);
 
   useEffect(() => {
     dispatch(getVideoDetails(vid));
-    dispatch(getCourseById(cid))
+    dispatch(getCourseById(cid));
   }, [dispatch, cid, vid]);
 
   return (
@@ -40,7 +39,11 @@ const VideoPlayerScreen = () => {
             <h3 className="related__video-header">Related Videos -</h3>
             {course?.videos &&
               course?.videos.map((video, index) => (
-                <VideoTile2 video={video.videoId} key={index} />
+                <VideoTile2
+                  video={video.videoId}
+                  key={index}
+                  id={course?._id}
+                />
               ))}
           </VideoPlaylist>
         </>

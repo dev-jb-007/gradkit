@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { login, clearErrors } from "../../redux/actions/userActions";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Loader } from "../../components";
+import { Loader, Message } from "../../components";
 
 const SigninScreen = () => {
   const dispatch = useDispatch();
@@ -27,7 +27,9 @@ const SigninScreen = () => {
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 2000);
+      setTimeout(() => {
+        dispatch(clearErrors());
+      }, 3000);
     }
 
     if (isAuthenticatedUser) {
@@ -37,54 +39,47 @@ const SigninScreen = () => {
 
   return (
     <SignInSection>
-      {loading ? (
-        <Loader />
-      ) : (
-        <SignInContainer>
-          <div className="form__container">
-            <form onSubmit={userSignin}>
-              <img src={Logo} alt="" className="form__logo" />
+      {loading && <Loader />}
+      <SignInContainer>
+        <div className="form__container">
+          <form onSubmit={userSignin}>
+            <img src={Logo} alt="" className="form__logo" />
 
-              <h1>Sign In</h1>
+            <h1>Sign In</h1>
 
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-              {/* <div className="check__container">
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
-            </div> */}
+            <button type="submit" className="form__button">
+              Sign In
+            </button>
 
-              <button type="submit" className="form__button">
-                Sign In
-              </button>
-
-              <div className="form__links">
-                <Link to="/signup">Sign Up</Link>
-                <Link to="/forgot-password">Forgot Password</Link>
-              </div>
-            </form>
-          </div>
-          <div className="image__container">
-            <img src={SignImg} alt="" />
-          </div>
-        </SignInContainer>
-      )}
+            <div className="form__links">
+              <Link to="/signup">Sign Up</Link>
+              <Link to="/forgot-password">Forgot Password</Link>
+            </div>
+            {error && <Message status="error">{error}</Message>}
+          </form>
+        </div>
+        <div className="image__container">
+          <img src={SignImg} alt="" />
+        </div>
+      </SignInContainer>
     </SignInSection>
   );
 };

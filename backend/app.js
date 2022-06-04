@@ -219,7 +219,7 @@ app.get('/addview',async(req,res,next)=>{
 
 
 // 
-// app.use(errorMiddleware);
+app.use(errorMiddleware);
 
 
 

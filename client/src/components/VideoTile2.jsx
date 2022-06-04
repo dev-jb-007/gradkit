@@ -1,37 +1,38 @@
 import React from "react";
 import styled from "styled-components/macro";
-import moment from "moment"
+import moment from "moment";
+import { Link } from "react-router-dom";
 
-const VideoTile2 = ({video}) => {
-
-  console.log(video)
+const VideoTile2 = ({ video, id }) => {
+  console.log(video);
 
   return (
     <VideoContainer>
-      <img className="video__thumbnail" src={video.thumbnail} alt="" />
+      <Link to={`/video/${video._id}/${id}`}>
+        <img className="video__thumbnail" src={video.thumbnail} alt="" />
+      </Link>
 
       <VideoDetails>
         <h4 className="video__title">
-          {video.videoTitle}
+          <Link to={`/video/${video._id}/${id}`}>{video.videoTitle}</Link>
         </h4>
 
-
         <p className="video__description">
-            {video?.videoDescription.length > 64
-              ? video?.videoDescription.substring(0, 64) + "..."
-              : video?.videoDescription}
-          </p>
+          {video?.videoDescription.length > 64
+            ? video?.videoDescription.substring(0, 64) + "..."
+            : video?.videoDescription}
+        </p>
 
         <div className="">
-            <span className="video__date">
-              {moment(video?.createdAt).format("Do MMM YYYY")}
-            </span>
+          <span className="video__date">
+            {moment(video?.createdAt).format("Do MMM YYYY")}
+          </span>
 
-            <span>&nbsp;|&nbsp;</span>
+          <span>&nbsp;|&nbsp;</span>
 
-            <span className="video__time">
-              {moment(video?.createdAt).format("h:mm a")}
-            </span>
+          <span className="video__time">
+            {moment(video?.createdAt).format("h:mm a")}
+          </span>
         </div>
       </VideoDetails>
     </VideoContainer>
@@ -81,7 +82,6 @@ const VideoDetails = styled.div`
     margin: 0.2rem 0 0.6rem;
     color: #171717;
   }
-
 
   @media (max-width: 768px) {
     width: 100%;

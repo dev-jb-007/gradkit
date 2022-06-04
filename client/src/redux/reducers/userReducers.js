@@ -103,7 +103,7 @@ export const userAuthReducer = (state = { user: {} }, action) => {
 
     case CLEAR_ERRORS:
       return {
-        state,
+        ...state,
         error: null,
       };
 
