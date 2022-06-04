@@ -5,10 +5,11 @@ const User = require("../models/user");
 const {encryptPassword}=require("../helpers/password_methods");
 const catchAsync = require("../utils/catchAsync");
 const ErrorHandler = require("../utils/errorHandler");
+
+
 exports.generateVerificationMail = catchAsync(async (req, res, next) => {
     let email = req.body.email;
     let ucode = uuid();
-    console.log(email);
     await sendMail(
       email,
       "Please Activate Your Doubt Account",
@@ -50,6 +51,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
         "Password Changed",
         `Please follow this link to reset your password - https://www.gradkit.in/reset-password/${code}`
       );
+
       setTimeout(async () => {
         await Pass.findByIdAndDelete(Pcode._id);
       }, 3600000);
@@ -59,14 +61,13 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
       res.send({ status: "You are not registered" });
     }
 });
+
 exports.changePassword = catchAsync(async (req, res, next) => {
     let code = await Code.findOne({ code: req.params.code });
     let email = code.email;
-    console.log(email);
     let user = await User.findOne({ email: email });
 
     const saltHash = encryptPassword(req.body.password);
-    console.log(saltHash);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
     user.salt = salt;

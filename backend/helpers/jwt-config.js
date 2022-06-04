@@ -27,10 +27,8 @@ const client = new OAuth2Client(CLIENT_ID);
 exports.auth = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;
-    // console.log(token);
     const decode = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findOne({ _id: decode._id, "tokens.token": token });
-    // console.log(token);
     // let payload = await verify(token);
     // console.log(payload);
     // if (!payload.error) {

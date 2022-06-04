@@ -92,10 +92,7 @@ app.get('/google',async(req,res,next)=>{
 })
 app.post('/google/register',async(req,res,next)=>{
   try{
-    console.log("Hello");
-    console.log(req.body);
     let user=await User.findOne({email:req.body.profile.tv});
-    console.log(user);
     if(user)
     {
       user.tokens.push({token:req.body.id_token});
@@ -117,12 +114,9 @@ app.post('/google/register',async(req,res,next)=>{
         expires: new Date(Date.now() + 5000000000),
         httpOnly: true,
       }); 
-      console.log("user"+user);
       await user.save();
-      console.log(user);
       //Error here:- Dev Patel (12 May 2022)
     }
-    console.log("user1"+user);
     res.send(user);
   }
   catch(err){
@@ -178,15 +172,12 @@ app.post('/watermark',async (req,res,next)=>{
 app.get('/addview',async(req,res,next)=>{
   try{
     const token=req.cookies.visitorId;
-    console.log(token);
     const id="61fa0fe147328bc7cc797cc7";
     const sol=await Solution.findById(id);
     
     const user=await nonlogged.findOne({id:token});
-    console.log(user);
     if(user===null)
     {
-      console.log("hello");
       let arr=new Array;
       arr.push(id);
       let usr=new nonlogged({
@@ -208,7 +199,6 @@ app.get('/addview',async(req,res,next)=>{
      await sol.save();
       }
     }
-    console.log(token);
     res.send(token);
   }
   catch(err)
@@ -238,7 +228,6 @@ app.use(errorMiddleware);
 
 
 app.use(function (err, req, res, next) {
-  console.log(err);
   res.status(err.status).send({status:err.status,error:err.message});
 });
 

@@ -22,13 +22,11 @@ exports.sessionSignUp = (req, res) => {
     hash: hash,
   });
 
-  newUser.save().then(console.log(newUser));
+  newUser.save();
   res.redirect("/auth/signin");
 };
 
 exports.jwtSignUp = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-  // console.log(req.data);
   let found=await User.findOne({email:req.body.email});
   if(found)
   {
@@ -54,7 +52,6 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
   //   expires: new Date(Date.now() + 5000000000),
   //   httpOnly: true,
   // });
-  // console.log("log1");
   next();
   // next();
 });
@@ -62,11 +59,9 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
 exports.verifySignUp = async (req, res, next) => {
   try {
     let code = req.params.code;
-    // console.log(code);
     let codeModel = await Code.findOne({ code });
     if (codeModel) {
       let email = codeModel.email;
-      console.log(email);
       if (email) {
         let user = await User.findOne({ email: email });
 
@@ -87,7 +82,6 @@ exports.verifySignUp = async (req, res, next) => {
 
 exports.jwtSignIn = catchAsync(async (req, res, next) => {
   const body = req.body;
-  console.log(req.body);
   const user = await User.findOne({
     email: body.email,
   })
@@ -100,11 +94,9 @@ exports.jwtSignIn = catchAsync(async (req, res, next) => {
     const salt = user.salt;
     const hash = user.hash;
     const found = validatePassword(body.password, salt, hash);
-    console.log(found);
 
     if (found) {
       if (user.activationStatus === "active") {
-        console.log(user.tokens);
         if (user.tokens.length >= 1&&user.role===0) {
           // throw new Error("Already Signed On Another Account");
           return next(
