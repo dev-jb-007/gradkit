@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/macro";
 import { CourseBlock, Loader } from "../components";
-import Logo from "../assets/logo.svg";
+// import Logo from "../assets/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../redux/actions/courseActions";
 
@@ -25,7 +25,7 @@ const CourseScreen = () => {
 
             <span>by</span>
 
-            <img className="course__header__image" src={Logo} alt="" />
+            <img className="course__header__image" src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg" alt="" />
           </div>
 
           <div className="course__wrapper">
