@@ -360,14 +360,24 @@ exports.enrollCourse = catchAsync(async (req, res, next) => {
     res.send(course);
 });
 
-exports.getVideoById = async (req, res, next) => {
-  try {
+exports.getVideoById = catchAsync(async (req, res, next) => {
     let video = await Video.findById(req.params.id);
+    let course= await Course.findById(req.params.cid);
+    let index=-1;
+    for(let i=0;i<course.videos.length;i++)
+    {
+      if(course.videos[i].videoId.toString()===video._id.toString())
+      {
+        index=i;
+        break;
+      }
+    }
+    if(index>=4&&!course.enrolled.includes(req.user._id))
+    {
+      return next(new ErrorHandler("You are not authorized to view this course", 403));
+    }
     res.send(video);
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
 exports.generateOrderId = catchAsync(async (req, res, next) => {
     const course = await Course.findById(req.body.id);

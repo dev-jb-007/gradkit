@@ -1,5 +1,5 @@
 import React from "react";
-import ContactImg from "../../assets/atom.svg";
+import ContactImg from "../../assets/contact.svg";
 import styled from "styled-components/macro";
 
 const ContactSection = () => {

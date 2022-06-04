@@ -37,13 +37,10 @@ const Footer = () => {
           <h3>Social</h3>
 
           <li>
-            <Link to="/">Linkedin</Link>
+            <a href="https://www.instagram.com/gradkit/">Instagram</a>
           </li>
           <li>
-            <Link to="/">Twitter</Link>
-          </li>
-          <li>
-            <Link to="/">Youtube</Link>
+            <a href="https://www.youtube.com/channel/UCDrl0YaP-Skkn8mTHCpVvig">Youtube</a>
           </li>
         </FooterColumn>
 
@@ -55,7 +52,7 @@ const Footer = () => {
           </li>
 
           <li>
-            <a href="tel:+9913356834">+9913356834</a>
+            <a href="tel:+9913356834">+919913356834</a>
           </li>
         </FooterColumn>
       </FooterRow>

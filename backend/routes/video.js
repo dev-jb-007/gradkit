@@ -71,6 +71,7 @@ module.exports = router;
 
 router.post("/enrollCourse", auth, enrollCourse);
 router.get("/subjectCode",sendSubjectCode);
-router.get("/:id", auth, getVideoById);
+
 router.post("/orders",auth, generateOrderId);
 router.post("/verify-payment", verifyPayment);
+router.get("/:id/:cid", auth, getVideoById);

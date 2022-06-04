@@ -1,5 +1,5 @@
 import React from "react";
-import AboutImg from "../../assets/atom.svg";
+import AboutImg from "../../assets/about.svg";
 import styled from "styled-components/macro";
 
 const AboutSection = () => {
@@ -15,18 +15,15 @@ const AboutSection = () => {
           <br />
 
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Repudiandae, quisquam. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Repudiandae, quisquam. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Repudiandae, quisquam.
+          We are here to make your university exam preparation efficient as well as smooth.
+          We are an SSIP funded project.
           </p>
 
           <br />
 
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Repudiandae, quisquam. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Repudiandae, quisquam. Lorem ipsum dolor sit amet
+          Our team consists of developers and teachers: Krishna Kalani, Bhagya Patel, Kritik Jiyaviya, Dev Patel, Jay Rathi, Nishant Asnani, Rahul Shinde, Rohit Sharma.
+          Get knowledgeable with us, thankyou.
           </p>
         </div>
       </AboutContainer>

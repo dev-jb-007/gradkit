@@ -4,8 +4,6 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 const VideoTile2 = ({ video, id }) => {
-  console.log(video);
-
   return (
     <VideoContainer>
       <Link to={`/video/${video._id}/${id}`}>

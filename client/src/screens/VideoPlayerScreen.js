@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 import { Loader, VideoPlayer, VideoTile2 } from "../components";
-import { getVideoDetails } from "../redux/actions/videoActions";
+import { getVideoDetails, clearErrors } from "../redux/actions/videoActions";
 import { getCourseById } from "../redux/actions/courseActions";
+import {useNavigate} from "react-router-dom"
+
 
 const VideoPlayerScreen = () => {
   const { vid, cid } = useParams();
@@ -12,12 +14,20 @@ const VideoPlayerScreen = () => {
   const dispatch = useDispatch();
   const { course } = useSelector((state) => state.course);
 
-  const { video, loading } = useSelector((state) => state.video);
+  const { video, loading, error } = useSelector((state) => state.video);
+
+  const history = useNavigate()
 
   useEffect(() => {
-    dispatch(getVideoDetails(vid));
+    dispatch(getVideoDetails(vid,cid));
     dispatch(getCourseById(cid));
-  }, [dispatch, cid, vid]);
+    
+    if(error) {
+      history(`/course/${cid}`)      
+    }
+
+    dispatch(clearErrors())
+  }, [dispatch, cid, vid, error, history]);
 
   return (
     <VideoContainer>
@@ -26,7 +36,9 @@ const VideoPlayerScreen = () => {
       ) : (
         <>
           <VideoWrapper>
+            <div>
             <VideoPlayer url={video?.videoURL} />
+            </div>
 
             <VideoDetails>
               <h3 className="video__title">{video?.videoTitle}</h3>

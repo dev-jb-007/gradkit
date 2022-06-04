@@ -52,7 +52,7 @@ const Navbar = styled.div`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 
   .nav__logo {
-    width: 9rem;
+    width: 12rem;
   }
 
   .nav__link {

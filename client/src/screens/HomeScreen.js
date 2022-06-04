@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-import Home from "../assets/atom.svg";
+import Home from "../assets/homepage.svg";
 import { VideoPlayer } from "../components";
 
 const HomeScreen = () => {
@@ -25,7 +25,7 @@ const HomeScreen = () => {
       </WelcomeSection>
 
       <OverviewSection>
-        <h2 className="second__header">How does Gradkit work?</h2>
+        <h2 className="second__header">WHAT DO WE PROVIDE?</h2>
 
         <OverviewContainer>
           <div className="overview__video">
@@ -34,12 +34,9 @@ const HomeScreen = () => {
           <div className="overview__text">
             <h3>Create</h3>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-              voluptates, animi eligendi sunt, magnam accusamus unde nesciunt ad
-              atque omnis necessitatibus! Sint, totam pariatur neque adipisci
-              hic quasi sapiente quis, molestias laborum delectus, repellat hic
-              quasi sapiente quis, molestias laborum delectus, repellat
-              doloremque!
+            
+To make your preparation easy for the upcoming exams of Semester 4 GTU IT/CS subjects
+We provide courses that will clear all the concepts, help in logic building and doubt-solving.
             </p>
           </div>
         </OverviewContainer>

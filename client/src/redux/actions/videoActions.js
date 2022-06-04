@@ -10,11 +10,11 @@ import {
   CLEAR_ERRORS,
 } from "../constants/videoConstants";
 
-export const getVideoDetails = (id) => async (dispatch) => {
+export const getVideoDetails = (id,cid) => async (dispatch) => {
   try {
     dispatch({ type: VIDEO_DETAILS_REQUEST });
 
-    const { data } = await axios.get(`/api/video/${id}`);
+    const { data } = await axios.get(`/api/video/${id}/${cid}`);
 
     dispatch({
       type: VIDEO_DETAILS_SUCCESS,
@@ -28,11 +28,6 @@ export const getVideoDetails = (id) => async (dispatch) => {
   }
 };
 
-export const clearErrors = () => {
-  return {
-    type: CLEAR_ERRORS,
-  };
-};
 
 export const createVideo = (formData) => async (dispatch) => {
   try {
@@ -61,3 +56,17 @@ export const createVideo = (formData) => async (dispatch) => {
     });
   }
 };
+
+
+
+export const clearErrors = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  });
+};
+
+// export const clearMessages = () => async (dispatch) => {
+//   dispatch({
+//     type: CLEAR_MESSAGES,
+//   });
+// };
