@@ -32,7 +32,7 @@ const HomeScreen = () => {
 
         <OverviewContainer>
           <div className="overview__video">
-            <VideoPlayer url="https://youtu.be/Go8nTmfrQd8" />
+            <VideoPlayer url="https://youtu.be/IVi0XrT2h4A" />
           </div>
           <div className="overview__text">
             <h3>Create</h3>
