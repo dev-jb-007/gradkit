@@ -29,9 +29,8 @@ exports.sessionSignUp = (req, res) => {
 exports.jwtSignUp = catchAsync(async (req, res, next) => {
   console.log(req.body);
   // console.log(req.data);
-  let found=await User.findOne({email:req.body.email});
-  if(found)
-  {
+  let found = await User.findOne({ email: req.body.email });
+  if (found) {
     return next(new ErrorHandler("Email Already Exist", 403));
   }
   const saltHash = encryptPassword(req.body.password);
@@ -45,9 +44,8 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
     salt: salt,
     hash: hash,
   });
-  
 
-  await user.save()
+  await user.save();
 
   // let token = await user.createAuthToken();
   // res.cookie("jwt", token, {
@@ -75,10 +73,13 @@ exports.verifySignUp = async (req, res, next) => {
           user.save();
         }
         await Code.findByIdAndDelete(codeModel._id);
-        res.send({ status: "true", message: "Done" });
+        res.status(200).json({
+          status: "success",
+          message: "Email Verified Successfully",
+        });
       }
     } else {
-      res.send({ status: "false", message: "Invalid Code" });
+      return next(new ErrorHandler("Invalid Code", 404));
     }
   } catch (err) {
     next(err);
@@ -105,7 +106,7 @@ exports.jwtSignIn = catchAsync(async (req, res, next) => {
     if (found) {
       if (user.activationStatus === "active") {
         console.log(user.tokens);
-        if (user.tokens.length >= 1&&user.role===0) {
+        if (user.tokens.length >= 1 && user.role === 0) {
           // throw new Error("Already Signed On Another Account");
           return next(
             new ErrorHandler("Already Signed On Another Account", 403)
@@ -117,7 +118,7 @@ exports.jwtSignIn = catchAsync(async (req, res, next) => {
           httpOnly: true,
         });
 
-        res.status(200).json({ user });
+        res.status(200).json({ user, message: "Logged In Successfully" });
       } else if (user.activationStatus !== "active") {
         // throw new Error("Please verify account through mail.");
         return next(
@@ -153,17 +154,16 @@ exports.sessionSignIn = (req, res, next) => {
 };
 
 exports.signOut = catchAsync(async (req, res, next) => {
-    req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token !== req.token;
-    });
-    // let z = schedule.scheduledJobs["job-1"];
-    // if (z) {
-    //   z.cancel();
-    // }
-    await req.user.save();
-    res.status(200).json("Signout Successfully");
-  
-})
+  req.user.tokens = req.user.tokens.filter((token) => {
+    return token.token !== req.token;
+  });
+  // let z = schedule.scheduledJobs["job-1"];
+  // if (z) {
+  //   z.cancel();
+  // }
+  await req.user.save();
+  res.status(200).json("Signout Successfully");
+});
 
 exports.getUserDetails = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id)
@@ -174,5 +174,5 @@ exports.getUserDetails = catchAsync(async (req, res, next) => {
     return next(new ErrorHandler("User not found", 404));
   }
 
-  res.status(200).json({ user });
+  res.status(200).json({ user, message: "User Authenticated" });
 });
