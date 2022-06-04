@@ -12,10 +12,10 @@ const Footer = () => {
           <h3>Company</h3>
 
           <li>
-            <Link to="/">About Us</Link>
+            <Link to="/reach-us/#about">About Us</Link>
           </li>
           <li>
-            <Link to="/">Contact Us</Link>
+            <Link to="/reach-us/#contact">Contact Us</Link>
           </li>
         </FooterColumn>
 
@@ -37,10 +37,22 @@ const Footer = () => {
           <h3>Social</h3>
 
           <li>
-            <a href="https://www.instagram.com/gradkit/">Instagram</a>
+            <a
+              href="https://www.instagram.com/gradkit/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Instagram
+            </a>
           </li>
           <li>
-            <a href="https://www.youtube.com/channel/UCDrl0YaP-Skkn8mTHCpVvig">Youtube</a>
+            <a
+              href="https://www.youtube.com/channel/UCDrl0YaP-Skkn8mTHCpVvig"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Youtube
+            </a>
           </li>
         </FooterColumn>
 
@@ -52,7 +64,7 @@ const Footer = () => {
           </li>
 
           <li>
-            <a href="tel:+9913356834">+919913356834</a>
+            <a href="tel:+919913356834">+91 9913356834</a>
           </li>
         </FooterColumn>
       </FooterRow>

@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { useDispatch } from "react-redux";
-import { createVideo } from "../redux/actions/videoActions";
-import { createCourse } from "../redux/actions/courseActions";
-import { Loader } from "../components";
+import {
+  createVideo,
+  clearVideoErrors,
+  clearVideoMessages,
+} from "../redux/actions/videoActions";
+
+import {
+  createCourse,
+  clearCourseErrors,
+  clearCourseMessages,
+} from "../redux/actions/courseActions";
+import { Loader, Message } from "../components";
 import { useSelector } from "react-redux";
 
 const UploadScreen = () => {
@@ -30,6 +39,13 @@ const UploadScreen = () => {
     courseForm.append("subjectCode", cSubjectCode);
 
     dispatch(createCourse(courseForm));
+
+    setCTitle("");
+    setCDescription("");
+    setCPrice("");
+    setCSemister("");
+    setCThumbnail("");
+    setCSubjectCode("");
   };
 
   /* Video Upload */
@@ -54,15 +70,51 @@ const UploadScreen = () => {
     videoForm.append("chapter", vChapter);
 
     dispatch(createVideo(videoForm));
+
+    setVideo("");
+    setvTitle("");
+    setvDescription("");
+    setvThumbnail("");
+    setVSubjectCode("");
+    setVIndex("");
+    setVChapter("");
   };
 
-  const { vLoading } = useSelector((state) => state.addVideo);
+  const { vLoading, vError, vMessage } = useSelector((state) => state.addVideo);
 
-  const { cLoading } = useSelector((state) => state.addCourse);
+  const { cLoading, cError, cMessage } = useSelector(
+    (state) => state.addCourse
+  );
 
   /* Tab Change */
 
   const [activeTab, setActiveTab] = useState("course");
+
+  useEffect(() => {
+    if (vError) {
+      setTimeout(() => {
+        dispatch(clearVideoErrors());
+      }, 3000);
+    }
+
+    if (vMessage) {
+      setTimeout(() => {
+        dispatch(clearVideoMessages());
+      }, 3000);
+    }
+
+    if (cError) {
+      setTimeout(() => {
+        dispatch(clearCourseErrors());
+      }, 3000);
+    }
+
+    if (cMessage) {
+      setTimeout(() => {
+        dispatch(clearCourseMessages());
+      }, 3000);
+    }
+  }, [vError, vMessage, cError, cMessage, dispatch]);
 
   return (
     <UploadSection>
@@ -159,8 +211,7 @@ const UploadScreen = () => {
               onChange={(e) => setCThumbnail(e.target.files[0])}
             />
 
-            <button  className="form__button" type="submit"
-            >
+            <button className="form__button" type="submit">
               Upload
             </button>
           </CourseForm>
@@ -248,13 +299,17 @@ const UploadScreen = () => {
               onChange={(e) => setVideo(e.target.files[0])}
             />
 
-            <button className="form__button" type="submit" >
+            <button className="form__button" type="submit">
               Upload
             </button>
           </VideoForm>
         )}
-      </FormContainer>
 
+        {vError && <Message status="error">{vError}</Message>}
+        {vMessage && <Message status="success">{vMessage}</Message>}
+        {cError && <Message status="error">{cError}</Message>}
+        {cMessage && <Message status="success">{cMessage}</Message>}
+      </FormContainer>
     </UploadSection>
   );
 };

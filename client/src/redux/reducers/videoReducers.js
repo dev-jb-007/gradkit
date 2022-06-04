@@ -6,6 +6,7 @@ import {
   VIDEO_ADD_SUCCESS,
   VIDEO_ADD_FAIL,
   CLEAR_ERRORS,
+  CLEAR_MESSAGES,
 } from "../constants/videoConstants";
 
 export const getVideoDetailsReducer = (state = { video: {} }, action) => {
@@ -49,19 +50,27 @@ export const addVideoReducer = (state = { video: {} }, action) => {
       return {
         ...state,
         vLoading: false,
-        video: action.payload,
+        video: action.payload.video,
+        vMessage: action.payload.message,
       };
     case VIDEO_ADD_FAIL:
       return {
         ...state,
         vLoading: false,
-        error: action.payload,
+        vError: action.payload,
       };
     case CLEAR_ERRORS:
       return {
         ...state,
-        error: null,
+        vError: null,
       };
+
+    case CLEAR_MESSAGES:
+      return {
+        ...state,
+        vMessage: null,
+      };
+
     default:
       return state;
   }

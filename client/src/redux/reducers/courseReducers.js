@@ -9,6 +9,7 @@ import {
   COURSE_DETAILS_SUCCESS,
   COURSE_DETAILS_FAIL,
   CLEAR_ERRORS,
+  CLEAR_MESSAGES,
 } from "../constants/courseContsants";
 
 export const createCourseReducer = (state = { course: {} }, action) => {
@@ -23,20 +24,27 @@ export const createCourseReducer = (state = { course: {} }, action) => {
       return {
         ...state,
         cLoading: false,
-        course: action.payload,
+        course: action.payload.course,
+        cMessage: action.payload.message,
       };
 
     case COURSE_CREATE_FAIL:
       return {
         ...state,
         cLoading: false,
-        error: action.payload,
+        cError: action.payload,
       };
 
     case CLEAR_ERRORS:
       return {
         ...state,
-        error: null,
+        cError: null,
+      };
+
+    case CLEAR_MESSAGES:
+      return {
+        ...state,
+        cMessage: null,
       };
     default:
       return state;

@@ -34,9 +34,9 @@ const HomeScreen = () => {
           <div className="overview__text">
             <h3>Create</h3>
             <p>
-            
-To make your preparation easy for the upcoming exams of Semester 4 GTU IT/CS subjects
-We provide courses that will clear all the concepts, help in logic building and doubt-solving.
+              To make your preparation easy for the upcoming exams of Semester 4
+              GTU IT/CS subjects We provide courses that will clear all the
+              concepts, help in logic building and doubt-solving.
             </p>
           </div>
         </OverviewContainer>

@@ -6,9 +6,9 @@ const Image = require("../models/image");
 const { s3 } = require("../helpers/s3_config");
 const question = require("../models/question");
 const Course = require("../models/course");
-const razorpay =require("razorpay");
-const crypto=require("crypto");
-const Transaction=require("../models/transaction");
+const razorpay = require("razorpay");
+const crypto = require("crypto");
+const Transaction = require("../models/transaction");
 const User = require("../models/user");
 const catchAsync = require("../utils/catchAsync");
 const ErrorHandler = require("../utils/errorHandler");
@@ -168,35 +168,35 @@ exports.uploadSolution = async (req, res) => {
 // }
 //Controller to add video to DB
 exports.uploadVideo = catchAsync(async (req, res, next) => {
-    // console.log(req.files);
-    const [vid] = req.files.video;
-    const [img] = req.files.image;
+  // console.log(req.files);
+  const [vid] = req.files.video;
+  const [img] = req.files.image;
 
-    var newVid = new Video({
-      // videoId: vid.key,
-      videoBucket: vid.bucket,
-      videoURL: vid.location,
-      // videoTitle: req.body.videoTitle,
-      // videoDesc: req.body.videoDesc,
-      uploadedBy: req.user._id,
-      thumbnail: img.location,
-    });
+  var newVid = new Video({
+    // videoId: vid.key,
+    videoBucket: vid.bucket,
+    videoURL: vid.location,
+    // videoTitle: req.body.videoTitle,
+    // videoDesc: req.body.videoDesc,
+    uploadedBy: req.user._id,
+    thumbnail: img.location,
+  });
 
-    if (newVid.videoId) {
-      // let product = await Product.findById(req.params.productid);
-      for (let i = 0; i < req.files.length; i++) {
-        let buffer = await sharp(req.files[i].buffer)
-          .resize({ width: 300, height: 300 })
-          .png()
-          .toBuffer();
-        newVid.images.push(buffer);
-      }
-      res.send("Images saved successfully");
-    } else {
-      throw new Error("Please try again with valid product id");
+  if (newVid.videoId) {
+    // let product = await Product.findById(req.params.productid);
+    for (let i = 0; i < req.files.length; i++) {
+      let buffer = await sharp(req.files[i].buffer)
+        .resize({ width: 300, height: 300 })
+        .png()
+        .toBuffer();
+      newVid.images.push(buffer);
     }
-    await newVid.save();
-    // res.redirect("/video/"
+    res.send("Images saved successfully");
+  } else {
+    throw new Error("Please try again with valid product id");
+  }
+  await newVid.save();
+  // res.redirect("/video/"
 });
 
 //Controller to find video by id
@@ -274,177 +274,181 @@ exports.textSearch = async (req, res) => {
 
 //Upload Courses
 exports.uploadCourse = catchAsync(async (req, res, next) => {
-    const [img] = req.files.image;
-    req.body.thumbnail = img.location;
-    let newImage = new Image({
-      imageBucket: img.bucket,
-      imageURL: img.location,
-    });
-    await newImage.save();
-    let obj = {
-      ...req.body,
-      thumbnail: newImage._id,
-    };
-    const course = new Course(obj);
-    await course.save();
-    res.send(course);
+  const [img] = req.files.image;
+  req.body.thumbnail = img.location;
+  let newImage = new Image({
+    imageBucket: img.bucket,
+    imageURL: img.location,
+  });
+  await newImage.save();
+  let obj = {
+    ...req.body,
+    thumbnail: newImage._id,
+  };
+  const course = new Course(obj);
+  await course.save();
+  res.status(201).json({ course, message: "Course Uploaded" });
 });
-exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
-    const [vid] = req.files.video;
-    const [img] = req.files.image;
-    var newVid = new Video({
-      // videoId: vid.key,
-      videoBucket: vid.bucket,
-      videoURL: vid.location,
-      videoTitle: req.body.videoTitle,
-      videoDescription: req.body.videoDescription,
-      thumbnail: img.location,
-    });
-    await newVid.save();
-    // console.log(newVid);
-    // const courseid = req.query.id;
 
-    const temp = await Course.findOne({ subjectCode: req.body.code });
-    temp.videos.push({
-      videoId: newVid._id,
-      chapter: req.body.chapter,
-      index: req.body.index,
-    });
-    temp.videos.sort(function (a, b) {
-      if (a.chapter > b.chapter) {
+exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
+  const [vid] = req.files.video;
+  const [img] = req.files.image;
+  var newVid = new Video({
+    // videoId: vid.key,
+    videoBucket: vid.bucket,
+    videoURL: vid.location,
+    videoTitle: req.body.videoTitle,
+    videoDescription: req.body.videoDescription,
+    thumbnail: img.location,
+  });
+  await newVid.save();
+  // console.log(newVid);
+  // const courseid = req.query.id;
+
+  const video = await Course.findOne({ subjectCode: req.body.code });
+
+  if (!video) {
+    return next(new ErrorResponse("Course Not Found", 404));
+  }
+
+  video.videos.push({
+    videoId: newVid._id,
+    chapter: req.body.chapter,
+    index: req.body.index,
+  });
+  video.videos.sort(function (a, b) {
+    if (a.chapter > b.chapter) {
+      return 1;
+    } else if (a.chapter == b.chapter) {
+      if (a.index > b.index) {
         return 1;
-      } else if (a.chapter == b.chapter) {
-        if (a.index > b.index) {
-          return 1;
-        } else {
-          return -1;
-        }
       } else {
         return -1;
       }
-    });
-    // console.log(temp.videos);
-    await temp.save();
-    res.send(temp);
+    } else {
+      return -1;
+    }
+  });
+  // console.log(video.videos);
+  await video.save();
+  res.status(201).json({ video, message: "Video Uploaded" });
 });
 
 exports.getAllCourses = catchAsync(async (req, res, next) => {
-    let courses = await Course.find({}).populate("thumbnail");
-    res.send(courses);
+  let courses = await Course.find({}).populate("thumbnail");
+  res.send(courses);
 });
 
 exports.checkValidBuy = catchAsync(async (req, res, next) => {
-    let course = await Course.findById(req.params.id).populate({
-      path: "videos",
-      populate: { path: "videoId" },
-    });
+  let course = await Course.findById(req.params.id).populate({
+    path: "videos",
+    populate: { path: "videoId" },
+  });
 
-    if (!course.enrolled.includes(req.user._id)) {
-      let n = course.videos.length;
+  if (!course.enrolled.includes(req.user._id)) {
+    let n = course.videos.length;
 
-      if (n >= 4) {
-        n = 4;
-      }
-      course.videos = course.videos.slice(0, n);
-
-      res.json(course);
-    } else {
-      res.send(course);
+    if (n >= 4) {
+      n = 4;
     }
+    course.videos = course.videos.slice(0, n);
+
+    res.json(course);
+  } else {
+    res.send(course);
+  }
 });
 
 exports.enrollCourse = catchAsync(async (req, res, next) => {
-    let course = await Course.findById(req.body.id);
-    course.enrolled.push(req.user._id);
-    await course.save();
-    res.send(course);
+  let course = await Course.findById(req.body.id);
+  course.enrolled.push(req.user._id);
+  await course.save();
+  res.send(course);
 });
 
 exports.getVideoById = catchAsync(async (req, res, next) => {
-    let video = await Video.findById(req.params.id);
-    let course= await Course.findById(req.params.cid);
-    let index=-1;
-    for(let i=0;i<course.videos.length;i++)
-    {
-      if(course.videos[i].videoId.toString()===video._id.toString())
-      {
-        index=i;
-        break;
-      }
+  let video = await Video.findById(req.params.id);
+  let course = await Course.findById(req.params.cid);
+  let index = -1;
+  for (let i = 0; i < course.videos.length; i++) {
+    if (course.videos[i].videoId.toString() === video._id.toString()) {
+      index = i;
+      break;
     }
-    if(index>=4&&!course.enrolled.includes(req.user._id))
-    {
-      return next(new ErrorHandler("You are not authorized to view this course", 403));
-    }
-    res.send(video);
+  }
+  if (index >= 4 && !course.enrolled.includes(req.user._id)) {
+    return next(
+      new ErrorHandler("You are not authorized to view this course", 403)
+    );
+  }
+  res.send(video);
 });
 
 exports.generateOrderId = catchAsync(async (req, res, next) => {
-    const course = await Course.findById(req.body.id);
-    if(course.enrolled.includes(req.user._id))
-    {
-      throw new Error('Already Bought That Course');
+  const course = await Course.findById(req.body.id);
+  if (course.enrolled.includes(req.user._id)) {
+    throw new Error("Already Bought That Course");
+  }
+  const instance = new razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+
+  const options = {
+    amount: course.price * 100,
+    currency: "INR",
+    receipt: crypto.randomBytes(10).toString("hex"),
+  };
+  let temp = new Transaction({
+    reciept: options.receipt,
+    course: course.id,
+    user: req.user._id,
+    amount: course.price,
+    status: "Pending",
+  });
+
+  await instance.orders.create(options, async (err, order) => {
+    if (err) {
+      temp.status = "Failed";
+      await temp.save();
+    } else {
+      temp.orderId = order.id;
+      await temp.save();
+      res.send(order);
     }
-    const instance = new razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET,
-    });
-    
-    const options = {
-      amount: course.price * 100,
-      currency: "INR",
-      receipt: crypto.randomBytes(10).toString("hex"),
-    };
-    let temp=new Transaction({
-      reciept:options.receipt,
-      course:course.id,
-      user:req.user._id,
-      amount:course.price,
-      status:'Pending'
-    });
-   
-    await instance.orders.create(options,async (err, order) => {
-      if (err) {
-        temp.status='Failed'
-        await temp.save();
-      } else {
-        temp.orderId=order.id;
-        await temp.save();
-        res.send(order);
-      }
-    });
+  });
 });
 
 exports.verifyPayment = catchAsync(async (req, res, next) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      req.body;
-    const temp=await Transaction.findOne({orderId:razorpay_order_id});
-    
-    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+  const temp = await Transaction.findOne({ orderId: razorpay_order_id });
 
-    const expectedSign = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-      .update(sign.toString())
-      .digest("hex");
+  const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
-    if (expectedSign === razorpay_signature) {
-      temp.status='Done';
-      let course=await Course.findById(temp.course);
-      course.enrolled.push(temp.user);
-      let user =await User.findById(temp.user);
-      user.courses.push(temp.course);
-      await user.save();
-      await temp.save();
-      await course.save();
-      res.send("Payment Successful");
-    } else {
-      temp.status='Fail';
-      await temp.save();
-      res.send("Invalid Signature");
-    }
+  const expectedSign = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+    .update(sign.toString())
+    .digest("hex");
+
+  if (expectedSign === razorpay_signature) {
+    temp.status = "Done";
+    let course = await Course.findById(temp.course);
+    course.enrolled.push(temp.user);
+    let user = await User.findById(temp.user);
+    user.courses.push(temp.course);
+    await user.save();
+    await temp.save();
+    await course.save();
+    res.send("Payment Successful");
+  } else {
+    temp.status = "Fail";
+    await temp.save();
+    res.send("Invalid Signature");
+  }
 });
 
-exports.sendSubjectCode=catchAsync(async(req,res,next)=>{
-    let temp=await Course.find({},'subjectCode');
-    res.send(temp);
+exports.sendSubjectCode = catchAsync(async (req, res, next) => {
+  let temp = await Course.find({}, "subjectCode");
+  res.send(temp);
 });

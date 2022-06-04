@@ -11,6 +11,7 @@ import {
   COURSE_DETAILS_SUCCESS,
   COURSE_DETAILS_FAIL,
   CLEAR_ERRORS,
+  CLEAR_MESSAGES,
 } from "../constants/courseContsants";
 
 export const createCourse = (formData) => async (dispatch) => {
@@ -79,8 +80,14 @@ export const getCourseById = (id) => async (dispatch) => {
   }
 };
 
-export const clearErrors = () => async (dispatch) => {
+export const clearCourseErrors = () => async (dispatch) => {
   dispatch({
     type: CLEAR_ERRORS,
+  });
+};
+
+export const clearCourseMessages = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_MESSAGES,
   });
 };

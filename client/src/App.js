@@ -20,7 +20,7 @@ import ReachUsScreen from "./screens/ReachUsScreen";
 
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./redux/actions/userActions";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import {
   PrivacyPolicyScreen,
   RefundPolicyScreen,
@@ -28,6 +28,7 @@ import {
 } from "./screens/Support";
 import UploadScreen from "./screens/UploadScreen";
 import Error404Screen from "./screens/Error404Screen";
+import ScrollToTop from "./utils/ScrollToTop";
 
 function App() {
   const { user, isAuthenticatedUser } = useSelector((state) => state.user);
@@ -41,63 +42,64 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {/* Header */}
+        <Fragment>
+          <ScrollToTop />
 
-        <Header />
-        <Routes>
-          {isAuthenticatedUser ? 
-          (
-            <Route exact path="/" element={<ProfileScreen />} />
-          ) : (
-            <Route exact path="/" element={<HomeScreen />} />
-          )
-          }
+          {/* Header */}
+          <Header />
+          <Routes>
+            {isAuthenticatedUser ? (
+              <Route exact path="/" element={<ProfileScreen />} />
+            ) : (
+              <Route exact path="/" element={<HomeScreen />} />
+            )}
 
-          <Route path="/reach-us" element={<ReachUsScreen />} />
+            <Route path="/reach-us" element={<ReachUsScreen />} />
 
-          {/* Authentication */}
+            {/* Authentication */}
 
-          <Route path="/signin" element={<SigninScreen />} />
+            <Route path="/signin" element={<SigninScreen />} />
 
-          <Route path="/signup" element={<SignupScreen />} />
+            <Route path="/signup" element={<SignupScreen />} />
 
-          <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
 
-          <Route
-            path="/reset-password/:token"
-            element={<ResetPasswordScreen />}
-          />
+            <Route
+              path="/reset-password/:token"
+              element={<ResetPasswordScreen />}
+            />
 
-          <Route path="/verify-email/:id" element={<VerifyEmailScreen />} />
+            <Route path="/verify-email/:id" element={<VerifyEmailScreen />} />
 
-          {/* <Route path="/profile" element={<ProfileScreen />} /> */}
+            {/* <Route path="/profile" element={<ProfileScreen />} /> */}
 
-          {/* Courses */}
+            {/* Courses */}
 
-          <Route path="/course" element={<CourseScreen />} />
+            <Route path="/course" element={<CourseScreen />} />
 
-          <Route path="/course/:id" element={<CourseViewScreen />} />
+            <Route path="/course/:id" element={<CourseViewScreen />} />
 
-          <Route path="/video/:vid/:cid" element={<VideoPlayerScreen />} />
+            <Route path="/video/:vid/:cid" element={<VideoPlayerScreen />} />
 
-          {/*  */}
+            {/*  */}
 
-          <Route path="/terms-conditions" element={<TermsScreen />} />
+            <Route path="/terms-conditions" element={<TermsScreen />} />
 
-          <Route path="/privacy-policy" element={<PrivacyPolicyScreen />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyScreen />} />
 
-          <Route path="/refund-policy" element={<RefundPolicyScreen />} />
+            <Route path="/refund-policy" element={<RefundPolicyScreen />} />
 
-          {isAuthenticatedUser && user && user.role >= 1 && (
-            <Route path="/admin" element={<UploadScreen />} />
-          )}
+            {isAuthenticatedUser && user && user.role >= 1 && (
+              <Route path="/admin" element={<UploadScreen />} />
+            )}
 
-          <Route path="*" element={<Error404Screen />} />
-        </Routes>
+            <Route path="*" element={<Error404Screen />} />
+          </Routes>
 
-        {/* Footer */}
+          {/* Footer */}
 
-        <Footer />
+          <Footer />
+        </Fragment>
       </Router>
     </div>
   );

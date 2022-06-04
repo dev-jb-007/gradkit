@@ -8,9 +8,10 @@ import {
   VIDEO_ADD_SUCCESS,
   VIDEO_ADD_FAIL,
   CLEAR_ERRORS,
+  CLEAR_MESSAGES,
 } from "../constants/videoConstants";
 
-export const getVideoDetails = (id,cid) => async (dispatch) => {
+export const getVideoDetails = (id, cid) => async (dispatch) => {
   try {
     dispatch({ type: VIDEO_DETAILS_REQUEST });
 
@@ -27,7 +28,6 @@ export const getVideoDetails = (id,cid) => async (dispatch) => {
     });
   }
 };
-
 
 export const createVideo = (formData) => async (dispatch) => {
   try {
@@ -57,16 +57,14 @@ export const createVideo = (formData) => async (dispatch) => {
   }
 };
 
-
-
-export const clearErrors = () => async (dispatch) => {
+export const clearVideoErrors = () => async (dispatch) => {
   dispatch({
     type: CLEAR_ERRORS,
   });
 };
 
-// export const clearMessages = () => async (dispatch) => {
-//   dispatch({
-//     type: CLEAR_MESSAGES,
-//   });
-// };
+export const clearVideoMessages = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_MESSAGES,
+  });
+};

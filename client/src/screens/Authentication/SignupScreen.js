@@ -120,7 +120,7 @@ const SignUpSection = styled.div`
 const SignUpContainer = styled.div`
   width: 100%;
   border-radius: 0.4rem;
-  height: 44rem;
+  height: 48rem;
   display: flex;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
 
