@@ -28,16 +28,13 @@ exports.generateVerificationMail = catchAsync(async (req, res, next) => {
 exports.verifyEmail = catchAsync(async (req, res, next) => {
   let code = req.params.code;
   let found = await Code.findOne({ code });
-  let status;
   if (found) {
     res.status(200).json({
-      status: "success",
-      message: "Email Verified",
+      message: "Email Verified Successfully",
     });
     next();
   } else {
-    return next(new ErrorHandler(404, "Invalid Code"));
-    // res.redirect("/auth/signup");
+    return next(new ErrorHandler("Invalid Code", 404));
   }
 });
 
@@ -68,6 +65,10 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 
 exports.changePassword = catchAsync(async (req, res, next) => {
   let code = await Code.findOne({ code: req.params.code });
+
+  if (!code) {
+    return next(new ErrorHandler("Invalid Reset Password Link", 404));
+  }
   let email = code.email;
   let user = await User.findOne({ email: email });
 
@@ -80,8 +81,8 @@ exports.changePassword = catchAsync(async (req, res, next) => {
 
     await user.save();
     await Code.findByIdAndDelete(code._id);
+
     res.status(200).json({
-      status: "success",
       message: "Password Changed Successfully",
     });
   } else {

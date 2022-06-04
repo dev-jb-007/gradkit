@@ -74,7 +74,6 @@ export const userAuthReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         loading: false,
-
         error: action.payload,
       };
 

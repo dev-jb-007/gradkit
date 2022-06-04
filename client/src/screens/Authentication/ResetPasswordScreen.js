@@ -12,7 +12,7 @@ import {
 } from "../../redux/actions/userActions";
 
 import { useNavigate, useParams } from "react-router-dom";
-import { Loader } from "../../components";
+import { Loader, Message } from "../../components";
 
 const ResetPasswordScreen = () => {
   const [password, setPassword] = useState("");
@@ -39,7 +39,7 @@ const ResetPasswordScreen = () => {
 
     if (message) {
       setTimeout(() => dispatch(clearMessages()), 2000);
-      setTimeout(() => history("/login"), 2000);
+      setTimeout(() => history("/signin"), 2000);
     }
   }, [error, dispatch, message, history]);
 
@@ -79,6 +79,9 @@ const ResetPasswordScreen = () => {
               <button type="submit" className="form__button">
                 Reset
               </button>
+
+              {message && <Message status="success">{message}</Message>}
+              {error && <Message status="error">{error}</Message>}
             </form>
           </div>
         </ResetPassContainer>

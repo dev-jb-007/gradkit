@@ -97,6 +97,8 @@ export const verifyUser = (code) => async (dispatch) => {
       type: VERIFY_USER_SUCCESS,
       payload: data,
     });
+
+    console.log(data);
   } catch (error) {
     dispatch({
       type: VERIFY_USER_FAIL,
@@ -181,8 +183,6 @@ export const resetPassword = (token, password) => async (dispatch) => {
       { password },
       config
     );
-
-    console.log(data);
 
     dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data.message });
   } catch (error) {

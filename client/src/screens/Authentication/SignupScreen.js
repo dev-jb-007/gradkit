@@ -4,7 +4,11 @@ import Logo from "../../assets/logo.svg";
 import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register, clearErrors } from "../../redux/actions/userActions";
+import {
+  register,
+  clearErrors,
+  clearMessages,
+} from "../../redux/actions/userActions";
 import { Loader, Message } from "../../components";
 
 const SignupScreen = () => {
@@ -33,7 +37,10 @@ const SignupScreen = () => {
     }
 
     if (message) {
-      console.log(message);
+      setTimeout(() => {
+        dispatch(clearMessages());
+      }, 3000);
+      history("/signin");
     }
 
     if (isAuthenticatedUser) {

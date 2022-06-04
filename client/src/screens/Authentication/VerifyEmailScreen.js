@@ -18,9 +18,11 @@ const VerifyEmailScreen = () => {
 
   const { message, loading, error } = useSelector((state) => state.user);
 
-  useEffect(() => {
+  const verify = () => {
     dispatch(verifyUser(id));
+  };
 
+  useEffect(() => {
     if (error) {
       setTimeout(() => dispatch(clearErrors()), 3000);
     }
@@ -28,17 +30,18 @@ const VerifyEmailScreen = () => {
     if (message) {
       setTimeout(() => dispatch(clearMessages()), 3000);
 
-      if (message) {
-        history("/");
-      }
+      setTimeout(() => history("/signin"), 3000);
     }
   }, [dispatch, id, history, error, message]);
 
   return (
     <VerifySection>
       {loading && <Loader />}
-      {message && <h2>{message}</h2>}
-      {error && <h2>{error}</h2>}
+      <h2>Click on button to verify email</h2>
+      <button onClick={verify}>Verify</button>
+
+      {message && <h3 className="success">{message}</h3>}
+      {error && <h3 className="error">{error}</h3>}
     </VerifySection>
   );
 };
@@ -60,6 +63,20 @@ const VerifySection = styled.div`
     font-size: 2.25rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+  }
+
+  .success {
+    color: rgb(21 128 61);
+  }
+
+  .error {
+    color: rgb(185 28 28);
   }
 
   button {

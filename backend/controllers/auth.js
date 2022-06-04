@@ -54,32 +54,35 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
   // next();
 });
 
-exports.verifySignUp = async (req, res, next) => {
-  try {
-    let code = req.params.code;
-    let codeModel = await Code.findOne({ code });
-    if (codeModel) {
-      let email = codeModel.email;
-      if (email) {
-        let user = await User.findOne({ email: email });
+exports.verifySignUp = catchAsync(async (req, res, next) => {
+  let code = req.params.code;
+  let codeModel = await Code.findOne({ code });
 
-        if (user.activationStatus !== "active") {
-          user.activationStatus = "active";
-          user.save();
-        }
-        await Code.findByIdAndDelete(codeModel._id);
-        res.status(200).json({
-          status: "success",
-          message: "Email Verified Successfully",
-        });
-      }
-    } else {
-      return next(new ErrorHandler("Invalid Code", 404));
-    }
-  } catch (err) {
-    next(err);
+  if (!codeModel) {
+    return next(new ErrorHandler("Invalid Verificatiion Code", 404));
   }
-};
+
+  if (codeModel) {
+    let email = codeModel.email;
+
+    if (email) {
+      let user = await User.findOne({ email: email });
+
+      if (user.activationStatus === "active") {
+        return next(new ErrorHandler("Account Already Verified", 403));
+      }
+      user.activationStatus = "active";
+      user.save();
+      await Code.findByIdAndDelete(codeModel._id);
+
+      res.status(200).json({
+        message: "Email Verified Successfully",
+      });
+    }
+  } else {
+    return next(new ErrorHandler("Invalid Code", 404));
+  }
+});
 
 exports.jwtSignIn = catchAsync(async (req, res, next) => {
   const body = req.body;
