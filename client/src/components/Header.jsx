@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-import logo from "../assets/logo.svg";
+// import logo from "../assets/logo.svg";
 import { logout } from "../redux/actions/userActions";
 
 const Header = () => {
@@ -17,7 +17,11 @@ const Header = () => {
   return (
     <Navbar>
       <Link to="/">
-        <img className="nav__logo" src={logo} alt="" />
+        <img
+          className="nav__logo"
+          src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+          alt="gradkit-logo"
+        />
       </Link>
       <li className="nav__links">
         <Link to="/course" className="nav__link">

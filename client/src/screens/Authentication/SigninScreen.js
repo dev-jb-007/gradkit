@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-import Logo from "../../assets/logo.svg";
-import SignImg from "../../assets/atom.svg";
+// import Logo from "../../assets/logo.svg";
+// import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -33,13 +33,13 @@ const SigninScreen = () => {
     if (error) {
       setTimeout(() => {
         dispatch(clearErrors());
-      }, 3000);
+      }, 1500);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 2000);
+      setTimeout(() => dispatch(clearMessages()), 1500);
 
-      setTimeout(() => history("/signin"), 2000);
+      setTimeout(() => history("/signin"), 3000);
     }
 
     if (isAuthenticatedUser) {
@@ -53,7 +53,11 @@ const SigninScreen = () => {
       <SignInContainer>
         <div className="form__container">
           <form onSubmit={userSignin}>
-            <img src={Logo} alt="" className="form__logo" />
+            <img
+              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+              alt="gradkit"
+              className="form__logo"
+            />
 
             <h1>Sign In</h1>
 
@@ -88,7 +92,10 @@ const SigninScreen = () => {
           </form>
         </div>
         <div className="image__container">
-          <img src={SignImg} alt="" />
+          <img
+            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/login.svg"
+            alt="login-img"
+          />
         </div>
       </SignInContainer>
     </SignInSection>
@@ -172,6 +179,11 @@ const SignInContainer = styled.div`
       font-size: 1.6rem;
       color: white;
       margin: 1rem 0;
+
+      &:hover {
+        box-shadow: 0 0 0.4rem var(--bg-light-secondary);
+        cursor: pointer;
+      }
     }
 
     .form__links {

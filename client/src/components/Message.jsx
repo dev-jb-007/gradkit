@@ -23,7 +23,7 @@ const MessageContainer = styled.div`
 
   .message {
     padding: 0.8rem;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,6 +44,12 @@ const MessageContainer = styled.div`
   .info {
     color: rgb(29 78 216);
     background: rgb(219 234 254);
+  }
+
+  @media (max-width: 768px) {
+    .message {
+      font-size: 1.2rem;
+    }
   }
 `;
 

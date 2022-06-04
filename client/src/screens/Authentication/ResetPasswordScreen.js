@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-import Logo from "../../assets/logo.svg";
-import SignImg from "../../assets/atom.svg";
+// import Logo from "../../assets/logo.svg";
+// import SignImg from "../../assets/atom.svg";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -34,12 +34,12 @@ const ResetPasswordScreen = () => {
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 2000);
+      setTimeout(() => dispatch(clearErrors()), 1500);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 2000);
-      setTimeout(() => history("/signin"), 2000);
+      setTimeout(() => dispatch(clearMessages()), 1500);
+      setTimeout(() => history("/signin"), 3000);
     }
   }, [error, dispatch, message, history]);
 
@@ -50,14 +50,19 @@ const ResetPasswordScreen = () => {
       ) : (
         <ResetPassContainer>
           <div className="image__container">
-            <img src={SignImg} alt="" />
+            <img
+              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
+              alt=""
+            />
           </div>
           <div className="form__container">
             <form onSubmit={resetPass}>
-              <img src={Logo} alt="" className="form__logo" />
-
+              <img
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                alt="gradkit"
+                className="form__logo"
+              />
               <h1>Reset Password</h1>
-
               <label htmlFor="password">Password</label>
               <input
                 type="password"
@@ -66,7 +71,6 @@ const ResetPasswordScreen = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
               <label htmlFor="confirm-password">Confirm Password</label>
               <input
                 type="password"
@@ -75,11 +79,9 @@ const ResetPasswordScreen = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-
               <button type="submit" className="form__button">
                 Reset
               </button>
-
               {message && <Message status="success">{message}</Message>}
               {error && <Message status="error">{error}</Message>}
             </form>
@@ -159,6 +161,11 @@ const ResetPassContainer = styled.div`
       font-size: 1.6rem;
       color: white;
       margin-top: 1rem;
+
+      &:hover {
+        box-shadow: 0 0 0.4rem var(--bg-light-secondary);
+        cursor: pointer;
+      }
     }
 
     @media (max-width: 768px) {

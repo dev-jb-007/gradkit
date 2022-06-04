@@ -3,16 +3,9 @@ import styled from "styled-components/macro";
 import CourseBlock from "../components/CourseBlock";
 import { useSelector } from "react-redux";
 import { Loader } from "../components";
-// import { loadUser } from "../redux/actions/userActions";
 
 const ProfileScreen = () => {
   const { user, loading } = useSelector((state) => state.user);
-
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //    dispatch(loadUser());
-  // }, [dispatch]);
 
   return (
     <ProfileSection>
@@ -31,8 +24,12 @@ const ProfileScreen = () => {
               <p className="user__email">{user?.email}</p>
             </div>
           </div>
+          {user && user?.courses.length > 0 ? (
+            <h3 className="enrolled__course__header">Enrolled Course</h3>
+          ) : (
+            "null"
+          )}
 
-          <h3 className="enrolled__course__header">Enrolled Course</h3>
           <CourseWrapper>
             {user.courses.map((course, index) => (
               <CourseBlock course={course} key={index} enroll={true} />

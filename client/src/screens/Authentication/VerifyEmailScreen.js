@@ -24,11 +24,11 @@ const VerifyEmailScreen = () => {
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 3000);
+      setTimeout(() => dispatch(clearErrors()), 1500);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 3000);
+      setTimeout(() => dispatch(clearMessages()), 1500);
 
       setTimeout(() => history("/signin"), 3000);
     }
@@ -87,9 +87,11 @@ const VerifySection = styled.div`
     background-color: var(--bg-light-secondary);
     font-size: 1.6rem;
     font-weight: 500;
-    color: var(--font-light-secondary);
+    /* color: var(--font-light-secondary); */
+    color: white;
 
     &:hover {
+      box-shadow: 0 0 0.4rem var(--bg-light-secondary);
       cursor: pointer;
     }
   }

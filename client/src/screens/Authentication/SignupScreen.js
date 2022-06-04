@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-import Logo from "../../assets/logo.svg";
-import SignImg from "../../assets/atom.svg";
+// import Logo from "../../assets/logo.svg";
+// import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -33,14 +33,15 @@ const SignupScreen = () => {
     if (error) {
       setTimeout(() => {
         dispatch(clearErrors());
-      }, 3000);
+      }, 1500);
     }
 
     if (message) {
       setTimeout(() => {
         dispatch(clearMessages());
-      }, 3000);
-      history("/signin");
+      }, 1500);
+
+      setTimeout(() => history("/signup"), 3000);
     }
 
     if (isAuthenticatedUser) {
@@ -53,14 +54,19 @@ const SignupScreen = () => {
       {loading && <Loader />}
       <SignUpContainer>
         <div className="image__container">
-          <img src={SignImg} alt="" />
+          <img
+            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
+            alt=""
+          />
         </div>
         <div className="form__container">
           <form onSubmit={registerUser}>
-            <img src={Logo} alt="" className="form__logo" />
-
+            <img
+              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+              alt="gradkit"
+              className="form__logo"
+            />
             <h1>Sign Up</h1>
-
             <label htmlFor="name">Name</label>
             <input
               type="text"
@@ -69,7 +75,6 @@ const SignupScreen = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -78,7 +83,6 @@ const SignupScreen = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -87,15 +91,12 @@ const SignupScreen = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-
             <button type="submit" className="form__button">
               Sign Up
             </button>
-
             <div className="form__links">
               <Link to="/signin">Already signed up?</Link>
             </div>
-
             {message && <Message status="info">{message}</Message>}
             {error && <Message status="error">{error}</Message>}
           </form>
@@ -173,6 +174,11 @@ const SignUpContainer = styled.div`
       font-size: 1.6rem;
       color: white;
       margin-top: 1rem;
+
+      &:hover {
+        box-shadow: 0 0 0.4rem var(--bg-light-secondary);
+        cursor: pointer;
+      }
     }
 
     .form__links {

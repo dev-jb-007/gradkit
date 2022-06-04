@@ -1,5 +1,5 @@
 import React from "react";
-import AboutImg from "../../assets/about.svg";
+// import AboutImg from "../../assets/about.svg";
 import styled from "styled-components/macro";
 
 const AboutSection = () => {
@@ -7,7 +7,10 @@ const AboutSection = () => {
     <About>
       <AboutContainer>
         <div className="image__container">
-          <img src={AboutImg} alt="" />
+          <img
+            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/about.svg"
+            alt=""
+          />
         </div>
         <div className="text__container">
           <h1>About Us</h1>
@@ -15,15 +18,16 @@ const AboutSection = () => {
           <br />
 
           <p>
-          We are here to make your university exam preparation efficient as well as smooth.
-          We are an SSIP funded project.
+            We are here to make your university exam preparation efficient as
+            well as smooth. We are an SSIP funded project.
           </p>
 
           <br />
 
           <p>
-          Our team consists of developers and teachers: Krishna Kalani, Bhagya Patel, Kritik Jiyaviya, Dev Patel, Jay Rathi, Nishant Asnani, Rahul Shinde, Rohit Sharma.
-          Get knowledgeable with us, thankyou.
+            Our team consists of developers and teachers: Krishna Kalani, Bhagya
+            Patel, Kritik Jiyaviya, Dev Patel, Jay Rathi, Nishant Asnani, Rahul
+            Shinde, Rohit Sharma. Get knowledgeable with us, thankyou.
           </p>
         </div>
       </AboutContainer>

@@ -1,12 +1,16 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo1.svg";
+// import logo from "../assets/logo1.svg";
 
 const Footer = () => {
   return (
     <FooterSection>
-      <img className="footer__logo" src={logo} alt="" />
+      <img
+        className="footer__logo"
+        src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo1.svg"
+        alt="gradkit-light-logo"
+      />
       <FooterRow>
         <FooterColumn>
           <h3>Company</h3>
@@ -69,9 +73,9 @@ const Footer = () => {
         </FooterColumn>
       </FooterRow>
 
-      {/* <p className="footer__copyright">
-        All rights reserved &copy; {new Date().getFullYear()} Gradkit
-      </p> */}
+      <p className="footer__copyright">
+        &copy; DoubtCo {new Date().getFullYear()}
+      </p>
     </FooterSection>
   );
 };
@@ -87,6 +91,11 @@ const FooterSection = styled.div`
   .footer__logo {
     margin-bottom: 3.6rem;
     width: 16rem;
+  }
+
+  .footer__copyright {
+    margin-top: 2.4rem;
+    color: white;
   }
 
   @media (max-width: 768px) {

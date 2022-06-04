@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-import Home from "../assets/homepage.svg";
+// import Home from "../assets/homepage.svg";
 import { VideoPlayer } from "../components";
 
 const HomeScreen = () => {
@@ -20,7 +20,10 @@ const HomeScreen = () => {
         </HeroTextContainer>
 
         <HeroImageContainer>
-          <img src={Home} alt="" />
+          <img
+            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/homepage.svg"
+            alt="home-img"
+          />
         </HeroImageContainer>
       </WelcomeSection>
 

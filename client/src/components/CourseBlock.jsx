@@ -1,23 +1,36 @@
 import moment from "moment";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
-import logo from "../assets/logo.svg";
+// import logo from "../assets/logo.svg";
 import { useSelector } from "react-redux";
-import  axios  from "axios";
+import axios from "axios";
+
+import PopUp from "./PopUp";
 
 const CourseBlock = ({ course, enroll }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticatedUser } = useSelector((state) => state.user);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  const history = useNavigate();
 
   const handlePayment = async (course) => {
+    if (!isAuthenticatedUser) {
+      setTimeout(() => {
+        history("/signin");
+      }, 1000);
+    }
+
     var id = course._id;
     try {
       const url = "/api/video/orders";
+
       const { data } = await axios.post(url, { id });
-      console.log(data);
+
       dispalyRazorPay(data);
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.message);
     }
   };
 
@@ -26,28 +39,28 @@ const CourseBlock = ({ course, enroll }) => {
       key: process.env.REACT_APP_RAZORPAY_KEY,
       amount: data.amount,
       currency: data.currency,
-      name: "COA Course",
-      description: "Purchase COA Course",
-      image: { logo },
+      name: course?.title,
+      description: `Purchase ${course?.title} course`,
+      image:
+        "https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg",
       order_id: data.id,
 
       handler: async (response) => {
         try {
           const verifyUrl = "/api/video/verify-payment";
           const { data } = await axios.post(verifyUrl, response);
-          console.log(data);
+
+          setMessage(data.message);
         } catch (error) {
-          console.log(error);
+          setError(error.response.data.message);
         }
       },
+
       prefill: {
         name: `${user?.name}`,
         email: `${user?.email}`,
         contact: "",
       },
-      // notes: {
-      //   address: "Razorpay Corporate Office",
-      // },
       theme: {
         color: "#3399cc",
       },
@@ -56,45 +69,55 @@ const CourseBlock = ({ course, enroll }) => {
     paymentObject.open();
   };
 
-  
-
   return (
-    <Course>
-      <Link to={`/course/${course?._id}`}>
-        <img src={course?.thumbnail?.imageURL} className="course__image" alt="" />
-      </Link>
-
-      <div className="course__details">
-        <h3 className="course__title">
-          <Link to={`/course/${course?._id}`}>{course?.title}</Link>
-        </h3>
-
-        <p className="course__description">{course?.description}</p>
-      </div>
-
-      <p className="course__date">
-        Created at&nbsp;
-        {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
-        {moment(course?.createdAt).format("h:mm a")}
-      </p>
-
-      <p className="course__price">
-        Price -{" "}
-        <span className="course__price__amount">&#8377; {course?.price}</span>
-      </p>
-
-      <div className="course__actions">
-        {!enroll && (
-          <p className="course__enroll" value={course} onClick={() => handlePayment(course)}>
-            Enroll
-          </p>
-        )}
-
-        <Link className="course__preview" to={`/course/${course?._id}`}>
-          <p>Preview</p>
+    <>
+      {error && <PopUp content={error} />}
+      {message && <PopUp content={message} />}
+      <Course>
+        <Link to={`/course/${course?._id}`}>
+          <img
+            src={course?.thumbnail?.imageURL}
+            className="course__image"
+            alt=""
+          />
         </Link>
-      </div>
-    </Course>
+
+        <div className="course__details">
+          <h3 className="course__title">
+            <Link to={`/course/${course?._id}`}>{course?.title}</Link>
+          </h3>
+
+          <p className="course__description">{course?.description}</p>
+        </div>
+
+        <p className="course__date">
+          Created at&nbsp;
+          {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
+          {moment(course?.createdAt).format("h:mm a")}
+        </p>
+
+        <p className="course__price">
+          Price -{" "}
+          <span className="course__price__amount">&#8377; {course?.price}</span>
+        </p>
+
+        <div className="course__actions">
+          {!enroll && (
+            <p
+              className="course__enroll"
+              value={course}
+              onClick={() => handlePayment(course)}
+            >
+              Enroll
+            </p>
+          )}
+
+          <Link className="course__preview" to={`/course/${course?._id}`}>
+            <p>Preview</p>
+          </Link>
+        </div>
+      </Course>
+    </>
   );
 };
 

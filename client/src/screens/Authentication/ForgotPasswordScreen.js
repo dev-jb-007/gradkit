@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-import Logo from "../../assets/logo.svg";
-import SignImg from "../../assets/atom.svg";
+// import Logo from "../../assets/logo.svg";
+// import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -32,13 +32,13 @@ const ForgotPasswordScreen = () => {
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 2000);
+      setTimeout(() => dispatch(clearErrors()), 1500);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 2000);
+      setTimeout(() => dispatch(clearMessages()), 1500);
 
-      setTimeout(() => history("/signin"), 2000);
+      setTimeout(() => history("/signin"), 3000);
     }
   }, [error, dispatch, message, history]);
 
@@ -50,7 +50,11 @@ const ForgotPasswordScreen = () => {
         <ForgotPassContainer>
           <div className="form__container">
             <form onSubmit={forgotPass}>
-              <img src={Logo} alt="" className="form__logo" />
+              <img
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                alt="gradkit"
+                className="form__logo"
+              />
 
               <h1>Forgot Password</h1>
 
@@ -85,7 +89,10 @@ const ForgotPasswordScreen = () => {
             </form>
           </div>
           <div className="image__container">
-            <img src={SignImg} alt="" />
+            <img
+              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
+              alt=""
+            />
           </div>
         </ForgotPassContainer>
       )}
@@ -161,6 +168,11 @@ const ForgotPassContainer = styled.div`
       font-size: 1.6rem;
       color: white;
       margin-top: 1rem;
+
+      &:hover {
+        box-shadow: 0 0 0.4rem var(--bg-light-secondary);
+        cursor: pointer;
+      }
     }
 
     .form__links {

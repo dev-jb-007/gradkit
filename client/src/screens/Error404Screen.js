@@ -1,12 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-import NotFound from ".././assets/not-found.svg";
+// import NotFound from ".././assets/not-found.svg";
 
 const Error404Screen = () => {
   return (
     <Error>
-      <img src={NotFound} alt="error-404" />
+      <img
+        src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/not-found.svg
+"
+        alt="error-404"
+      />
 
       <h2>Page not found</h2>
       <Link to="/" className="goback__link">

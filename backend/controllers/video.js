@@ -386,9 +386,17 @@ exports.getVideoById = catchAsync(async (req, res, next) => {
 
 exports.generateOrderId = catchAsync(async (req, res, next) => {
   const course = await Course.findById(req.body.id);
-  if (course.enrolled.includes(req.user._id)) {
-    throw new Error("Already Bought That Course");
+
+  if (!course) {
+    return next(new ErrorHandler("Course Not Found", 404));
   }
+
+  if (course.enrolled.includes(req.user._id)) {
+    return next(
+      new ErrorHandler("You are already enrolled in this course", 403)
+    );
+  }
+
   const instance = new razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -399,6 +407,7 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     currency: "INR",
     receipt: crypto.randomBytes(10).toString("hex"),
   };
+
   let temp = new Transaction({
     reciept: options.receipt,
     course: course.id,
@@ -440,11 +449,11 @@ exports.verifyPayment = catchAsync(async (req, res, next) => {
     await user.save();
     await temp.save();
     await course.save();
-    res.send("Payment Successful");
+    res.status(200).json({ message: "Payment Successful" });
   } else {
     temp.status = "Fail";
     await temp.save();
-    res.send("Invalid Signature");
+    return next(new ErrorHandler("Payment Failed", 400));
   }
 });
 

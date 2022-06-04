@@ -1,5 +1,5 @@
 import React from "react";
-import ContactImg from "../../assets/contact.svg";
+// import ContactImg from "../../assets/contact.svg";
 import styled from "styled-components/macro";
 
 const ContactSection = () => {
@@ -25,7 +25,10 @@ const ContactSection = () => {
           </form>
         </div>
         <div className="image__container">
-          <img src={ContactImg} alt="" />
+          <img
+            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/contact.svg"
+            alt=""
+          />
         </div>
       </ContactContainer>
     </Contact>

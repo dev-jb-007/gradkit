@@ -8,6 +8,7 @@ import { getAllCourses } from "../redux/actions/courseActions";
 const CourseScreen = () => {
   const dispatch = useDispatch();
   const { courses, loading } = useSelector((state) => state.courses);
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getAllCourses());
@@ -29,8 +30,15 @@ const CourseScreen = () => {
 
           <div className="course__wrapper">
             {courses &&
-              courses.map((course) => (
-                <CourseBlock course={course} key={course._id} />
+              courses.map((course, index) => (
+                <CourseBlock
+                  enroll={
+                    user &&
+                    user.courses.filter((c) => c._id === course._id).length > 0
+                  }
+                  course={course}
+                  key={index}
+                />
               ))}
           </div>
         </div>
