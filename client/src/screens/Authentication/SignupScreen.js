@@ -12,7 +12,7 @@ const SignupScreen = () => {
 
   const history = useNavigate();
 
-  const { error, isAuthenticatedUser, loading, success } = useSelector(
+  const { error, isAuthenticatedUser, loading, message } = useSelector(
     (state) => state.user
   );
 
@@ -32,68 +32,68 @@ const SignupScreen = () => {
       }, 3000);
     }
 
-    if(success) {
-      console.log(success)
+    if (message) {
+      console.log(message);
     }
 
     if (isAuthenticatedUser) {
       history("/");
     }
-  }, [dispatch, error, isAuthenticatedUser, history]);
+  }, [dispatch, error, isAuthenticatedUser, history, message]);
 
   return (
     <SignUpSection>
       {loading && <Loader />}
-        <SignUpContainer>
-          <div className="image__container">
-            <img src={SignImg} alt="" />
-          </div>
-          <div className="form__container">
-            <form onSubmit={registerUser}>
-              <img src={Logo} alt="" className="form__logo" />
+      <SignUpContainer>
+        <div className="image__container">
+          <img src={SignImg} alt="" />
+        </div>
+        <div className="form__container">
+          <form onSubmit={registerUser}>
+            <img src={Logo} alt="" className="form__logo" />
 
-              <h1>Sign Up</h1>
+            <h1>Sign Up</h1>
 
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
 
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-              <button type="submit" className="form__button">
-                Sign Up
-              </button>
+            <button type="submit" className="form__button">
+              Sign Up
+            </button>
 
-              <div className="form__links">
-                <Link to="/signin">Already signed up?</Link>
-              </div>
+            <div className="form__links">
+              <Link to="/signin">Already signed up?</Link>
+            </div>
 
-              {success && <Message status="info">{success}</Message>}
-              {error && <Message status="error">{error}</Message>}
-            </form>
-          </div>
-        </SignUpContainer>
+            {message && <Message status="info">{message}</Message>}
+            {error && <Message status="error">{error}</Message>}
+          </form>
+        </div>
+      </SignUpContainer>
     </SignUpSection>
   );
 };

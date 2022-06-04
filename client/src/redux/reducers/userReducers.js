@@ -44,8 +44,8 @@ export const userAuthReducer = (state = { user: {} }, action) => {
         ...state,
         loading: false,
         isAuthenticatedUser: true,
-        user: action.payload,
-        message: action.payload,
+        user: action.payload.user,
+        message: action.payload.message,
       };
 
     case USER_REGISTER_SUCCESS:
@@ -53,7 +53,7 @@ export const userAuthReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         loading: false,
-        success: action.payload,
+        message: action.payload.message,
       };
 
     case USER_LOGOUT_SUCCESS:
@@ -108,12 +108,21 @@ export const userAuthReducer = (state = { user: {} }, action) => {
         error: null,
       };
 
+    case CLEAR_MESSAGES:
+      return {
+        ...state,
+        message: null,
+      };
+
     default:
       return state;
   }
 };
 
-export const forgotPasswordReducer = (state = {}, action) => {
+export const forgotPasswordReducer = (
+  state = { forgotPassword: {} },
+  action
+) => {
   switch (action.type) {
     case FORGOT_PASSWORD_REQUEST:
     case RESET_PASSWORD_REQUEST:
@@ -144,6 +153,7 @@ export const forgotPasswordReducer = (state = {}, action) => {
         ...state,
         error: null,
       };
+
     case CLEAR_MESSAGES:
       return {
         ...state,

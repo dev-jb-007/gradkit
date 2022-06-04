@@ -4,14 +4,18 @@ import Logo from "../../assets/logo.svg";
 import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
 
-import { login, clearErrors } from "../../redux/actions/userActions";
+import {
+  login,
+  clearErrors,
+  clearMessages,
+} from "../../redux/actions/userActions";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Loader, Message } from "../../components";
 
 const SigninScreen = () => {
   const dispatch = useDispatch();
-  const { error, isAuthenticatedUser, loading } = useSelector(
+  const { error, isAuthenticatedUser, loading, message } = useSelector(
     (state) => state.user
   );
 
@@ -32,10 +36,16 @@ const SigninScreen = () => {
       }, 3000);
     }
 
+    if (message) {
+      setTimeout(() => dispatch(clearMessages()), 2000);
+
+      setTimeout(() => history("/signin"), 2000);
+    }
+
     if (isAuthenticatedUser) {
       history("/");
     }
-  }, [dispatch, error, isAuthenticatedUser, history]);
+  }, [dispatch, error, isAuthenticatedUser, history, message]);
 
   return (
     <SignInSection>
@@ -73,6 +83,7 @@ const SigninScreen = () => {
               <Link to="/signup">Sign Up</Link>
               <Link to="/forgot-password">Forgot Password</Link>
             </div>
+            {message && <Message status="success">{message}</Message>}
             {error && <Message status="error">{error}</Message>}
           </form>
         </div>

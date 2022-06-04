@@ -1,25 +1,44 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyUser } from "../../redux/actions/userActions";
-import {Loader} from "../../components"
+import {
+  clearErrors,
+  clearMessages,
+  verifyUser,
+} from "../../redux/actions/userActions";
+import { Loader } from "../../components";
 
 const VerifyEmailScreen = () => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const { message , loading } = useSelector((state) => state.user);
+  const history = useNavigate();
+
+  const { message, loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(verifyUser(id));
-  }, [dispatch, id]);
+
+    if (error) {
+      setTimeout(() => dispatch(clearErrors()), 3000);
+    }
+
+    if (message) {
+      setTimeout(() => dispatch(clearMessages()), 3000);
+
+      if (message) {
+        history("/");
+      }
+    }
+  }, [dispatch, id, history, error, message]);
 
   return (
     <VerifySection>
-    {loading && <Loader />}
-      <h2>{message?.message}</h2>
+      {loading && <Loader />}
+      {message && <h2>{message}</h2>}
+      {error && <h2>{error}</h2>}
     </VerifySection>
   );
 };

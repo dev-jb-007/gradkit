@@ -11,7 +11,7 @@ import {
   clearMessages,
   forgotPassword,
 } from "../../redux/actions/userActions";
-import { Loader } from "../../components";
+import { Loader, Message } from "../../components";
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +38,7 @@ const ForgotPasswordScreen = () => {
     if (message) {
       setTimeout(() => dispatch(clearMessages()), 2000);
 
-      setTimeout(() => history("/login"), 2000);
+      setTimeout(() => history("/signin"), 2000);
     }
   }, [error, dispatch, message, history]);
 
@@ -80,6 +80,8 @@ const ForgotPasswordScreen = () => {
                 <Link to="/signin">Sign In</Link>
                 <Link to="/signup">Sign Up</Link>
               </div>
+              {message && <Message status="success">{message}</Message>}
+              {error && <Message status="error">{error}</Message>}
             </form>
           </div>
           <div className="image__container">
