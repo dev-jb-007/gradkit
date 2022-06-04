@@ -66,9 +66,7 @@ const UploadScreen = () => {
 
   return (
     <UploadSection>
-      {cLoading || vLoading ? (
-        <Loader />
-      ) : (
+      {(cLoading || vLoading) && <Loader></Loader>}
       <FormContainer>
         <div className="form__changer">
           <button
@@ -161,7 +159,8 @@ const UploadScreen = () => {
               onChange={(e) => setCThumbnail(e.target.files[0])}
             />
 
-            <button className="form__button" type="submit">
+            <button disabled={!this.state.value} className="form__button" type="submit"
+            >
               Upload
             </button>
           </CourseForm>
@@ -249,13 +248,13 @@ const UploadScreen = () => {
               onChange={(e) => setVideo(e.target.files[0])}
             />
 
-            <button className="form__button" type="submit">
+            <button className="form__button" type="submit" >
               Upload
             </button>
           </VideoForm>
         )}
       </FormContainer>
-      )} 
+
     </UploadSection>
   );
 };

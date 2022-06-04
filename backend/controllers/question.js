@@ -2,8 +2,9 @@ const findOrCreate = require('mongoose-find-or-create');
 const Question = require('../models/question');
 const Tag = require('../models/tag');
 const Image=require('../models/image');
-
-exports.askQuestion = async (req, res) => {
+const catchAsync = require("../utils/catchAsync");
+const ErrorHandler = require("../utils/errorHandler");
+exports.askQuestion = catchAsync(async (req, res,next) => {
     try {
         let tagsArray = new Array;
         console.log(req.body.questionTags.split(" "));
@@ -47,7 +48,7 @@ exports.askQuestion = async (req, res) => {
         next(err);
     }
     // res.redirect('/video/');
-}
+});
 
 exports.listQuestions = (req, res) => {
     Question.find({ answerStatus: false }, { _id: 1, questionTitle: 1, questionDesc: 1 }, function (err, docs) {

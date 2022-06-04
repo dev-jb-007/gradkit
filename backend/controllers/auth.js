@@ -29,6 +29,11 @@ exports.sessionSignUp = (req, res) => {
 exports.jwtSignUp = catchAsync(async (req, res, next) => {
   console.log(req.body);
   // console.log(req.data);
+  let found=await User.findOne({email:req.body.email});
+  if(found)
+  {
+    return next(new ErrorHandler("Email Already Exist", 403));
+  }
   const saltHash = encryptPassword(req.body.password);
 
   const salt = saltHash.salt;
@@ -40,6 +45,9 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
     salt: salt,
     hash: hash,
   });
+  
+
+  await user.save()
 
   // let token = await user.createAuthToken();
   // res.cookie("jwt", token, {
@@ -48,6 +56,7 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
   // });
   // console.log("log1");
   next();
+  // next();
 });
 
 exports.verifySignUp = async (req, res, next) => {
@@ -96,7 +105,7 @@ exports.jwtSignIn = catchAsync(async (req, res, next) => {
     if (found) {
       if (user.activationStatus === "active") {
         console.log(user.tokens);
-        if (user.tokens.length !== 1) {
+        if (user.tokens.length >= 1&&user.role===0) {
           // throw new Error("Already Signed On Another Account");
           return next(
             new ErrorHandler("Already Signed On Another Account", 403)
@@ -143,8 +152,7 @@ exports.sessionSignIn = (req, res, next) => {
   })(req, res, next);
 };
 
-exports.signOut = async (req, res, next) => {
-  try {
+exports.signOut = catchAsync(async (req, res, next) => {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
     });
@@ -153,11 +161,9 @@ exports.signOut = async (req, res, next) => {
     //   z.cancel();
     // }
     await req.user.save();
-    res.send({ status: "done" });
-  } catch (err) {
-    next(err);
-  }
-};
+    res.status(200).json("Signout Successfully");
+  
+})
 
 exports.getUserDetails = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id)

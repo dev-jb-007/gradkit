@@ -1,7 +1,8 @@
 const Form = require("../models/form");
 const sendMail = require("../helpers/send_mail");
-
-exports.contact = async (req,res) => {
+const catchAsync = require("../utils/catchAsync");
+const ErrorHandler = require("../utils/errorHandler");
+exports.contact = catchAsync(async (req,res,next) => {
     const form = new Form({
         type: 'Contact Request',
         name: req.body.name,
@@ -10,6 +11,7 @@ exports.contact = async (req,res) => {
     });
 
     await form.save();
-    await sendMail("doubt.co923@gmail.com", "Contact Request", `A user has submitted a contact request. ${form._id}`);
-    res.send("OK");
-}
+    sendMail(req.body.email,"Query Recieved","Thanks for your feedback, we will get back to you soon!!");
+    sendMail("doubt.co923@gmail.com", "Contact Request", `A user has submitted a contact request. ${form._id}`);
+    res.send("Submitted").status(200);
+});

@@ -5,14 +5,14 @@ import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, clearErrors } from "../../redux/actions/userActions";
-import { Loader } from "../../components";
+import { Loader, Message } from "../../components";
 
 const SignupScreen = () => {
   const dispatch = useDispatch();
 
   const history = useNavigate();
 
-  const { error, isAuthenticatedUser, loading } = useSelector(
+  const { error, isAuthenticatedUser, loading, success } = useSelector(
     (state) => state.user
   );
 
@@ -27,9 +27,13 @@ const SignupScreen = () => {
 
   useEffect(() => {
     if (error) {
-      let alert = error;
-      dispatch(clearErrors());
-      return alert;
+      setTimeout(() => {
+        dispatch(clearErrors());
+      }, 3000);
+    }
+
+    if(success) {
+      console.log(success)
     }
 
     if (isAuthenticatedUser) {
@@ -39,9 +43,7 @@ const SignupScreen = () => {
 
   return (
     <SignUpSection>
-      {loading ? (
-        <Loader />
-      ) : (
+      {loading && <Loader />}
         <SignUpContainer>
           <div className="image__container">
             <img src={SignImg} alt="" />
@@ -86,10 +88,12 @@ const SignupScreen = () => {
               <div className="form__links">
                 <Link to="/signin">Already signed up?</Link>
               </div>
+
+              {success && <Message status="info">{success}</Message>}
+              {error && <Message status="error">{error}</Message>}
             </form>
           </div>
         </SignUpContainer>
-      )}
     </SignUpSection>
   );
 };

@@ -3,13 +3,14 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyUser } from "../../redux/actions/userActions";
+import {Loader} from "../../components"
 
 const VerifyEmailScreen = () => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const { message } = useSelector((state) => state.user);
+  const { message , loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(verifyUser(id));
@@ -17,6 +18,7 @@ const VerifyEmailScreen = () => {
 
   return (
     <VerifySection>
+    {loading && <Loader />}
       <h2>{message?.message}</h2>
     </VerifySection>
   );

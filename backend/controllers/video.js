@@ -10,6 +10,8 @@ const razorpay =require("razorpay");
 const crypto=require("crypto");
 const Transaction=require("../models/transaction");
 const User = require("../models/user");
+const catchAsync = require("../utils/catchAsync");
+const ErrorHandler = require("../utils/errorHandler");
 //Controller to delete video from S3 first and then from DB
 // exports.deleteVideo = async (req, res) => {
 //   await Video.find({ videoId: req.params.videoId }, (err, vid) => {
@@ -174,8 +176,7 @@ exports.uploadSolution = async (req, res) => {
 //   }
 // }
 //Controller to add video to DB
-exports.uploadVideo = async (req, res, next) => {
-  try {
+exports.uploadVideo = catchAsync(async (req, res, next) => {
     // console.log(req.files);
     const [vid] = req.files.video;
     const [img] = req.files.image;
@@ -206,10 +207,7 @@ exports.uploadVideo = async (req, res, next) => {
     await newVid.save();
     console.log("Uploaded");
     // res.redirect("/video/"
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
 //Controller to find video by id
 // exports.getVideoById = (req, res) => {
@@ -289,8 +287,7 @@ exports.textSearch = async (req, res) => {
 };
 
 //Upload Courses
-exports.uploadCourse = async (req, res, next) => {
-  try {
+exports.uploadCourse = catchAsync(async (req, res, next) => {
     const [img] = req.files.image;
     req.body.thumbnail = img.location;
     console.log(img);
@@ -306,12 +303,8 @@ exports.uploadCourse = async (req, res, next) => {
     const course = new Course(obj);
     await course.save();
     res.send(course);
-  } catch (err) {
-    next(err);
-  }
-};
-exports.uploadCourseVideos = async (req, res, next) => {
-  try {
+});
+exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
     const [vid] = req.files.video;
     const [img] = req.files.image;
     console.log(vid);
@@ -346,25 +339,17 @@ exports.uploadCourseVideos = async (req, res, next) => {
         return -1;
       }
     });
-    console.log(temp.videos);
+    // console.log(temp.videos);
     await temp.save();
     res.send(temp);
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
-exports.getAllCourses = async (req, res, next) => {
-  try {
+exports.getAllCourses = catchAsync(async (req, res, next) => {
     let courses = await Course.find({}).populate("thumbnail");
     res.send(courses);
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
-exports.checkValidBuy = async (req, res, next) => {
-  try {
+exports.checkValidBuy = catchAsync(async (req, res, next) => {
     let course = await Course.findById(req.params.id).populate({
       path: "videos",
       populate: { path: "videoId" },
@@ -382,21 +367,14 @@ exports.checkValidBuy = async (req, res, next) => {
     } else {
       res.send(course);
     }
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
-exports.enrollCourse = async (req, res, next) => {
-  try {
+exports.enrollCourse = catchAsync(async (req, res, next) => {
     let course = await Course.findById(req.body.id);
     course.enrolled.push(req.user._id);
     await course.save();
     res.send(course);
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
 exports.getVideoById = async (req, res, next) => {
   try {
@@ -407,8 +385,7 @@ exports.getVideoById = async (req, res, next) => {
   }
 };
 
-exports.generateOrderId = async (req, res, next) => {
-  try {
+exports.generateOrderId = catchAsync(async (req, res, next) => {
     const course = await Course.findById(req.body.id);
     if(course.enrolled.includes(req.user._id))
     {
@@ -445,14 +422,9 @@ exports.generateOrderId = async (req, res, next) => {
         res.send(order);
       }
     });
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-};
+});
 
-exports.verifyPayment = async (req, res, next) => {
-  try {
+exports.verifyPayment = catchAsync(async (req, res, next) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
     const temp=await Transaction.findOne({orderId:razorpay_order_id});
@@ -479,8 +451,9 @@ exports.verifyPayment = async (req, res, next) => {
       await temp.save();
       res.send("Invalid Signature");
     }
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-};
+});
+
+exports.sendSubjectCode=catchAsync(async(req,res,next)=>{
+    let temp=await Course.find({},'subjectCode');
+    res.send(temp);
+});

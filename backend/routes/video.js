@@ -20,7 +20,8 @@ const {
   checkValidBuy,
   enrollCourse,
   generateOrderId,
-  verifyPayment
+  verifyPayment,
+  sendSubjectCode
 } = require("../controllers/video");
 // const { textSearch, getVideoById, uploadVideo, deleteVideo, uploadSolution } = require('../controllers/video');
 const { reportSolution } = require("../controllers/solution");
@@ -69,7 +70,7 @@ router.post("/report/:solutionId", auth, reportSolution);
 module.exports = router;
 
 router.post("/enrollCourse", auth, enrollCourse);
-
+router.get("/subjectCode",sendSubjectCode);
 router.get("/:id", auth, getVideoById);
 router.post("/orders",auth, generateOrderId);
 router.post("/verify-payment", verifyPayment);

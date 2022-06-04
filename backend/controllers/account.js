@@ -3,8 +3,9 @@ const sendMail = require("../helpers/send_mail");
 const Code = require("../models/codes");
 const User = require("../models/user");
 const {encryptPassword}=require("../helpers/password_methods");
-exports.generateVerificationMail = async (req, res, next) => {
-  try {
+const catchAsync = require("../utils/catchAsync");
+const ErrorHandler = require("../utils/errorHandler");
+exports.generateVerificationMail = catchAsync(async (req, res, next) => {
     let email = req.body.email;
     let ucode = uuid();
     console.log(email);
@@ -19,14 +20,12 @@ exports.generateVerificationMail = async (req, res, next) => {
       await Code.findByIdAndDelete(code._id);
     }, 1000000);
     await code.save();
-    res.send({ status: "Done" });
-  } catch (err) {
-    next(err);
-  }
-};
+    res.status(201).json({
+      success: "Please Verify your Email"
+    });
+});
 
-exports.verifyEmail = async (req, res, next) => {
-  try {
+exports.verifyEmail = catchAsync(async (req, res, next) => {
     let code = req.params.code;
     let found = await Code.findOne({ code });
     let status;
@@ -37,13 +36,9 @@ exports.verifyEmail = async (req, res, next) => {
       status = "Fail";
       res.redirect("/auth/signup");
     }
-  } catch (err) {
-    next(err);
-  }
-};
+});
 
-exports.forgetPassword = async (req, res, next) => {
-  try {
+exports.forgetPassword = catchAsync(async (req, res, next) => {
     let code = uuid();
     let found = await User.findOne({ email: req.body.email });
     if (found) {
@@ -63,13 +58,8 @@ exports.forgetPassword = async (req, res, next) => {
     } else {
       res.send({ status: "You are not registered" });
     }
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.changePassword = async (req, res, next) => {
-  try {
+});
+exports.changePassword = catchAsync(async (req, res, next) => {
     let code = await Code.findOne({ code: req.params.code });
     let email = code.email;
     console.log(email);
@@ -85,7 +75,4 @@ exports.changePassword = async (req, res, next) => {
     await user.save();
     await Code.findByIdAndDelete(code._id);
     res.send({ status: "Success" });
-  } catch (err) {
-    next(err);
-  }
-};
+});
