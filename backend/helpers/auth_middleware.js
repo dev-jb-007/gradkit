@@ -4,7 +4,6 @@ exports.isAuth = (req, res, next) => {
     if(req.isAuthenticated()){
         next();
     }else{
-        console.log('Seems like you are not authorized');
         req.session.returnTo = req.originalUrl;
         res.redirect("/auth/signin")
     }

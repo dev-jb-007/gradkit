@@ -2,6 +2,7 @@ const Form = require("../models/form");
 const sendMail = require("../helpers/send_mail");
 const catchAsync = require("../utils/catchAsync");
 const ErrorHandler = require("../utils/errorHandler");
+
 exports.contact = catchAsync(async (req,res,next) => {
     const form = new Form({
         type: 'Contact Request',

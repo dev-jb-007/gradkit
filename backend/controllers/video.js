@@ -42,7 +42,6 @@ const ErrorHandler = require("../utils/errorHandler");
 
 exports.uploadSolution = async (req, res) => {
   try {
-    console.log("hell0");
     let [vid] = req.files.video || undefined;
     let videoID;
     if (vid) {
@@ -79,12 +78,6 @@ exports.uploadSolution = async (req, res) => {
         await newNote.save();
       });
     }
-    // console.log(req.body.description);
-    // console.log(newVideo._id);
-    // console.log(imagesArray);
-    // console.log(notesArray);
-
-    console.log(req.body.description, videoID, imagesArray, notesArray);
 
     let solution = new Solution({
       description: req.body.description,
@@ -93,13 +86,11 @@ exports.uploadSolution = async (req, res) => {
       note: notesArray,
       // createdBy: req.user._id
     });
-    console.log(solution);
     // console.log(`%c${solution}`, "color:green");
     await solution.save();
 
     // console.log(req.params.questionID);
     const question = await Question.findById(req.params.questionID);
-    console.log(question);
     // Question.findById(req.params.questionID, async (result) => {
     //     result.solutionId.push(solution._id);
     //     console.log(result);
@@ -205,7 +196,6 @@ exports.uploadVideo = catchAsync(async (req, res, next) => {
       throw new Error("Please try again with valid product id");
     }
     await newVid.save();
-    console.log("Uploaded");
     // res.redirect("/video/"
 });
 
@@ -224,13 +214,11 @@ exports.uploadVideo = catchAsync(async (req, res, next) => {
 
 //Controller for text based search
 exports.textSearch = async (req, res) => {
-  console.log(req.query.searchText);
   let words = req.query.searchText.split(" ");
   let result = ``;
   words.forEach((element) => {
     result += `(?=.*${element})`;
   });
-  console.log(result);
   // Video.find({$text: {$search: searchText}}, {_id:0, videoTitle:1, videoDesc:1}).limit(10)
   // .exec(function(err, docs){
   //     if(!err){
@@ -250,7 +238,6 @@ exports.textSearch = async (req, res) => {
     },
     { _id: 1, videoTitle: 1, videoDesc: 1 }
   ).limit(10);
-  console.log(video1);
   result = ``;
   result += `(${words[0]})`;
   for (let i = 1; i < words.length; i++) {
@@ -266,7 +253,6 @@ exports.textSearch = async (req, res) => {
     },
     { _id: 1, videoTitle: 1, videoDesc: 1 }
   ).limit(10);
-  console.log(video2);
   let indexes = new Array();
   video2.forEach((element, index) => {
     video1.forEach((item) => {
@@ -290,7 +276,6 @@ exports.textSearch = async (req, res) => {
 exports.uploadCourse = catchAsync(async (req, res, next) => {
     const [img] = req.files.image;
     req.body.thumbnail = img.location;
-    console.log(img);
     let newImage = new Image({
       imageBucket: img.bucket,
       imageURL: img.location,
@@ -307,7 +292,6 @@ exports.uploadCourse = catchAsync(async (req, res, next) => {
 exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
     const [vid] = req.files.video;
     const [img] = req.files.image;
-    console.log(vid);
     var newVid = new Video({
       // videoId: vid.key,
       videoBucket: vid.bucket,
@@ -391,7 +375,6 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     {
       throw new Error('Already Bought That Course');
     }
-    console.log(course);
     const instance = new razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -412,11 +395,9 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
    
     await instance.orders.create(options,async (err, order) => {
       if (err) {
-        console.log(err);
         temp.status='Failed'
         await temp.save();
       } else {
-        console.log(order);
         temp.orderId=order.id;
         await temp.save();
         res.send(order);
