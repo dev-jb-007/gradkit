@@ -16,8 +16,8 @@ const VideoTile2 = ({ video, id }) => {
         </h4>
 
         <p className="video__description">
-          {video?.videoDescription.length > 64
-            ? video?.videoDescription.substring(0, 64) + "..."
+          {video?.videoDescription.length > 60
+            ? video?.videoDescription.substring(0, 60) + "..."
             : video?.videoDescription}
         </p>
 

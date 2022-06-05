@@ -150,6 +150,8 @@ const CourseDetails = styled.div`
       border-radius: 0.4rem;
       background-color: var(--bg-light-secondary);
       color: white;
+      border: none;
+      box-shadow: none;
       &:hover {
         cursor: pointer;
         box-shadow: 0 0 0.4rem var(--bg-light-secondary);

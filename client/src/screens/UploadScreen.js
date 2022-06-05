@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components/macro";
 import { useDispatch } from "react-redux";
 import {
@@ -20,6 +20,7 @@ const UploadScreen = () => {
 
   /* Course Upload */
 
+  const cThumbRef = useRef(null);
   const [cTitle, setCTitle] = useState("");
   const [cDescription, setCDescription] = useState("");
   const [cSubjectCode, setCSubjectCode] = useState("");
@@ -46,9 +47,13 @@ const UploadScreen = () => {
     setCSemister("");
     setCThumbnail("");
     setCSubjectCode("");
+    cThumbRef.current.value=""
   };
 
   /* Video Upload */
+
+  const vidRef = useRef(null);
+  const thumbRef = useRef(null);
 
   const [vTitle, setvTitle] = useState("");
   const [vDescription, setvDescription] = useState("");
@@ -78,7 +83,8 @@ const UploadScreen = () => {
     setVSubjectCode("");
     setVIndex("");
     setVChapter("");
-
+    thumbRef.current.value="";
+    vidRef.current.value="";
   };
 
   const { vLoading, vError, vMessage } = useSelector((state) => state.addVideo);
@@ -209,6 +215,7 @@ const UploadScreen = () => {
               type="file"
               name="image"
               accept="image/*"
+              ref={cThumbRef}
               onChange={(e) => setCThumbnail(e.target.files[0])}
             />
 
@@ -286,6 +293,7 @@ const UploadScreen = () => {
               type="file"
               name="image"
               accept="image/*"
+              ref={thumbRef}
               onChange={(e) => setvThumbnail(e.target.files[0])}
             />
 
@@ -293,10 +301,12 @@ const UploadScreen = () => {
               Video
             </label>
             <input
+            id="video_file"
               className="form__input"
               type="file"
               name="video"
               accept="video/*"
+              ref={vidRef}
               onChange={(e) => setVideo(e.target.files[0])}
             />
 

@@ -15,7 +15,7 @@ const VideoTile = ({ video, id }) => {
 
         <div>
           <h4 className="video__title">
-            <Link to="/video/1">{video?.videoTitle}</Link>
+            <Link to={`/video/${video._id}/${id}`}>{video?.videoTitle}</Link>
           </h4>
 
           <p className="video__description">

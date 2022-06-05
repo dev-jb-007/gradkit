@@ -76,6 +76,9 @@ const Footer = () => {
       <p className="footer__copyright">
         &copy; DoubtCo {new Date().getFullYear()}
       </p>
+      <p className="footer__version">
+        1.0.0
+      </p>
     </FooterSection>
   );
 };
@@ -95,6 +98,11 @@ const FooterSection = styled.div`
 
   .footer__copyright {
     margin-top: 2.4rem;
+    color: white;
+  }
+  
+  .footer__version {
+    margin-top: 1.4rem;
     color: white;
   }
 

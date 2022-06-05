@@ -14,18 +14,18 @@ export const getVideoDetailsReducer = (state = { video: {} }, action) => {
     case VIDEO_DETAILS_REQUEST:
       return {
         ...state,
-        loading: true,
+        vLoading: true,
       };
     case VIDEO_DETAILS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        vLoading: false,
         video: action.payload,
       };
     case VIDEO_DETAILS_FAIL:
       return {
         ...state,
-        loading: false,
+        vLoading: false,
         error: action.payload,
       };
 

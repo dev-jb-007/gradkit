@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Linkify from "react-linkify";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
@@ -15,8 +16,9 @@ const VideoPlayerScreen = () => {
 
   const dispatch = useDispatch();
   const { course } = useSelector((state) => state.course);
+  const { isAuthenticatedUser, loading } = useSelector((state) => state.user);
 
-  const { video, loading, error } = useSelector((state) => state.video);
+  const { video, vLoading, error } = useSelector((state) => state.video);
 
   const history = useNavigate();
 
@@ -27,13 +29,18 @@ const VideoPlayerScreen = () => {
     if (error) {
       history(`/course/${cid}`);
     }
+    
+    if (loading === undefined) {
+    } else if (!loading && !isAuthenticatedUser) {
+      history("/signin")
+    }
 
     dispatch(clearVideoErrors());
-  }, [dispatch, cid, vid, error, history]);
+  }, [dispatch, cid, vid, error, history, loading, isAuthenticatedUser]);
 
   return (
     <VideoContainer>
-      {loading ? (
+      {vLoading ? (
         <Loader />
       ) : (
         <>
@@ -44,8 +51,9 @@ const VideoPlayerScreen = () => {
 
             <VideoDetails>
               <h3 className="video__title">{video?.videoTitle}</h3>
-
+            <Linkify>
               <p className="video__description">{video?.videoDescription?.split('\n').map(str => <p >{str}</p>)}</p>
+            </Linkify>
             </VideoDetails>
           </VideoWrapper>
 
@@ -88,6 +96,10 @@ const VideoWrapper = styled.div`
 const VideoDetails = styled.div`
   padding: 1.4rem 0;
   color: var(--font-light-primary);
+
+  a{
+    color:blue;
+  }
 
   .video__title {
     font-weight: 600;
