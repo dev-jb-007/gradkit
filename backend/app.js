@@ -1,4 +1,18 @@
 //import modules
+const os=require("os");
+const cluster=require("cluster");
+if(cluster.isMaster)
+{
+  const n_cpus=os.cpus().length;
+  console.log("Forking "+n_cpus+" CPUS");
+  for(let i=0;i<n_cpus;i++)
+  {
+    cluster.fork();
+  }
+}
+else{
+
+
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -12,6 +26,7 @@ const https = require("https");
 const cors = require("cors");
 const Code = require('./models/codes');
 const Solution=require('./models/solution');
+
 const client=require("twilio")(process.env.ACCOUNT_SID,process.env.AUTH_TOKEN);
 // const client=require("twilio")(process.env.ACCOUNT_SID,process.env.AUTH_TOKEN);
 //import routes
@@ -268,3 +283,4 @@ app.listen(5001, () => console.log(`Listening on port ${port}`));
 //     console.log("💥 Process terminated!");
 //   });
 // });
+}
