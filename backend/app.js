@@ -19,7 +19,6 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
-const template=require('./watermark.json');
 const path = require("path");
 const fs = require("fs");
 const https = require("https");
@@ -31,8 +30,8 @@ const client=require("twilio")(process.env.ACCOUNT_SID,process.env.AUTH_TOKEN);
 // const client=require("twilio")(process.env.ACCOUNT_SID,process.env.AUTH_TOKEN);
 //import routes
 const httpsOptions = {
-    cert:fs.readFileSync(path.join(__dirname, 'certificate.pem')),
-    key:fs.readFileSync(path.join(__dirname, 'privatekay.pem'))
+    cert:fs.readFileSync(path.join(__dirname, 'server.crt')),
+    key:fs.readFileSync(path.join(__dirname, 'server.key'))
 }
 const videoRoutes = require("./routes/video");
 const authRoutes = require("./routes/auth");
@@ -254,18 +253,18 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
 });
-// https.createServer(httpsOptions, app)
-//     .listen(5001, () => {
-//         console.log('HTTPS Server started on port 5000');
-//     })
+https.createServer(httpsOptions, app)
+    .listen(5002, () => {
+        console.log('HTTPS Server started on port 5000');
+    })
 app.listen(5001, () => console.log(`Listening on port ${port}`));
 
 // const secureServer = https.createServer({
-//   key: fs.readFileSync(path.join(__dirname, './cert/key.pem')),
-//   cert: fs.readFileSync(path.join(__dirname, './cert/cert.pem')),
+//   key: fs.readFileSync(path.join(__dirname, 'server.key')),
+//   cert: fs.readFileSync(path.join(__dirname, 'server.crt')),
 // }, app);
 
-// secureServer.listen(port, () => console.log(`Secure server 🚀🔑 on port ${port}`))
+// secureServer.listen(5000, () => console.log(`Secure server 🚀🔑 on port 5000`))
 
 
 // Unhandled Promise Rejection
