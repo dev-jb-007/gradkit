@@ -27,7 +27,7 @@ const ProfileScreen = () => {
           {user && user?.courses.length > 0 ? (
             <h3 className="enrolled__course__header">Enrolled Course</h3>
           ) : (
-            "null"
+            null
           )}
 
           <CourseWrapper>
