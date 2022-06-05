@@ -69,15 +69,18 @@ const UploadScreen = () => {
     videoForm.append("index", vIndex);
     videoForm.append("chapter", vChapter);
 
+    console.log(videoForm)
+
     dispatch(createVideo(videoForm));
 
     setVideo("");
+    setvThumbnail("");
     setvTitle("");
     setvDescription("");
-    setvThumbnail("");
     setVSubjectCode("");
     setVIndex("");
     setVChapter("");
+
   };
 
   const { vLoading, vError, vMessage } = useSelector((state) => state.addVideo);
@@ -156,8 +159,8 @@ const UploadScreen = () => {
             <label className="form__label" htmlFor="description">
               Description
             </label>
-            <input
-              className="form__input"
+            <textarea
+              className="form__textarea"
               type="text"
               name="description"
               id="description"
@@ -232,8 +235,8 @@ const UploadScreen = () => {
             <label className="form__label" htmlFor="description">
               Video Description
             </label>
-            <input
-              className="form__input"
+            <textarea
+              className="form__textarea"
               type="text"
               name="description"
               id="description"
@@ -340,6 +343,16 @@ const UploadSection = styled.div`
     font-size: 1.6rem;
     outline: none;
   }
+  
+  .form__textarea {
+    border: 0.1rem solid black;
+    border-radius: 0.2rem;
+    padding: 0.6rem;
+    font-size: 1.6rem;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+  }
 
   .form__button {
     border: 0.1rem solid black;
@@ -352,6 +365,7 @@ const UploadSection = styled.div`
 
     &:hover {
       cursor: pointer;
+      box-shadow: 0 0 0.4rem var(--bg-light-secondary);
     }
   }
 
@@ -362,6 +376,7 @@ const UploadSection = styled.div`
 
     .form__label,
     .form__input,
+    .form__textarea,
     .form__button {
       font-size: 1.4rem;
     }

@@ -19,13 +19,18 @@ const CourseViewScreen = () => {
   const { course } = useSelector((state) => state.course);
 
   const { isAuthenticatedUser, loading } = useSelector((state) => state.user);
+  
+  function handleClick() {
+    history("/course")
+  }
 
   useEffect(() => {
-    if (!isAuthenticatedUser) {
-      history("/signin");
+    if (loading === undefined) {
+    } else if (!loading && !isAuthenticatedUser) {
+      history("/signin")
     }
     dispatch(getCourseById(id));
-  }, [dispatch, id, isAuthenticatedUser, history]);
+  }, [dispatch, id, isAuthenticatedUser, history, loading]);
 
   return (
     <CourseSection>
@@ -34,27 +39,45 @@ const CourseViewScreen = () => {
       ) : (
         <>
           <CourseDetails>
-            <h3 className="course__title">{course?.title}</h3>
+            <div className="course__info">
 
-            <p className="course__description">{course?.description}</p>
+              <h3 className="course__title">{course?.title}</h3>
 
-            <p className="course__semister">Semister - {course?.semister}</p>
+              <div
+                className="course__description"
+              >{course?.description?.split('\n').map((str, index) => <p key={index}>{str}</p>)}</div>
+              
+              <p className="course__semister">Semister - {course?.semister}</p>
 
-            <p className="course__subject__code">
-              Subject Code - {course?.subjectCode}
-            </p>
 
-            <p className="course__date">
-              Created at&nbsp;
-              {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
-              {moment(course?.createdAt).format("h:mm a")}
-            </p>
+              <p className="course__subject__code">
+                Subject Code - {course?.subjectCode}             
+              </p>
+              <p className="course__videos__number">
+                {course?.videos?.length} videos
+              </p>
+
+              <p className="course__date">
+                Created at&nbsp;
+                {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
+                {moment(course?.createdAt).format("h:mm a")}
+              </p>
+            </div>
+            {course && course?.videos?.length <= 4 && 
+            <div className="lock__container">
+              <img src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/lock-100.svg" className="lock__icon"  alt="lock-icon" />
+              <p className="lock__text">Buy to access all videos</p>
+              <button className="lock__button"
+                onClick={handleClick}
+              >Buy Now</button>
+            </div>
+           } 
           </CourseDetails>
 
           <CoursePlaylist>
             {course?.videos &&
               course?.videos.map((video, index) => (
-                <VideoTile video={video.videoId} id={course?._id} key={index} />
+                <VideoTile video={video?.videoId} id={course?._id} key={index} />
               ))}
           </CoursePlaylist>
         </>
@@ -71,42 +94,107 @@ const CourseDetails = styled.div`
   background-color: #171717;
   padding: 2rem 4rem;
   color: #bbbbbb;
+  display: flex;
+  align-items: center;
+  justify: space-between;
+  width: 100%;
 
-  .course__title {
-    font-size: 3.2rem;
-    font-weight: 600;
+  .course__info {
+    width: 80%;
+    .course__title {
+      font-size: 3.2rem;
+      font-weight: 600;
+    }
+  
+    .course__description {
+      margin: 1.2rem 0;
+      font-size: 2rem;
+      line-height: 2.5rem;
+      font-weight: 400;
+      line-height: 2rem
+    }
+  
+    .course__subject__code,
+    .course__semister,
+    .course__videos__number,
+    .course__date {
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin: 0.6rem 0;
+    }
   }
 
-  .course__description {
-    margin: 1.2rem 0;
-    font-size: 2rem;
-    line-height: 2.5rem;
-    font-weight: 400;
+  .lock__container {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column;
+    position : absolute;
+    right: 4rem;  
+
+    .lock__icon {
+      width: 12rem;
+      height: 12rem;
+    }
+    
+    .lock__text {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin: 0.6rem 0;
+    }
+    
+    .lock__button {
+      font-size: 1.4rem;
+      font-weight: 400;
+      padding: 0.4rem;
+      border-radius: 0.4rem;
+      background-color: var(--bg-light-secondary);
+      color: white;
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0 0 0.4rem var(--bg-light-secondary);
+      }
+    }
   }
 
-  .course__subject__code,
-  .course__semister,
-  .course__date {
-    font-size: 1.6rem;
-    font-weight: 400;
-    margin: 0.6rem 0;
-  }
 
   @media (max-width: 768px) {
     padding: 2rem;
 
-    .course__title {
-      font-size: 2.2rem;
+    .course__info {
+      width: 70%;
+      .course__title {
+        font-size: 2.2rem;
+      }
+  
+      .course__description {
+        font-size: 1.6rem;
+      }
+  
+      .course__subject__code,
+      .course__videos__number,
+      .course__semister,
+      .course__date {
+        font-size: 1.4rem;
+      }
     }
 
-    .course__description {
-      font-size: 1.6rem;
-    }
+    
+    .lock__container {
+      right: 2rem;  
 
-    .course__subject__code,
-    .course__semister,
-    .course__date {
-      font-size: 1.4rem;
+      .lock__icon {
+        width: 6rem;
+        height: 6rem;
+      }
+      
+      .lock__text {
+        font-size: 1.2rem;
+      }
+      
+      .lock__button {
+        font-size: 1.2rem;
+      }
     }
   }
 `;

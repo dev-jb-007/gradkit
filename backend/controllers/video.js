@@ -291,8 +291,12 @@ exports.uploadCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
+  console.log("HEllo");
+  console.log(req.files);
   const [vid] = req.files.video;
   const [img] = req.files.image;
+  console.log(img);
+  console.log(vid);
   var newVid = new Video({
     // videoId: vid.key,
     videoBucket: vid.bucket,
@@ -301,6 +305,7 @@ exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
     videoDescription: req.body.videoDescription,
     thumbnail: img.location,
   });
+  
   await newVid.save();
   // console.log(newVid);
   // const courseid = req.query.id;
@@ -310,7 +315,7 @@ exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
   if (!video) {
     return next(new ErrorResponse("Course Not Found", 404));
   }
-
+  
   video.videos.push({
     videoId: newVid._id,
     chapter: req.body.chapter,

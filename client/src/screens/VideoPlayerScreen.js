@@ -45,12 +45,12 @@ const VideoPlayerScreen = () => {
             <VideoDetails>
               <h3 className="video__title">{video?.videoTitle}</h3>
 
-              <p className="video__description">{video?.videoDescription}</p>
+              <p className="video__description">{video?.videoDescription?.split('\n').map(str => <p >{str}</p>)}</p>
             </VideoDetails>
           </VideoWrapper>
 
           <VideoPlaylist>
-            <h3 className="related__video-header">Related Videos -</h3>
+            <h3 className="related__video-header">{course?.title} -</h3>
             {course?.videos &&
               course?.videos.map((video, index) => (
                 <VideoTile2
