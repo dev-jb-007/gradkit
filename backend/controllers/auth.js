@@ -27,7 +27,9 @@ exports.sessionSignUp = (req, res) => {
 };
 
 exports.jwtSignUp = catchAsync(async (req, res, next) => {
+  console.log("Hello");
   let found = await User.findOne({ email: req.body.email });
+  console.log(found);
   if (found) {
     return next(new ErrorHandler("Email Already Exist", 403));
   }
@@ -42,9 +44,9 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
     salt: salt,
     hash: hash,
   });
-
+  console.log(user);
   await user.save();
-
+  console.log("hello");
   // let token = await user.createAuthToken();
   // res.cookie("jwt", token, {
   //   expires: new Date(Date.now() + 5000000000),

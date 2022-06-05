@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema({
     courses:[{
         type:mongoose.SchemaTypes.ObjectId,
         ref:'course',
-        unique:true
     }],
     hash: String,
     salt: String,

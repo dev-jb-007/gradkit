@@ -69,8 +69,6 @@ const UploadScreen = () => {
     videoForm.append("index", vIndex);
     videoForm.append("chapter", vChapter);
 
-    console.log(videoForm)
-
     dispatch(createVideo(videoForm));
 
     setVideo("");
