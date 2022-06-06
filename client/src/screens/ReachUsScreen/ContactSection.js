@@ -29,7 +29,7 @@ const ContactSection = () => {
   }, [message, dispatch]);
 
   return (
-    <Contact>
+    <Contact id="#contact">
       <ContactContainer>
         <div className="form__container">
           <form onSubmit={submitMessage}>
@@ -55,7 +55,6 @@ const ContactSection = () => {
 
             <label htmlFor="message">Message</label>
             <textarea
-              className="messagebox"
               type="message"
               id="message"
               required
@@ -122,7 +121,7 @@ const Contact = styled.div`
 const ContactContainer = styled.div`
   width: 100%;
   border-radius: 0.4rem;
-  height: 44rem;
+  height: 46rem;
   display: flex;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
 
@@ -142,10 +141,6 @@ const ContactContainer = styled.div`
       width: 32rem;
     }
 
-    .messagebox{
-      resize: vertical;
-    }
-
     h1 {
       font-size: 3rem;
       font-weight: 500;
@@ -163,6 +158,16 @@ const ContactContainer = styled.div`
       padding: 0.6rem;
       font-size: 1.6rem;
       outline: none;
+    }
+
+    textarea {
+      border: 0.1rem solid black;
+      border-radius: 0.2rem;
+      padding: 0.6rem;
+      font-size: 1.6rem;
+      outline: none;
+      resize: none;
+      font-family: "Roboto", sans-serif;
     }
 
     .check__container {

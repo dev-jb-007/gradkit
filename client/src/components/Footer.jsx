@@ -1,9 +1,37 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { Link } from "react-router-dom";
-// import logo from "../assets/logo1.svg";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const { pathname } = useLocation();
+  const history = useNavigate();
+
+  const handleAboutClick = () => {
+    if (pathname !== "/reach-us") {
+      history("/reach-us");
+      setTimeout(() => {
+        const events = document.getElementById("#about");
+        events.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    } else {
+      const events = document.getElementById("#about");
+      events.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleContactClick = () => {
+    if (pathname !== "/reach-us") {
+      history("/reach-us");
+      setTimeout(() => {
+        const events = document.getElementById("#contact");
+        events.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    } else {
+      const events = document.getElementById("#contact");
+      events.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <FooterSection>
       <img
@@ -16,10 +44,10 @@ const Footer = () => {
           <h3>Company</h3>
 
           <li>
-            <Link to="/reach-us/#about">About Us</Link>
+            <span onClick={handleAboutClick}>About Us</span>
           </li>
           <li>
-            <Link to="/reach-us/#contact">Contact Us</Link>
+            <span onClick={handleContactClick}>Contact Us</span>
           </li>
         </FooterColumn>
 
@@ -76,9 +104,7 @@ const Footer = () => {
       <p className="footer__copyright">
         &copy; DoubtCo {new Date().getFullYear()}
       </p>
-      <p className="footer__version">
-        1.0.0
-      </p>
+      <p className="footer__version">1.0.0</p>
     </FooterSection>
   );
 };
@@ -100,7 +126,7 @@ const FooterSection = styled.div`
     margin-top: 2.4rem;
     color: white;
   }
-  
+
   .footer__version {
     margin-top: 1.4rem;
     color: white;
@@ -143,6 +169,8 @@ const FooterColumn = styled.div`
 
   li {
     margin-bottom: 0.2rem;
+
+    span,
     a {
       font-size: 1.4rem;
       font-weight: 400;
@@ -151,6 +179,7 @@ const FooterColumn = styled.div`
       &:hover {
         color: var(--bg-light-secondary);
         text-decoration: underline;
+        cursor: pointer;
       }
     }
   }
@@ -161,6 +190,7 @@ const FooterColumn = styled.div`
     }
 
     li {
+      span,
       a {
         font-size: 1.2rem;
       }

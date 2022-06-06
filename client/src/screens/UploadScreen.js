@@ -47,7 +47,7 @@ const UploadScreen = () => {
     setCSemister("");
     setCThumbnail("");
     setCSubjectCode("");
-    cThumbRef.current.value=""
+    cThumbRef.current.value = "";
   };
 
   /* Video Upload */
@@ -83,8 +83,8 @@ const UploadScreen = () => {
     setVSubjectCode("");
     setVIndex("");
     setVChapter("");
-    thumbRef.current.value="";
-    vidRef.current.value="";
+    thumbRef.current.value = "";
+    vidRef.current.value = "";
   };
 
   const { vLoading, vError, vMessage } = useSelector((state) => state.addVideo);
@@ -301,7 +301,7 @@ const UploadScreen = () => {
               Video
             </label>
             <input
-            id="video_file"
+              id="video_file"
               className="form__input"
               type="file"
               name="video"
@@ -351,7 +351,7 @@ const UploadSection = styled.div`
     font-size: 1.6rem;
     outline: none;
   }
-  
+
   .form__textarea {
     border: 0.1rem solid black;
     border-radius: 0.2rem;
@@ -359,7 +359,7 @@ const UploadSection = styled.div`
     font-size: 1.6rem;
     outline: none;
     resize: vertical;
-    font-family: inherit;
+    font-family: "Roboto", sans-serif;
   }
 
   .form__button {

@@ -10,8 +10,8 @@ const ReachUsScreen = () => {
   return (
     <>
       {loading && <Loader />}
-      <AboutSection id="#about" />
-      <ContactSection id="#contact" />
+      <AboutSection />
+      <ContactSection />
     </>
   );
 };

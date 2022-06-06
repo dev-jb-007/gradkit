@@ -14,18 +14,25 @@ const ProfileScreen = () => {
       ) : (
         <>
           <div className="profile__header">
-            <img
+            {/* <img
               src="https://images.pexels.com/photos/2179483/pexels-photo-2179483.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
               alt="profile"
-            />
+            /> */}
+            <div className="profile__header-image">
+              <i>
+                <p className="profile__header-image-letter">
+                  {user.name.charAt(0)}
+                </p>
+              </i>
+            </div>
 
-            <div className="profile__header__info">
+            <div className="profile__header-info">
               <h1 className="user__name">{user?.name}</h1>
               <p className="user__email">{user?.email}</p>
             </div>
           </div>
           {user && user?.courses.length > 0 ? (
-            <h3 className="enrolled__course__header">Enrolled Course</h3>
+            <h3 className="enrolled__course-header">Enrolled Course</h3>
           ) : null}
 
           <CourseWrapper>
@@ -44,7 +51,7 @@ const ProfileSection = styled.div`
   min-height: calc(100vh - 7.6rem);
   padding: 2rem 4rem;
 
-  .enrolled__course__header {
+  .enrolled__course-header {
     font-size: 2.4rem;
     font-weight: 700;
     margin-bottom: 2rem;
@@ -59,6 +66,29 @@ const ProfileSection = styled.div`
     color: #fff;
     margin-bottom: 2rem;
 
+    .profile__header-image {
+      background: rgb(45, 88, 255);
+      background: linear-gradient(
+        315deg,
+        rgba(45, 88, 255, 1) 0%,
+        rgba(253, 29, 29, 1) 55%,
+        rgba(246, 63, 255, 1) 100%
+      );
+
+      width: 10rem;
+      height: 10rem;
+      border-radius: 50%;
+      margin-right: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .profile__header-image-letter {
+        font-size: 4rem;
+        font-weight: 600;
+      }
+    }
+
     img {
       width: 10rem;
       height: 10rem;
@@ -67,7 +97,7 @@ const ProfileSection = styled.div`
       object-fit: fill;
     }
 
-    .profile__header__info {
+    .profile__header-info {
       .user__name {
         font-size: 2.4rem;
         font-weight: 700;
@@ -84,12 +114,16 @@ const ProfileSection = styled.div`
   @media (max-width: 768px) {
     padding: 2rem;
     .profile__header {
-      img {
+      .profile__header-image {
         width: 6.4rem;
         height: 6.4rem;
+
+        .profile__header-image-letter {
+          font-size: 2.4rem;
+        }
       }
 
-      .profile__header__info {
+      .profile__header-info {
         .user__name {
           font-size: 1.8rem;
         }
