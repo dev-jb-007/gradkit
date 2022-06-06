@@ -16,7 +16,7 @@ let courseSchema = new mongoose.Schema(
     subjectCode: {
       type: Number,
       required: true,
-      unique:true
+      unique: true,
     },
     videos: [
       {
@@ -29,6 +29,19 @@ let courseSchema = new mongoose.Schema(
         },
         index: {
           type: Number,
+        },
+      },
+    ],
+    featured: [
+      {
+        videoId: { type: mongoose.SchemaTypes.ObjectId, ref: "Video" },
+        chapter: {
+          type: Number,
+          default: 0,
+        },
+        index: {
+          type: Number,
+          default: 0,
         },
       },
     ],

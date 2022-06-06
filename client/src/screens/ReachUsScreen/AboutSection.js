@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components/macro";
 
-
 const AboutSection = () => {
   return (
-    <About>
+    <About id="#about">
       <AboutContainer>
         <div className="image__container">
           <img
@@ -36,7 +35,7 @@ const AboutSection = () => {
 };
 
 const About = styled.div`
-  min-height: calc(100vh - 7.6rem);
+  min-height: 100vh;
 
   display: flex;
   justify-content: center;

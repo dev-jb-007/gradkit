@@ -47,7 +47,7 @@ const CourseViewScreen = () => {
                 className="course__description"
               >{course?.description?.split('\n').map((str, index) => <p key={index}>{str}</p>)}</div>
               
-              <p className="course__semister">Semister - {course?.semister}</p>
+              <p className="course__semister">Semester - {course?.semister}</p>
 
 
               <p className="course__subject__code">

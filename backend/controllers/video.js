@@ -305,7 +305,7 @@ exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
     videoDescription: req.body.videoDescription,
     thumbnail: img.location,
   });
-  
+
   await newVid.save();
   // console.log(newVid);
   // const courseid = req.query.id;
@@ -315,7 +315,7 @@ exports.uploadCourseVideos = catchAsync(async (req, res, next) => {
   if (!video) {
     return next(new ErrorResponse("Course Not Found", 404));
   }
-  
+
   video.videos.push({
     videoId: newVid._id,
     chapter: req.body.chapter,
@@ -345,10 +345,16 @@ exports.getAllCourses = catchAsync(async (req, res, next) => {
 });
 
 exports.checkValidBuy = catchAsync(async (req, res, next) => {
-  let course = await Course.findById(req.params.id).populate({
-    path: "videos",
-    populate: { path: "videoId" },
-  });
+  let course = await Course.findById(req.params.id).populate([
+    {
+      path: "videos",
+      populate: { path: "videoId" },
+    },
+    {
+      path: "featured",
+      populate: { path: "videoId" },
+    },
+  ]);
 
   if (!course.enrolled.includes(req.user._id)) {
     let n = course.videos.length;
@@ -356,8 +362,8 @@ exports.checkValidBuy = catchAsync(async (req, res, next) => {
     if (n >= 4) {
       n = 4;
     }
-    course.videos = course.videos.slice(0, n);
-
+    // course.videos = course.videos.slice(0, n);
+    course.videos = course.featured;
     res.json(course);
   } else {
     res.send(course);
@@ -375,13 +381,22 @@ exports.getVideoById = catchAsync(async (req, res, next) => {
   let video = await Video.findById(req.params.id);
   let course = await Course.findById(req.params.cid);
   let index = -1;
-  for (let i = 0; i < course.videos.length; i++) {
-    if (course.videos[i].videoId.toString() === video._id.toString()) {
-      index = i;
-      break;
-    }
-  }
-  if (index >= 4 && !course.enrolled.includes(req.user._id)) {
+
+  // for (let i = 0; i < course.videos.length; i++) {
+  //   if (course.videos[i].videoId.toString() === video._id.toString()) {
+  //     index = i;
+  //     break;
+  //   }
+  // }
+  // if (index >= 4 && !course.enrolled.includes(req.user._id)) {
+  //   return next(
+  //     new ErrorHandler("You are not authorized to view this course", 403)
+  //   );
+
+  let featured = course.featured.map((videos) => videos.videoId.toString());
+  const videoId = video._id.toString();
+
+  if (!course.enrolled.includes(req.user._id) && !featured.includes(videoId)) {
     return next(
       new ErrorHandler("You are not authorized to view this course", 403)
     );

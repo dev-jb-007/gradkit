@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Linkify from "react-linkify";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -13,6 +13,12 @@ import { useNavigate } from "react-router-dom";
 
 const VideoPlayerScreen = () => {
   const { vid, cid } = useParams();
+
+  const [showDescription, setShowDescription] = useState(false);
+
+  const showDescriptionHandler = () => {
+    showDescription ? setShowDescription(false) : setShowDescription(true);
+  };
 
   const dispatch = useDispatch();
   const { course } = useSelector((state) => state.course);
@@ -29,10 +35,10 @@ const VideoPlayerScreen = () => {
     if (error) {
       history(`/course/${cid}`);
     }
-    
+
     if (loading === undefined) {
     } else if (!loading && !isAuthenticatedUser) {
-      history("/signin")
+      history("/signin");
     }
 
     dispatch(clearVideoErrors());
@@ -51,9 +57,24 @@ const VideoPlayerScreen = () => {
 
             <VideoDetails>
               <h3 className="video__title">{video?.videoTitle}</h3>
-            <Linkify>
-              <p className="video__description">{video?.videoDescription?.split('\n').map(str => <p >{str}</p>)}</p>
-            </Linkify>
+
+              <div className="video__description">
+                {showDescription ? (
+                  <span onClick={showDescriptionHandler}>Hide Description</span>
+                ) : (
+                  <span onClick={showDescriptionHandler}>Show Description</span>
+                )}
+
+                {showDescription && (
+                  <Linkify>
+                    <div className="video__description-wrapper">
+                      {video?.videoDescription?.split("\n").map((str) => (
+                        <p>{str}</p>
+                      ))}
+                    </div>
+                  </Linkify>
+                )}
+              </div>
             </VideoDetails>
           </VideoWrapper>
 
@@ -81,9 +102,11 @@ const VideoContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   min-height: calc(100vh - 7.6rem);
+  position: relative;
 
   @media (max-width: 768px) {
     flex-direction: column;
+    justify-content: flex-start;
     padding: 2rem;
   }
 `;
@@ -91,14 +114,26 @@ const VideoContainer = styled.div`
 const VideoWrapper = styled.div`
   max-width: 85.4rem;
   width: 100%;
+  height: 100%;
+  top: 2rem;
+  left: 0;
+  position: sticky;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+  }
 `;
 
 const VideoDetails = styled.div`
   padding: 1.4rem 0;
   color: var(--font-light-primary);
 
-  a{
-    color:blue;
+  a {
+    color: blue;
   }
 
   .video__title {
@@ -108,7 +143,19 @@ const VideoDetails = styled.div`
 
   .video__description {
     font-size: 1.4rem;
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
+
+    span {
+      font-size: 1.2rem;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .video__description-wrapper {
+      line-height: 1.8rem;
+      margin-top: 1rem;
+    }
   }
 
   @media (max-width: 768px) {
@@ -123,6 +170,7 @@ const VideoDetails = styled.div`
 
 const VideoPlaylist = styled.div`
   margin-left: 2rem;
+  height: 100%;
 
   .related__video-header {
     font-size: 2rem;
@@ -132,6 +180,7 @@ const VideoPlaylist = styled.div`
 
   @media (max-width: 768px) {
     margin-left: 0;
+    width: 100%;
 
     .related__video-header {
       font-size: 1.8rem;
