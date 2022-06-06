@@ -26,9 +26,7 @@ const ProfileScreen = () => {
           </div>
           {user && user?.courses.length > 0 ? (
             <h3 className="enrolled__course__header">Enrolled Course</h3>
-          ) : (
-            null
-          )}
+          ) : null}
 
           <CourseWrapper>
             {user.courses.map((course, index) => (
@@ -81,8 +79,11 @@ const ProfileSection = styled.div`
         font-weight: 400;
       }
     }
+  }
 
-    @media (max-width: 768px) {
+  @media (max-width: 768px) {
+    padding: 2rem;
+    .profile__header {
       img {
         width: 6.4rem;
         height: 6.4rem;
