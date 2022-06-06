@@ -40,7 +40,7 @@ const CourseBlock = ({ course, enroll }) => {
       amount: data.amount,
       currency: data.currency,
       name: course?.title,
-      description: `Purchase ${course?.title} course`,
+      description: `Purchase ${course?.title}`,
       image:
         "https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg",
       order_id: data.id,
