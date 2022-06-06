@@ -1,6 +1,6 @@
 import React from "react";
-// import AboutImg from "../../assets/about.svg";
 import styled from "styled-components/macro";
+
 
 const AboutSection = () => {
   return (
@@ -42,6 +42,7 @@ const About = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2rem 4rem;
+  border-bottom: 0.4rem solid #aaaa;
 
   @media (max-width: 768px) {
     padding: 2rem;

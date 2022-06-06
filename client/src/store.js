@@ -16,6 +16,8 @@ import {
   getVideoDetailsReducer,
 } from "./redux/reducers/videoReducers";
 
+import { messageReducer } from "./redux/reducers/messageReducers";
+
 const reducer = combineReducers({
   user: userAuthReducer,
   forgotPassword: forgotPasswordReducer,
@@ -24,6 +26,7 @@ const reducer = combineReducers({
   addCourse: createCourseReducer,
   video: getVideoDetailsReducer,
   addVideo: addVideoReducer,
+  message: messageReducer,
 });
 
 let initialState = {};
