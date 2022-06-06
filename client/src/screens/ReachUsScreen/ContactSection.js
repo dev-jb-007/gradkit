@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/macro";
-// import { Message } from "../../components";
-import { sendMessage } from "../../redux/actions/messageActions";
+import { Message } from "../../components";
+import { sendMessage, clearMessages } from "../../redux/actions/messageActions";
 
 const ContactSection = () => {
   const dispatch = useDispatch();
@@ -11,22 +11,22 @@ const ContactSection = () => {
   const [email, setEmail] = useState("");
   const [feedback, setFeedback] = useState("");
 
-  // const { message } = useSelector((state) => state.message);
+  const { message } = useSelector((state) => state.message);
 
   const submitMessage = (e) => {
     e.preventDefault();
     dispatch(sendMessage(name, email, feedback));
   };
 
-  // useEffect(() => {
-  //   if (message) {
-  //     setName("");
-  //     setEmail("");
-  //     setFeedback("");
+  useEffect(() => {
+    if (message) {
+      setName("");
+      setEmail("");
+      setFeedback("");
 
-  //     dispatch(clearMessages());
-  //   }
-  // }, [message, dispatch]);
+      dispatch(clearMessages());
+    }
+  }, [message, dispatch]);
 
   return (
     <Contact>
@@ -54,7 +54,8 @@ const ContactSection = () => {
             />
 
             <label htmlFor="message">Message</label>
-            <input
+            <textarea
+              className="messagebox"
               type="message"
               id="message"
               required
@@ -66,7 +67,7 @@ const ContactSection = () => {
               Send
             </button>
 
-            {/* {message && <Message status="success">{message}</Message>} */}
+            {message && <Message status="success">{message.message}</Message>}
 
             <div className="address__conrainer">
               <img
@@ -139,6 +140,10 @@ const ContactContainer = styled.div`
       flex-direction: column;
       justify-content: center;
       width: 32rem;
+    }
+
+    .messagebox{
+      resize: vertical;
     }
 
     h1 {
