@@ -23,7 +23,6 @@ const ContactSection = () => {
       setName("");
       setEmail("");
       setFeedback("");
-
       dispatch(clearMessages());
     }
   }, [message, dispatch]);
