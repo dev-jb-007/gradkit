@@ -45,11 +45,11 @@ const VideoPlayerScreen = () => {
   }, [dispatch, cid, vid, error, history, loading, isAuthenticatedUser]);
 
   return (
-    <VideoContainer>
+    <Video>
       {vLoading ? (
         <Loader />
       ) : (
-        <>
+        <VideoContainer>
           <VideoWrapper>
             <div>
               <VideoPlayer url={video?.videoURL} />
@@ -89,25 +89,30 @@ const VideoPlayerScreen = () => {
                 />
               ))}
           </VideoPlaylist>
-        </>
+        </VideoContainer>
       )}
-    </VideoContainer>
+    </Video>
   );
 };
 
-const VideoContainer = styled.div`
+const Video = styled.div`
   padding: 2rem 4rem;
+  width: 100%;
+  min-height: calc(100vh - 7.6rem);
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
+`;
+const VideoContainer = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  width: 100%;
-  min-height: calc(100vh - 7.6rem);
   position: relative;
 
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
-    padding: 2rem;
   }
 `;
 
