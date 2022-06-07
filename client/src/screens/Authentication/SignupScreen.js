@@ -10,6 +10,7 @@ import {
   clearMessages,
 } from "../../redux/actions/userActions";
 import { Loader, Message } from "../../components";
+import { Helmet } from "react-helmet";
 
 const SignupScreen = () => {
   const dispatch = useDispatch();
@@ -27,21 +28,24 @@ const SignupScreen = () => {
   const registerUser = (e) => {
     e.preventDefault();
     dispatch(register(name, email, password));
+    setName("");
+    setEmail("");
+    setPassword("");
   };
 
   useEffect(() => {
     if (error) {
       setTimeout(() => {
         dispatch(clearErrors());
-      }, 1500);
+      }, 3000);
     }
 
     if (message) {
       setTimeout(() => {
         dispatch(clearMessages());
-      }, 1500);
+      }, 3000);
 
-      setTimeout(() => history("/signup"), 3000);
+      setTimeout(() => history("/signup"), 4000);
     }
 
     if (isAuthenticatedUser) {
@@ -50,59 +54,69 @@ const SignupScreen = () => {
   }, [dispatch, error, isAuthenticatedUser, history, message]);
 
   return (
-    <SignUpSection>
-      {loading && <Loader />}
-      <SignUpContainer>
-        <div className="image__container">
-          <img
-            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
-            alt=""
-          />
-        </div>
-        <div className="form__container">
-          <form onSubmit={registerUser}>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Signup</title>
+        <meta
+          name="description"
+          content="Gradkit's Sign up page, Sign up to explore all courses provided by Gradkit. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
+      <SignUpSection>
+        {loading && <Loader />}
+        <SignUpContainer>
+          <div className="image__container">
             <img
-              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
-              alt="gradkit"
-              className="form__logo"
+              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
+              alt=""
             />
-            <h1>Sign Up</h1>
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit" className="form__button">
-              Sign Up
-            </button>
-            <div className="form__links">
-              <Link to="/signin">Already signed up?</Link>
-            </div>
-            {message && <Message status="info">{message}</Message>}
-            {error && <Message status="error">{error}</Message>}
-          </form>
-        </div>
-      </SignUpContainer>
-    </SignUpSection>
+          </div>
+          <div className="form__container">
+            <form onSubmit={registerUser}>
+              <img
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                alt="gradkit"
+                className="form__logo"
+              />
+              <h1>Sign Up</h1>
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button type="submit" className="form__button">
+                Sign Up
+              </button>
+              <div className="form__links">
+                <Link to="/signin">Already signed up?</Link>
+              </div>
+              {message && <Message status="info">{message}</Message>}
+              {error && <Message status="error">{error}</Message>}
+            </form>
+          </div>
+        </SignUpContainer>
+      </SignUpSection>
+    </>
   );
 };
 

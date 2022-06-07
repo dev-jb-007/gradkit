@@ -13,6 +13,7 @@ import {
 
 import { useNavigate, useParams } from "react-router-dom";
 import { Loader, Message } from "../../components";
+import { Helmet } from "react-helmet";
 
 const ResetPasswordScreen = () => {
   const [password, setPassword] = useState("");
@@ -30,65 +31,78 @@ const ResetPasswordScreen = () => {
   const resetPass = (e) => {
     e.preventDefault();
     dispatch(resetPassword(token, password));
+    setPassword("");
+    setConfirmPassword("");
   };
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 1500);
+      setTimeout(() => dispatch(clearErrors()), 3000);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 1500);
-      setTimeout(() => history("/signin"), 3000);
+      setTimeout(() => dispatch(clearMessages()), 3000);
+      setTimeout(() => history("/signin"), 4000);
     }
   }, [error, dispatch, message, history]);
 
   return (
-    <ResetPassSection>
-      {loading ? (
-        <Loader />
-      ) : (
-        <ResetPassContainer>
-          <div className="image__container">
-            <img
-              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
-              alt=""
-            />
-          </div>
-          <div className="form__container">
-            <form onSubmit={resetPass}>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Reset Password</title>
+        <meta
+          name="description"
+          content="Gradkit's Reset password page. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology semester 4 courses"
+        />
+      </Helmet>
+
+      <ResetPassSection>
+        {loading ? (
+          <Loader />
+        ) : (
+          <ResetPassContainer>
+            <div className="image__container">
               <img
-                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
-                alt="gradkit"
-                className="form__logo"
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
+                alt=""
               />
-              <h1>Reset Password</h1>
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <label htmlFor="confirm-password">Confirm Password</label>
-              <input
-                type="password"
-                id="confirm-password"
-                required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <button type="submit" className="form__button">
-                Reset
-              </button>
-              {message && <Message status="success">{message}</Message>}
-              {error && <Message status="error">{error}</Message>}
-            </form>
-          </div>
-        </ResetPassContainer>
-      )}
-    </ResetPassSection>
+            </div>
+            <div className="form__container">
+              <form onSubmit={resetPass}>
+                <img
+                  src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                  alt="gradkit"
+                  className="form__logo"
+                />
+                <h1>Reset Password</h1>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <label htmlFor="confirm-password">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirm-password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button type="submit" className="form__button">
+                  Reset
+                </button>
+                {message && <Message status="success">{message}</Message>}
+                {error && <Message status="error">{error}</Message>}
+              </form>
+            </div>
+          </ResetPassContainer>
+        )}
+      </ResetPassSection>
+    </>
   );
 };
 export default ResetPasswordScreen;

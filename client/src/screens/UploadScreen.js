@@ -14,6 +14,7 @@ import {
 } from "../redux/actions/courseActions";
 import { Loader, Message } from "../components";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 
 const UploadScreen = () => {
   const dispatch = useDispatch();
@@ -124,204 +125,215 @@ const UploadScreen = () => {
   }, [vError, vMessage, cError, cMessage, dispatch]);
 
   return (
-    <UploadSection>
-      {(cLoading || vLoading) && <Loader></Loader>}
-      <FormContainer>
-        <div className="form__changer">
-          <button
-            className={`form__changer-button ${
-              activeTab === "course" ? "form__changer-active" : ""
-            }`}
-            onClick={() => setActiveTab("course")}
-          >
-            Upload Course
-          </button>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Admin</title>
+        <meta
+          name="description"
+          content="Gradkit's Admin page. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology semester 4 courses"
+        />
+      </Helmet>
 
-          <button
-            className={`form__changer-button
+      <UploadSection>
+        {(cLoading || vLoading) && <Loader></Loader>}
+        <FormContainer>
+          <div className="form__changer">
+            <button
+              className={`form__changer-button ${
+                activeTab === "course" ? "form__changer-active" : ""
+              }`}
+              onClick={() => setActiveTab("course")}
+            >
+              Upload Course
+            </button>
+
+            <button
+              className={`form__changer-button
             ${activeTab === "video" ? "form__changer-active" : ""}`}
-            onClick={() => setActiveTab("video")}
-          >
-            Upload Video
-          </button>
-        </div>
-
-        {activeTab === "course" ? (
-          <CourseForm onSubmit={uploadCourse} encType="multipart/form-data">
-            <label className="form__label" htmlFor="title">
-              Title
-            </label>
-            <input
-              className="form__input"
-              type="text"
-              name="title"
-              id="title"
-              value={cTitle}
-              onChange={(e) => setCTitle(e.target.value)}
-            />
-
-            <label className="form__label" htmlFor="description">
-              Description
-            </label>
-            <textarea
-              className="form__textarea"
-              type="text"
-              name="description"
-              id="description"
-              value={cDescription}
-              onChange={(e) => setCDescription(e.target.value)}
-            />
-            <label className="form__label" htmlFor="subjectCode">
-              Subject Code
-            </label>
-            <input
-              className="form__input"
-              type="number"
-              name="subjectCode"
-              id="subjectCode"
-              value={cSubjectCode}
-              onChange={(e) => setCSubjectCode(e.target.value)}
-            />
-
-            <label className="form__label" htmlFor="semister">
-              Semister
-            </label>
-            <input
-              className="form__input"
-              type="text"
-              name="semister"
-              id="semister"
-              value={cSemister}
-              onChange={(e) => setCSemister(e.target.value)}
-            />
-
-            <label className="form__label" htmlFor="price">
-              Price
-            </label>
-            <input
-              className="form__input"
-              type="text"
-              name="price"
-              id="price"
-              value={cPrice}
-              onChange={(e) => setCPrice(e.target.value)}
-            />
-
-            <label className="form__label" htmlFor="thumbnail">
-              Thumbnail
-            </label>
-            <input
-              className="form__input"
-              type="file"
-              name="image"
-              accept="image/*"
-              ref={cThumbRef}
-              onChange={(e) => setCThumbnail(e.target.files[0])}
-            />
-
-            <button className="form__button" type="submit">
-              Upload
+              onClick={() => setActiveTab("video")}
+            >
+              Upload Video
             </button>
-          </CourseForm>
-        ) : (
-          <VideoForm onSubmit={uploadVideo} encType="multipart/form-data">
-            <label className="form__label" htmlFor="title">
-              Video Title
-            </label>
-            <input
-              className="form__input"
-              type="text"
-              name="title"
-              id="title"
-              value={vTitle}
-              onChange={(e) => setvTitle(e.target.value)}
-            />
+          </div>
 
-            <label className="form__label" htmlFor="description">
-              Video Description
-            </label>
-            <textarea
-              className="form__textarea"
-              type="text"
-              name="description"
-              id="description"
-              value={vDescription}
-              onChange={(e) => setvDescription(e.target.value)}
-            />
+          {activeTab === "course" ? (
+            <CourseForm onSubmit={uploadCourse} encType="multipart/form-data">
+              <label className="form__label" htmlFor="title">
+                Title
+              </label>
+              <input
+                className="form__input"
+                type="text"
+                name="title"
+                id="title"
+                value={cTitle}
+                onChange={(e) => setCTitle(e.target.value)}
+              />
 
-            <label className="form__label" htmlFor="subjectCode">
-              Subject Code
-            </label>
-            <input
-              className="form__input"
-              type="number"
-              name="subjectCode"
-              id="subjectCode"
-              value={vSubjectCode}
-              onChange={(e) => setVSubjectCode(e.target.value)}
-            />
+              <label className="form__label" htmlFor="description">
+                Description
+              </label>
+              <textarea
+                className="form__textarea"
+                type="text"
+                name="description"
+                id="description"
+                value={cDescription}
+                onChange={(e) => setCDescription(e.target.value)}
+              />
+              <label className="form__label" htmlFor="subjectCode">
+                Subject Code
+              </label>
+              <input
+                className="form__input"
+                type="number"
+                name="subjectCode"
+                id="subjectCode"
+                value={cSubjectCode}
+                onChange={(e) => setCSubjectCode(e.target.value)}
+              />
 
-            <label className="form__label" htmlFor="chapter">
-              Chapter
-            </label>
-            <input
-              className="form__input"
-              type="number"
-              name="chapter"
-              id="chapter"
-              value={vChapter}
-              onChange={(e) => setVChapter(e.target.value)}
-            />
+              <label className="form__label" htmlFor="semister">
+                Semister
+              </label>
+              <input
+                className="form__input"
+                type="text"
+                name="semister"
+                id="semister"
+                value={cSemister}
+                onChange={(e) => setCSemister(e.target.value)}
+              />
 
-            <label className="form__label" htmlFor="index">
-              Index
-            </label>
-            <input
-              className="form__input"
-              type="number"
-              name="index"
-              id="index"
-              value={vIndex}
-              onChange={(e) => setVIndex(e.target.value)}
-            />
+              <label className="form__label" htmlFor="price">
+                Price
+              </label>
+              <input
+                className="form__input"
+                type="text"
+                name="price"
+                id="price"
+                value={cPrice}
+                onChange={(e) => setCPrice(e.target.value)}
+              />
 
-            <label className="form__label" htmlFor="thumbnail">
-              Thumbnail
-            </label>
-            <input
-              className="form__input"
-              type="file"
-              name="image"
-              accept="image/*"
-              ref={thumbRef}
-              onChange={(e) => setvThumbnail(e.target.files[0])}
-            />
+              <label className="form__label" htmlFor="thumbnail">
+                Thumbnail
+              </label>
+              <input
+                className="form__input"
+                type="file"
+                name="image"
+                accept="image/*"
+                ref={cThumbRef}
+                onChange={(e) => setCThumbnail(e.target.files[0])}
+              />
 
-            <label className="form__label" htmlFor="video">
-              Video
-            </label>
-            <input
-              id="video_file"
-              className="form__input"
-              type="file"
-              name="video"
-              accept="video/*"
-              ref={vidRef}
-              onChange={(e) => setVideo(e.target.files[0])}
-            />
+              <button className="form__button" type="submit">
+                Upload
+              </button>
+            </CourseForm>
+          ) : (
+            <VideoForm onSubmit={uploadVideo} encType="multipart/form-data">
+              <label className="form__label" htmlFor="title">
+                Video Title
+              </label>
+              <input
+                className="form__input"
+                type="text"
+                name="title"
+                id="title"
+                value={vTitle}
+                onChange={(e) => setvTitle(e.target.value)}
+              />
 
-            <button className="form__button" type="submit">
-              Upload
-            </button>
-          </VideoForm>
-        )}
+              <label className="form__label" htmlFor="description">
+                Video Description
+              </label>
+              <textarea
+                className="form__textarea"
+                type="text"
+                name="description"
+                id="description"
+                value={vDescription}
+                onChange={(e) => setvDescription(e.target.value)}
+              />
 
-        {vError && <Message status="error">{vError}</Message>}
-        {vMessage && <Message status="success">{vMessage}</Message>}
-        {cError && <Message status="error">{cError}</Message>}
-        {cMessage && <Message status="success">{cMessage}</Message>}
-      </FormContainer>
-    </UploadSection>
+              <label className="form__label" htmlFor="subjectCode">
+                Subject Code
+              </label>
+              <input
+                className="form__input"
+                type="number"
+                name="subjectCode"
+                id="subjectCode"
+                value={vSubjectCode}
+                onChange={(e) => setVSubjectCode(e.target.value)}
+              />
+
+              <label className="form__label" htmlFor="chapter">
+                Chapter
+              </label>
+              <input
+                className="form__input"
+                type="number"
+                name="chapter"
+                id="chapter"
+                value={vChapter}
+                onChange={(e) => setVChapter(e.target.value)}
+              />
+
+              <label className="form__label" htmlFor="index">
+                Index
+              </label>
+              <input
+                className="form__input"
+                type="number"
+                name="index"
+                id="index"
+                value={vIndex}
+                onChange={(e) => setVIndex(e.target.value)}
+              />
+
+              <label className="form__label" htmlFor="thumbnail">
+                Thumbnail
+              </label>
+              <input
+                className="form__input"
+                type="file"
+                name="image"
+                accept="image/*"
+                ref={thumbRef}
+                onChange={(e) => setvThumbnail(e.target.files[0])}
+              />
+
+              <label className="form__label" htmlFor="video">
+                Video
+              </label>
+              <input
+                id="video_file"
+                className="form__input"
+                type="file"
+                name="video"
+                accept="video/*"
+                ref={vidRef}
+                onChange={(e) => setVideo(e.target.files[0])}
+              />
+
+              <button className="form__button" type="submit">
+                Upload
+              </button>
+            </VideoForm>
+          )}
+
+          {vError && <Message status="error">{vError}</Message>}
+          {vMessage && <Message status="success">{vMessage}</Message>}
+          {cError && <Message status="error">{cError}</Message>}
+          {cMessage && <Message status="success">{cMessage}</Message>}
+        </FormContainer>
+      </UploadSection>
+    </>
   );
 };
 

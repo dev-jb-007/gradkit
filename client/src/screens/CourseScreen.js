@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/macro";
 import { CourseBlock, Loader } from "../components";
-// import Logo from "../assets/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../redux/actions/courseActions";
+import { Helmet } from "react-helmet";
 
 const CourseScreen = () => {
   const dispatch = useDispatch();
@@ -15,35 +15,50 @@ const CourseScreen = () => {
   }, [dispatch]);
 
   return (
-    <Course>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="course__container">
-          <div className="course__header">
-            <h1 className="course__header__title">Featured Courses</h1>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Courses</title>
+        <meta
+          name="description"
+          content="Explore Gradkit's courses. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
+      <Course>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="course__container">
+            <div className="course__header">
+              <h1 className="course__header__title">Featured Courses</h1>
 
-            <span>by</span>
+              <span>by</span>
 
-            <img className="course__header__image" src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg" alt="" />
+              <img
+                className="course__header__image"
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                alt=""
+              />
+            </div>
+
+            <div className="course__wrapper">
+              {courses &&
+                courses.map((course, index) => (
+                  <CourseBlock
+                    enroll={
+                      user &&
+                      user.courses.filter((c) => c._id === course._id).length >
+                        0
+                    }
+                    course={course}
+                    key={index}
+                  />
+                ))}
+            </div>
           </div>
-
-          <div className="course__wrapper">
-            {courses &&
-              courses.map((course, index) => (
-                <CourseBlock
-                  enroll={
-                    user &&
-                    user.courses.filter((c) => c._id === course._id).length > 0
-                  }
-                  course={course}
-                  key={index}
-                />
-              ))}
-          </div>
-        </div>
-      )}
-    </Course>
+        )}
+      </Course>
+    </>
   );
 };
 

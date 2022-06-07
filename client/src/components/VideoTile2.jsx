@@ -12,12 +12,16 @@ const VideoTile2 = ({ video, id }) => {
 
       <VideoDetails>
         <h4 className="video__title">
-          <Link to={`/video/${video._id}/${id}`}>{video.videoTitle}</Link>
+          <Link to={`/video/${video._id}/${id}`}>
+            {video?.videoTitle.length > 36
+              ? video?.videoTitle.substring(0, 36) + ".."
+              : video?.videoTitle}
+          </Link>
         </h4>
 
         <p className="video__description">
-          {video?.videoDescription.length > 60
-            ? video?.videoDescription.substring(0, 60) + "..."
+          {video?.videoDescription.length > 54
+            ? video?.videoDescription.substring(0, 54) + ".."
             : video?.videoDescription}
         </p>
 

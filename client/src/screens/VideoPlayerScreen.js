@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import Linkify from "react-linkify";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
-import { Loader, VideoPlayer, VideoTile2 } from "../components";
+import { Loader, VideoPlayer } from "../components";
 import {
   getVideoDetails,
   clearVideoErrors,
 } from "../redux/actions/videoActions";
 import { getCourseById } from "../redux/actions/courseActions";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { LazyVideoTile2 } from "../components/LazyLoadComponets";
+
+const VideoTile2 = lazy(() => import("../components/VideoTile2"));
 
 const VideoPlayerScreen = () => {
   const { vid, cid } = useParams();
@@ -45,69 +49,88 @@ const VideoPlayerScreen = () => {
   }, [dispatch, cid, vid, error, history, loading, isAuthenticatedUser]);
 
   return (
-    <VideoContainer>
-      {vLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <VideoWrapper>
-            <div>
-              <VideoPlayer url={video?.videoURL} />
-            </div>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`${video?.videoTitle}`}</title>
+        <meta name="description" content={`${video?.videoDescription}`} />
+      </Helmet>
 
-            <VideoDetails>
-              <h3 className="video__title">{video?.videoTitle}</h3>
-
-              <div className="video__description">
-                {showDescription ? (
-                  <span onClick={showDescriptionHandler}>Hide Description</span>
-                ) : (
-                  <span onClick={showDescriptionHandler}>Show Description</span>
-                )}
-
-                {showDescription && (
-                  <Linkify>
-                    <div className="video__description-wrapper">
-                      {video?.videoDescription?.split("\n").map((str) => (
-                        <p>{str}</p>
-                      ))}
-                    </div>
-                  </Linkify>
-                )}
+      <Video>
+        {vLoading ? (
+          <Loader />
+        ) : (
+          <VideoContainer>
+            <VideoWrapper>
+              <div>
+                <VideoPlayer url={video?.videoURL} />
               </div>
-            </VideoDetails>
-          </VideoWrapper>
 
-          <VideoPlaylist>
-            <h3 className="related__video-header">{course?.title} -</h3>
-            {course?.videos &&
-              course?.videos.map((video, index) => (
-                <VideoTile2
-                  video={video.videoId}
-                  key={index}
-                  id={course?._id}
-                />
-              ))}
-          </VideoPlaylist>
-        </>
-      )}
-    </VideoContainer>
+              <VideoDetails>
+                <h3 className="video__title">{video?.videoTitle}</h3>
+
+                <div className="video__description">
+                  {showDescription ? (
+                    <span onClick={showDescriptionHandler}>
+                      Hide Description
+                    </span>
+                  ) : (
+                    <span onClick={showDescriptionHandler}>
+                      Show Description
+                    </span>
+                  )}
+
+                  {showDescription && (
+                    <Linkify>
+                      <div className="video__description-wrapper">
+                        {video?.videoDescription?.split("\n").map((str) => (
+                          <p>{str}</p>
+                        ))}
+                      </div>
+                    </Linkify>
+                  )}
+                </div>
+              </VideoDetails>
+            </VideoWrapper>
+
+            <VideoPlaylist>
+              <h3 className="related__video-header">{course?.title} -</h3>
+              {course?.videos &&
+                course?.videos.map((video, index) => (
+                  <Suspense fallback={<LazyVideoTile2 />} key={index}>
+                    <VideoTile2
+                      video={video.videoId}
+                      key={index}
+                      id={course?._id}
+                    />
+                  </Suspense>
+                ))}
+            </VideoPlaylist>
+          </VideoContainer>
+        )}
+      </Video>
+    </>
   );
 };
 
-const VideoContainer = styled.div`
+const Video = styled.div`
   padding: 2rem 4rem;
+  width: 100%;
+  min-height: calc(100vh - 7.6rem);
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
+`;
+const VideoContainer = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  width: 100%;
-  min-height: calc(100vh - 7.6rem);
   position: relative;
 
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
-    padding: 2rem;
   }
 `;
 

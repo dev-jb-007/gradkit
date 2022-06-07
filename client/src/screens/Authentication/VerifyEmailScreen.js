@@ -8,6 +8,7 @@ import {
   verifyUser,
 } from "../../redux/actions/userActions";
 import { Loader } from "../../components";
+import { Helmet } from "react-helmet";
 
 const VerifyEmailScreen = () => {
   const { id } = useParams();
@@ -24,25 +25,36 @@ const VerifyEmailScreen = () => {
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 1500);
+      setTimeout(() => dispatch(clearErrors()), 3000);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 1500);
+      setTimeout(() => dispatch(clearMessages()), 3000);
 
-      setTimeout(() => history("/signin"), 3000);
+      setTimeout(() => history("/signin"), 4000);
     }
   }, [dispatch, id, history, error, message]);
 
   return (
-    <VerifySection>
-      {loading && <Loader />}
-      <h2>Click on button to verify email</h2>
-      <button onClick={verify}>Verify</button>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Verify Email</title>
+        <meta
+          name="description"
+          content="Gradkit's Email verification page, Verify your email to explore all courses provided by Gradkit. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
 
-      {message && <h3 className="success">{message}</h3>}
-      {error && <h3 className="error">{error}</h3>}
-    </VerifySection>
+      <VerifySection>
+        {loading && <Loader />}
+        <h2>Click on button to verify email</h2>
+        <button onClick={verify}>Verify</button>
+
+        {message && <h3 className="success">{message}</h3>}
+        {error && <h3 className="error">{error}</h3>}
+      </VerifySection>
+    </>
   );
 };
 

@@ -3,46 +3,58 @@ import styled from "styled-components/macro";
 import CourseBlock from "../components/CourseBlock";
 import { useSelector } from "react-redux";
 import { Loader } from "../components";
+import { Helmet } from "react-helmet";
 
 const ProfileScreen = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   return (
-    <ProfileSection>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <div className="profile__header">
-            {/* <img
-              src="https://images.pexels.com/photos/2179483/pexels-photo-2179483.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="profile"
-            /> */}
-            <div className="profile__header-image">
-              <i>
-                <p className="profile__header-image-letter">
-                  {user.name.charAt(0)}
-                </p>
-              </i>
-            </div>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{user?.name} - Profile</title>
+        <meta
+          name="description"
+          content="Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
 
-            <div className="profile__header-info">
-              <h1 className="user__name">{user?.name}</h1>
-              <p className="user__email">{user?.email}</p>
-            </div>
-          </div>
-          {user && user?.courses.length > 0 ? (
-            <h3 className="enrolled__course-header">Enrolled Course</h3>
-          ) : null}
+      <ProfileSection>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="profile__header">
+              <div className="profile__header-image">
+                <i>
+                  <p className="profile__header-image-letter">
+                    {user.name.charAt(0)}
+                  </p>
+                </i>
+              </div>
 
-          <CourseWrapper>
-            {user.courses.map((course, index) => (
-              <CourseBlock course={course} key={index} enroll={true} />
-            ))}
-          </CourseWrapper>
-        </>
-      )}
-    </ProfileSection>
+              <div className="profile__header-info">
+                <h1 className="user__name">{user?.name}</h1>
+                <p className="user__email">{user?.email}</p>
+              </div>
+            </div>
+            {user && user?.courses.length > 0 ? (
+              <h3 className="enrolled__course-header">Enrolled Course</h3>
+            ) : (
+              <h3 className="notenrolled__course-header">
+                Not Enrolled in any Course
+              </h3>
+            )}
+
+            <CourseWrapper>
+              {user.courses.map((course, index) => (
+                <CourseBlock course={course} key={index} enroll={true} />
+              ))}
+            </CourseWrapper>
+          </>
+        )}
+      </ProfileSection>
+    </>
   );
 };
 
@@ -55,6 +67,14 @@ const ProfileSection = styled.div`
     font-size: 2.4rem;
     font-weight: 700;
     margin-bottom: 2rem;
+  }
+
+  .notenrolled__course-header {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: gray;
+    text-align: center;
   }
 
   .profile__header {
@@ -113,6 +133,12 @@ const ProfileSection = styled.div`
 
   @media (max-width: 768px) {
     padding: 2rem;
+
+    .enrolled__course-header,
+    .notenrolled__course-header {
+      font-size: 2rem;
+    }
+
     .profile__header {
       .profile__header-image {
         width: 6.4rem;
