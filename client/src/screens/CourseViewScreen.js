@@ -47,7 +47,11 @@ const CourseViewScreen = () => {
         ) : (
           <>
             <CourseDetails>
-              <div className="course__info">
+              <div
+                className={`course__info ${
+                  course && course?.videos?.length <= 4 ? "course__locked" : ""
+                }`}
+              >
                 <h3 className="course__title">{course?.title}</h3>
 
                 <div className="course__description">
@@ -119,7 +123,7 @@ const CourseDetails = styled.div`
   width: 100%;
 
   .course__info {
-    width: 80%;
+    width: 100%;
     .course__title {
       font-size: 3.2rem;
       font-weight: 600;
@@ -178,11 +182,17 @@ const CourseDetails = styled.div`
     }
   }
 
+  .course__locked {
+    width: 80%;
+  }
+
   @media (max-width: 768px) {
     padding: 2rem;
+    .course__locked {
+      width: 70%;
+    }
 
     .course__info {
-      width: 70%;
       .course__title {
         font-size: 2.2rem;
       }
