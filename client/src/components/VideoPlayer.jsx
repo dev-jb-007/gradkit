@@ -18,7 +18,7 @@ const VideoPlayer = ({ url }) => {
           return false;
         }}
         controls
-        muted={true}
+        muted={false}
         config={{
           file: {
             attributes: {

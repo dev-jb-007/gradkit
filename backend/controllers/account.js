@@ -52,7 +52,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     );
 
     setTimeout(async () => {
-      await Pass.findByIdAndDelete(Pcode._id);
+      await Code.findByIdAndDelete(Pcode._id);
     }, 3600000);
 
     res.status(200).json({
@@ -78,7 +78,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
     const hash = saltHash.hash;
     user.salt = salt;
     user.hash = hash;
-
+    user.tokens=[];
     await user.save();
     await Code.findByIdAndDelete(code._id);
 
