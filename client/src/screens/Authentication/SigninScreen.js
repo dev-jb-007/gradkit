@@ -28,19 +28,21 @@ const SigninScreen = () => {
   const userSignin = async (e) => {
     e.preventDefault();
     await dispatch(login(email, password));
+    setEmail("");
+    setPassword("");
   };
 
   useEffect(() => {
     if (error) {
       setTimeout(() => {
         dispatch(clearErrors());
-      }, 1500);
+      }, 3000);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 1500);
+      setTimeout(() => dispatch(clearMessages()), 3000);
 
-      setTimeout(() => history("/signin"), 3000);
+      setTimeout(() => history("/signin"), 4000);
     }
 
     if (isAuthenticatedUser) {

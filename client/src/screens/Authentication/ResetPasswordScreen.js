@@ -31,16 +31,18 @@ const ResetPasswordScreen = () => {
   const resetPass = (e) => {
     e.preventDefault();
     dispatch(resetPassword(token, password));
+    setPassword("");
+    setConfirmPassword("");
   };
 
   useEffect(() => {
     if (error) {
-      setTimeout(() => dispatch(clearErrors()), 1500);
+      setTimeout(() => dispatch(clearErrors()), 3000);
     }
 
     if (message) {
-      setTimeout(() => dispatch(clearMessages()), 1500);
-      setTimeout(() => history("/signin"), 3000);
+      setTimeout(() => dispatch(clearMessages()), 3000);
+      setTimeout(() => history("/signin"), 4000);
     }
   }, [error, dispatch, message, history]);
 

@@ -28,21 +28,24 @@ const SignupScreen = () => {
   const registerUser = (e) => {
     e.preventDefault();
     dispatch(register(name, email, password));
+    setName("");
+    setEmail("");
+    setPassword("");
   };
 
   useEffect(() => {
     if (error) {
       setTimeout(() => {
         dispatch(clearErrors());
-      }, 1500);
+      }, 3000);
     }
 
     if (message) {
       setTimeout(() => {
         dispatch(clearMessages());
-      }, 1500);
+      }, 3000);
 
-      setTimeout(() => history("/signup"), 3000);
+      setTimeout(() => history("/signup"), 4000);
     }
 
     if (isAuthenticatedUser) {
