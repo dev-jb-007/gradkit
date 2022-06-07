@@ -1,12 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-// import Home from "../assets/homepage.svg";
 import { VideoPlayer } from "../components";
+import { Helmet } from "react-helmet";
 
 const HomeScreen = () => {
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Gradkit</title>
+        <meta
+          name="description"
+          content="Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology semester 4 courses"
+        />
+      </Helmet>
       <WelcomeSection>
         <HeroTextContainer>
           <h1>

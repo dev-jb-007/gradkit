@@ -12,6 +12,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { Loader, Message } from "../../components";
+import { Helmet } from "react-helmet";
 
 const SigninScreen = () => {
   const dispatch = useDispatch();
@@ -48,57 +49,67 @@ const SigninScreen = () => {
   }, [dispatch, error, isAuthenticatedUser, history, message]);
 
   return (
-    <SignInSection>
-      {loading && <Loader />}
-      <SignInContainer>
-        <div className="form__container">
-          <form onSubmit={userSignin}>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Signin</title>
+        <meta
+          name="description"
+          content="Gradkit's Sign in page, Sign in to explore all courses provided by Gradkit. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
+      <SignInSection>
+        {loading && <Loader />}
+        <SignInContainer>
+          <div className="form__container">
+            <form onSubmit={userSignin}>
+              <img
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                alt="gradkit"
+                className="form__logo"
+              />
+
+              <h1>Sign In</h1>
+
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <button type="submit" className="form__button">
+                Sign In
+              </button>
+
+              <div className="form__links">
+                <Link to="/signup">Sign Up</Link>
+                <Link to="/forgot-password">Forgot Password</Link>
+              </div>
+              {message && <Message status="success">{message}</Message>}
+              {error && <Message status="error">{error}</Message>}
+            </form>
+          </div>
+          <div className="image__container">
             <img
-              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
-              alt="gradkit"
-              className="form__logo"
+              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/login.svg"
+              alt="login-img"
             />
-
-            <h1>Sign In</h1>
-
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <button type="submit" className="form__button">
-              Sign In
-            </button>
-
-            <div className="form__links">
-              <Link to="/signup">Sign Up</Link>
-              <Link to="/forgot-password">Forgot Password</Link>
-            </div>
-            {message && <Message status="success">{message}</Message>}
-            {error && <Message status="error">{error}</Message>}
-          </form>
-        </div>
-        <div className="image__container">
-          <img
-            src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/login.svg"
-            alt="login-img"
-          />
-        </div>
-      </SignInContainer>
-    </SignInSection>
+          </div>
+        </SignInContainer>
+      </SignInSection>
+    </>
   );
 };
 

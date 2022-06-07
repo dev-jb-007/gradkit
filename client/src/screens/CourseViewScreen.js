@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { getCourseById } from "../redux/actions/courseActions";
 
 import moment from "moment";
+import { Helmet } from "react-helmet";
 
 const CourseViewScreen = () => {
   const { id } = useParams();
@@ -19,70 +20,88 @@ const CourseViewScreen = () => {
   const { course } = useSelector((state) => state.course);
 
   const { isAuthenticatedUser, loading } = useSelector((state) => state.user);
-  
+
   function handleClick() {
-    history("/course")
+    history("/course");
   }
 
   useEffect(() => {
     if (loading === undefined) {
     } else if (!loading && !isAuthenticatedUser) {
-      history("/signin")
+      history("/signin");
     }
     dispatch(getCourseById(id));
   }, [dispatch, id, isAuthenticatedUser, history, loading]);
 
   return (
-    <CourseSection>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <CourseDetails>
-            <div className="course__info">
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{course?.title}</title>
+        <meta name="description" content={course?.description} />
+      </Helmet>
 
-              <h3 className="course__title">{course?.title}</h3>
+      <CourseSection>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <CourseDetails>
+              <div className="course__info">
+                <h3 className="course__title">{course?.title}</h3>
 
-              <div
-                className="course__description"
-              >{course?.description?.split('\n').map((str, index) => <p key={index}>{str}</p>)}</div>
-              
-              <p className="course__semister">Semester - {course?.semister}</p>
+                <div className="course__description">
+                  {course?.description?.split("\n").map((str, index) => (
+                    <p key={index}>{str}</p>
+                  ))}
+                </div>
 
+                <p className="course__semister">
+                  Semester - {course?.semister}
+                </p>
 
-              <p className="course__subject__code">
-                Subject Code - {course?.subjectCode}             
-              </p>
-              <p className="course__videos__number">
-                {course?.videos?.length} videos
-              </p>
+                <p className="course__subject__code">
+                  Subject Code - {course?.subjectCode}
+                </p>
+                <p className="course__videos__number">
+                  {course?.videos?.length} videos
+                </p>
 
-              <p className="course__date">
-                Created at&nbsp;
-                {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
-                {moment(course?.createdAt).format("h:mm a")}
-              </p>
-            </div>
-            {course && course?.videos?.length <= 4 && 
-            <div className="lock__container">
-              <img src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/lock-100.svg" className="lock__icon"  alt="lock-icon" />
-              <p className="lock__text">Buy to access all videos</p>
-              <button className="lock__button"
-                onClick={handleClick}
-              >Buy Now</button>
-            </div>
-           } 
-          </CourseDetails>
+                <p className="course__date">
+                  Created at&nbsp;
+                  {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
+                  {moment(course?.createdAt).format("h:mm a")}
+                </p>
+              </div>
+              {course && course?.videos?.length <= 4 && (
+                <div className="lock__container">
+                  <img
+                    src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/lock-100.svg"
+                    className="lock__icon"
+                    alt="lock-icon"
+                  />
+                  <p className="lock__text">Buy to access all videos</p>
+                  <button className="lock__button" onClick={handleClick}>
+                    Buy Now
+                  </button>
+                </div>
+              )}
+            </CourseDetails>
 
-          <CoursePlaylist>
-            {course?.videos &&
-              course?.videos.map((video, index) => (
-                <VideoTile video={video?.videoId} id={course?._id} key={index} />
-              ))}
-          </CoursePlaylist>
-        </>
-      )}
-    </CourseSection>
+            <CoursePlaylist>
+              {course?.videos &&
+                course?.videos.map((video, index) => (
+                  <VideoTile
+                    video={video?.videoId}
+                    id={course?._id}
+                    key={index}
+                  />
+                ))}
+            </CoursePlaylist>
+          </>
+        )}
+      </CourseSection>
+    </>
   );
 };
 
@@ -96,7 +115,7 @@ const CourseDetails = styled.div`
   color: #bbbbbb;
   display: flex;
   align-items: center;
-  justify: space-between;
+  justify-content: space-between;
   width: 100%;
 
   .course__info {
@@ -105,15 +124,15 @@ const CourseDetails = styled.div`
       font-size: 3.2rem;
       font-weight: 600;
     }
-  
+
     .course__description {
       margin: 1.2rem 0;
       font-size: 2rem;
       line-height: 2.5rem;
       font-weight: 400;
-      line-height: 2rem
+      line-height: 2rem;
     }
-  
+
     .course__subject__code,
     .course__semister,
     .course__videos__number,
@@ -127,22 +146,22 @@ const CourseDetails = styled.div`
   .lock__container {
     display: flex;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
     flex-direction: column;
-    position : absolute;
-    right: 4rem;  
+    position: absolute;
+    right: 4rem;
 
     .lock__icon {
       width: 12rem;
       height: 12rem;
     }
-    
+
     .lock__text {
       font-size: 1.4rem;
       font-weight: 400;
       margin: 0.6rem 0;
     }
-    
+
     .lock__button {
       font-size: 1.4rem;
       font-weight: 400;
@@ -159,7 +178,6 @@ const CourseDetails = styled.div`
     }
   }
 
-
   @media (max-width: 768px) {
     padding: 2rem;
 
@@ -168,11 +186,11 @@ const CourseDetails = styled.div`
       .course__title {
         font-size: 2.2rem;
       }
-  
+
       .course__description {
         font-size: 1.6rem;
       }
-  
+
       .course__subject__code,
       .course__videos__number,
       .course__semister,
@@ -181,19 +199,18 @@ const CourseDetails = styled.div`
       }
     }
 
-    
     .lock__container {
-      right: 2rem;  
+      right: 2rem;
 
       .lock__icon {
         width: 6rem;
         height: 6rem;
       }
-      
+
       .lock__text {
         font-size: 1.2rem;
       }
-      
+
       .lock__button {
         font-size: 1.2rem;
       }

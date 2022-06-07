@@ -1,22 +1,30 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 // import NotFound from ".././assets/not-found.svg";
 
 const Error404Screen = () => {
   return (
-    <Error>
-      <img
-        src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/not-found.svg
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Error - 404</title>
+        <meta name="description" content="Error - 404 | Page not found" />
+      </Helmet>
+      <Error>
+        <img
+          src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/not-found.svg
 "
-        alt="error-404"
-      />
+          alt="error-404"
+        />
 
-      <h2>Page not found</h2>
-      <Link to="/" className="goback__link">
-        Go to Home
-      </Link>
-    </Error>
+        <h2>Page not found</h2>
+        <Link to="/" className="goback__link">
+          Go to Home
+        </Link>
+      </Error>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import {
   forgotPassword,
 } from "../../redux/actions/userActions";
 import { Loader, Message } from "../../components";
+import { Helmet } from "react-helmet";
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState("");
@@ -43,60 +44,71 @@ const ForgotPasswordScreen = () => {
   }, [error, dispatch, message, history]);
 
   return (
-    <ForgotPassSection>
-      {loading ? (
-        <Loader />
-      ) : (
-        <ForgotPassContainer>
-          <div className="form__container">
-            <form onSubmit={forgotPass}>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Forgot Password</title>
+        <meta
+          name="description"
+          content="Gradkit's Forgot password page. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
+
+      <ForgotPassSection>
+        {loading ? (
+          <Loader />
+        ) : (
+          <ForgotPassContainer>
+            <div className="form__container">
+              <form onSubmit={forgotPass}>
+                <img
+                  src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
+                  alt="gradkit"
+                  className="form__logo"
+                />
+
+                <h1>Forgot Password</h1>
+
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+
+                <label htmlFor="confirm-email">Confirm Email</label>
+                <input
+                  type="email"
+                  id="confirm-email"
+                  required
+                  value={confirmEmail}
+                  onChange={(e) => setConfirmEmail(e.target.value)}
+                />
+
+                <button type="submit" className="form__button">
+                  Send
+                </button>
+
+                <div className="form__links">
+                  <Link to="/signin">Sign In</Link>
+                  <Link to="/signup">Sign Up</Link>
+                </div>
+                {message && <Message status="success">{message}</Message>}
+                {error && <Message status="error">{error}</Message>}
+              </form>
+            </div>
+            <div className="image__container">
               <img
-                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
-                alt="gradkit"
-                className="form__logo"
+                src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
+                alt=""
               />
-
-              <h1>Forgot Password</h1>
-
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-
-              <label htmlFor="confirm-email">Confirm Email</label>
-              <input
-                type="email"
-                id="confirm-email"
-                required
-                value={confirmEmail}
-                onChange={(e) => setConfirmEmail(e.target.value)}
-              />
-
-              <button type="submit" className="form__button">
-                Send
-              </button>
-
-              <div className="form__links">
-                <Link to="/signin">Sign In</Link>
-                <Link to="/signup">Sign Up</Link>
-              </div>
-              {message && <Message status="success">{message}</Message>}
-              {error && <Message status="error">{error}</Message>}
-            </form>
-          </div>
-          <div className="image__container">
-            <img
-              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
-              alt=""
-            />
-          </div>
-        </ForgotPassContainer>
-      )}
-    </ForgotPassSection>
+            </div>
+          </ForgotPassContainer>
+        )}
+      </ForgotPassSection>
+    </>
   );
 };
 

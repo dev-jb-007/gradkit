@@ -1,24 +1,36 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components/macro";
 
 const RefundPolicyScreen = () => {
   return (
-    <RefundContainer>
-      <h1>RETURN POLICY</h1>
-      <br />
-      <h4> Last updated on 28th May 2022 </h4>
-      <br />
-      <h1>REFUNDS</h1>
-      <br />
-      <h4> ALL SALES ARE FINAL AND NO REFUND WILL BE ISSUED </h4>
-      <br />
-      <h1>QUESTIONS</h1>
-      <br />
-      <h4>
-        if you have any questions regarding our return policy,please contact us
-        at DOUBT.CO923@GMAIL.COM
-      </h4>
-    </RefundContainer>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Refund Policy</title>
+        <meta
+          name="description"
+          content="Gradkit's Refund Policy, Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
+
+      <RefundContainer>
+        <h1>RETURN POLICY</h1>
+        <br />
+        <h4> Last updated on 28th May 2022 </h4>
+        <br />
+        <h1>REFUNDS</h1>
+        <br />
+        <h4> ALL SALES ARE FINAL AND NO REFUND WILL BE ISSUED </h4>
+        <br />
+        <h1>QUESTIONS</h1>
+        <br />
+        <h4>
+          if you have any questions regarding our return policy,please contact
+          us at DOUBT.CO923@GMAIL.COM
+        </h4>
+      </RefundContainer>
+    </>
   );
 };
 

@@ -3,46 +3,58 @@ import styled from "styled-components/macro";
 import CourseBlock from "../components/CourseBlock";
 import { useSelector } from "react-redux";
 import { Loader } from "../components";
+import { Helmet } from "react-helmet";
 
 const ProfileScreen = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   return (
-    <ProfileSection>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <div className="profile__header">
-            {/* <img
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{user?.name} - Profile</title>
+        <meta
+          name="description"
+          content="Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+        />
+      </Helmet>
+
+      <ProfileSection>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="profile__header">
+              {/* <img
               src="https://images.pexels.com/photos/2179483/pexels-photo-2179483.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
               alt="profile"
             /> */}
-            <div className="profile__header-image">
-              <i>
-                <p className="profile__header-image-letter">
-                  {user.name.charAt(0)}
-                </p>
-              </i>
-            </div>
+              <div className="profile__header-image">
+                <i>
+                  <p className="profile__header-image-letter">
+                    {user.name.charAt(0)}
+                  </p>
+                </i>
+              </div>
 
-            <div className="profile__header-info">
-              <h1 className="user__name">{user?.name}</h1>
-              <p className="user__email">{user?.email}</p>
+              <div className="profile__header-info">
+                <h1 className="user__name">{user?.name}</h1>
+                <p className="user__email">{user?.email}</p>
+              </div>
             </div>
-          </div>
-          {user && user?.courses.length > 0 ? (
-            <h3 className="enrolled__course-header">Enrolled Course</h3>
-          ) : null}
+            {user && user?.courses.length > 0 ? (
+              <h3 className="enrolled__course-header">Enrolled Course</h3>
+            ) : null}
 
-          <CourseWrapper>
-            {user.courses.map((course, index) => (
-              <CourseBlock course={course} key={index} enroll={true} />
-            ))}
-          </CourseWrapper>
-        </>
-      )}
-    </ProfileSection>
+            <CourseWrapper>
+              {user.courses.map((course, index) => (
+                <CourseBlock course={course} key={index} enroll={true} />
+              ))}
+            </CourseWrapper>
+          </>
+        )}
+      </ProfileSection>
+    </>
   );
 };
 

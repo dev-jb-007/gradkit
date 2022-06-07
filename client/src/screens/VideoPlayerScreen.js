@@ -10,6 +10,7 @@ import {
 } from "../redux/actions/videoActions";
 import { getCourseById } from "../redux/actions/courseActions";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const VideoPlayerScreen = () => {
   const { vid, cid } = useParams();
@@ -45,53 +46,65 @@ const VideoPlayerScreen = () => {
   }, [dispatch, cid, vid, error, history, loading, isAuthenticatedUser]);
 
   return (
-    <Video>
-      {vLoading ? (
-        <Loader />
-      ) : (
-        <VideoContainer>
-          <VideoWrapper>
-            <div>
-              <VideoPlayer url={video?.videoURL} />
-            </div>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`${video?.videoTitle}`}</title>
+        <meta name="description" content={`${video?.videoDescription}`} />
+      </Helmet>
 
-            <VideoDetails>
-              <h3 className="video__title">{video?.videoTitle}</h3>
-
-              <div className="video__description">
-                {showDescription ? (
-                  <span onClick={showDescriptionHandler}>Hide Description</span>
-                ) : (
-                  <span onClick={showDescriptionHandler}>Show Description</span>
-                )}
-
-                {showDescription && (
-                  <Linkify>
-                    <div className="video__description-wrapper">
-                      {video?.videoDescription?.split("\n").map((str) => (
-                        <p>{str}</p>
-                      ))}
-                    </div>
-                  </Linkify>
-                )}
+      <Video>
+        {vLoading ? (
+          <Loader />
+        ) : (
+          <VideoContainer>
+            <VideoWrapper>
+              <div>
+                <VideoPlayer url={video?.videoURL} />
               </div>
-            </VideoDetails>
-          </VideoWrapper>
 
-          <VideoPlaylist>
-            <h3 className="related__video-header">{course?.title} -</h3>
-            {course?.videos &&
-              course?.videos.map((video, index) => (
-                <VideoTile2
-                  video={video.videoId}
-                  key={index}
-                  id={course?._id}
-                />
-              ))}
-          </VideoPlaylist>
-        </VideoContainer>
-      )}
-    </Video>
+              <VideoDetails>
+                <h3 className="video__title">{video?.videoTitle}</h3>
+
+                <div className="video__description">
+                  {showDescription ? (
+                    <span onClick={showDescriptionHandler}>
+                      Hide Description
+                    </span>
+                  ) : (
+                    <span onClick={showDescriptionHandler}>
+                      Show Description
+                    </span>
+                  )}
+
+                  {showDescription && (
+                    <Linkify>
+                      <div className="video__description-wrapper">
+                        {video?.videoDescription?.split("\n").map((str) => (
+                          <p>{str}</p>
+                        ))}
+                      </div>
+                    </Linkify>
+                  )}
+                </div>
+              </VideoDetails>
+            </VideoWrapper>
+
+            <VideoPlaylist>
+              <h3 className="related__video-header">{course?.title} -</h3>
+              {course?.videos &&
+                course?.videos.map((video, index) => (
+                  <VideoTile2
+                    video={video.videoId}
+                    key={index}
+                    id={course?._id}
+                  />
+                ))}
+            </VideoPlaylist>
+          </VideoContainer>
+        )}
+      </Video>
+    </>
   );
 };
 
