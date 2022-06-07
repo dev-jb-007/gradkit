@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import Linkify from "react-linkify";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
-import { Loader, VideoPlayer, VideoTile2 } from "../components";
+import { Loader, VideoPlayer } from "../components";
 import {
   getVideoDetails,
   clearVideoErrors,
@@ -11,6 +11,9 @@ import {
 import { getCourseById } from "../redux/actions/courseActions";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { LazyVideoTile2 } from "../components/LazyLoadComponets";
+
+const VideoTile2 = lazy(() => import("../components/VideoTile2"));
 
 const VideoPlayerScreen = () => {
   const { vid, cid } = useParams();
@@ -94,11 +97,13 @@ const VideoPlayerScreen = () => {
               <h3 className="related__video-header">{course?.title} -</h3>
               {course?.videos &&
                 course?.videos.map((video, index) => (
-                  <VideoTile2
-                    video={video.videoId}
-                    key={index}
-                    id={course?._id}
-                  />
+                  <Suspense fallback={<LazyVideoTile2 />} key={index}>
+                    <VideoTile2
+                      video={video.videoId}
+                      key={index}
+                      id={course?._id}
+                    />
+                  </Suspense>
                 ))}
             </VideoPlaylist>
           </VideoContainer>

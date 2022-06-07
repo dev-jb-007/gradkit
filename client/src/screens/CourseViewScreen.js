@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
-import { Loader, VideoTile } from "../components";
+import { Loader } from "../components";
+import { LazyVideoTile } from "../components/LazyLoadComponets";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,6 +11,8 @@ import { getCourseById } from "../redux/actions/courseActions";
 
 import moment from "moment";
 import { Helmet } from "react-helmet";
+
+const VideoTile = lazy(() => import("../components/VideoTile"));
 
 const CourseViewScreen = () => {
   const { id } = useParams();
@@ -95,11 +98,13 @@ const CourseViewScreen = () => {
             <CoursePlaylist>
               {course?.videos &&
                 course?.videos.map((video, index) => (
-                  <VideoTile
-                    video={video?.videoId}
-                    id={course?._id}
-                    key={index}
-                  />
+                  <Suspense key={index} fallback={<LazyVideoTile />}>
+                    <VideoTile
+                      video={video?.videoId}
+                      id={course?._id}
+                      key={index}
+                    />
+                  </Suspense>
                 ))}
             </CoursePlaylist>
           </>

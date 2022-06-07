@@ -25,10 +25,6 @@ const ProfileScreen = () => {
         ) : (
           <>
             <div className="profile__header">
-              {/* <img
-              src="https://images.pexels.com/photos/2179483/pexels-photo-2179483.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="profile"
-            /> */}
               <div className="profile__header-image">
                 <i>
                   <p className="profile__header-image-letter">
@@ -44,7 +40,11 @@ const ProfileScreen = () => {
             </div>
             {user && user?.courses.length > 0 ? (
               <h3 className="enrolled__course-header">Enrolled Course</h3>
-            ) : null}
+            ) : (
+              <h3 className="notenrolled__course-header">
+                Not Enrolled in any Course
+              </h3>
+            )}
 
             <CourseWrapper>
               {user.courses.map((course, index) => (
@@ -67,6 +67,14 @@ const ProfileSection = styled.div`
     font-size: 2.4rem;
     font-weight: 700;
     margin-bottom: 2rem;
+  }
+
+  .notenrolled__course-header {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: gray;
+    text-align: center;
   }
 
   .profile__header {
@@ -125,6 +133,12 @@ const ProfileSection = styled.div`
 
   @media (max-width: 768px) {
     padding: 2rem;
+
+    .enrolled__course-header,
+    .notenrolled__course-header {
+      font-size: 2rem;
+    }
+
     .profile__header {
       .profile__header-image {
         width: 6.4rem;

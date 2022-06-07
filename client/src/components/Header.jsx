@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-// import logo from "../assets/logo.svg";
 import { logout } from "../redux/actions/userActions";
 
 const Header = () => {
@@ -23,7 +22,7 @@ const Header = () => {
           alt="gradkit-logo"
         />
       </Link>
-      <li className="nav__links">
+      <div className="nav__links">
         <Link to="/course" className="nav__link">
           Courses
         </Link>
@@ -40,7 +39,7 @@ const Header = () => {
             Sign In
           </Link>
         )}
-      </li>
+      </div>
     </Navbar>
   );
 };
