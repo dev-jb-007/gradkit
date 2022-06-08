@@ -18,7 +18,10 @@ exports.generateVerificationMail = catchAsync(async (req, res, next) => {
   let code = new Code({ code: ucode, email, codeType: "verify" });
   setTimeout(async () => {
     await Code.findByIdAndDelete(code._id);
-    await User.findOneAndDelete({email:email});
+    const user = await User.findOne({ email: email });
+    if (user.activationStatus !== "active") {
+      await User.findOneAndDelete({ email: email });
+    }
   }, 3600000);
   await code.save();
   res.status(201).json({
@@ -79,7 +82,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
     const hash = saltHash.hash;
     user.salt = salt;
     user.hash = hash;
-    user.tokens=[];
+    user.tokens = [];
     await user.save();
     await Code.findByIdAndDelete(code._id);
 
