@@ -18,7 +18,8 @@ exports.generateVerificationMail = catchAsync(async (req, res, next) => {
   let code = new Code({ code: ucode, email, codeType: "verify" });
   setTimeout(async () => {
     await Code.findByIdAndDelete(code._id);
-  }, 1000000);
+    await User.findOneAndDelete({email:email});
+  }, 3600000);
   await code.save();
   res.status(201).json({
     message: "Please Verify your Email",
