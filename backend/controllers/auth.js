@@ -3,6 +3,7 @@ const Code = require("../models/codes");
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");
 const ErrorHandler = require("../utils/errorHandler");
+const decodeJwtResponse = require("../helpers/decode_jwt.js")
 
 const {
   encryptPassword,
@@ -27,9 +28,8 @@ exports.sessionSignUp = (req, res) => {
 };
 
 exports.jwtSignUp = catchAsync(async (req, res, next) => {
-  console.log("Hello");
+  
   let found = await User.findOne({ email: req.body.email });
-  console.log(found);
   if (found) {
     return next(new ErrorHandler("Email Already Exist", 403));
   }
@@ -46,7 +46,7 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
   });
   console.log(user);
   await user.save();
-  console.log("hello");
+  // console.log("hello");
   // let token = await user.createAuthToken();
   // res.cookie("jwt", token, {
   //   expires: new Date(Date.now() + 5000000000),
@@ -88,11 +88,74 @@ exports.verifySignUp = catchAsync(async (req, res, next) => {
 
 exports.jwtSignIn = catchAsync(async (req, res, next) => {
   const body = req.body;
+
+
+  if(req.body.credential)
+  {
+    const responsePayload = decodeJwtResponse(req.body.credential);
+    console.log("ID: " + responsePayload.sub);
+    console.log('Full Name: ' + responsePayload.name);
+    console.log('Given Name: ' + responsePayload.given_name);
+    console.log('Family Name: ' + responsePayload.family_name);
+    console.log("Image URL: " + responsePayload.picture);
+    console.log("Email: " + responsePayload.email);
+    
+    body.email=responsePayload.email;
+    body.name=responsePayload.name;
+    
+    const user = await User.findOne({
+      email: body.email,
+    }).populate("courses")
+    .populate({ path: "courses", populate: { path: "thumbnail" } });
+    
+    if (!user) {
+      
+
+      let temp=new User({
+        email:body.email,
+        name:body.name,
+        activationStatus: "active"   
+      });
+
+      
+      let token = await user.createAuthToken();
+      res.cookie("jwt", token, {
+      expires: new Date(Date.now() + 5000000000),
+      httpOnly: true,
+    });
+    
+    temp.tokens.add(token);
+
+      
+      await temp.save();
+
+      res.status(201).json({ user, message: "User created successfully" });
+    }
+    else{
+      if (user.tokens.length >= 1 && user.role === 0) {
+        return next(
+          new ErrorHandler("Already Signed On Another Account", 403)
+        );
+      }
+      else{
+        let token = await user.createAuthToken();
+        res.cookie("jwt", token, {
+        expires: new Date(Date.now() + 5000000000),
+        httpOnly: true,
+      });
+
+      temp.tokens.add(token);
+      await temp.save();
+        res.status(200).json({ user, message: "Logged In Successfully" });
+      }
+    }
+  }
+  
   const user = await User.findOne({
     email: body.email,
   })
-    .populate("courses")
-    .populate({ path: "courses", populate: { path: "thumbnail" } });
+  .populate("courses")
+  .populate({ path: "courses", populate: { path: "thumbnail" } });
 
   if (!user) {
     return next(new ErrorHandler("Enter valid Credantials", 403));

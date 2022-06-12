@@ -45,7 +45,7 @@ const SignupScreen = () => {
         dispatch(clearMessages());
       }, 3000);
 
-      setTimeout(() => history("/signup"), 4000);
+      setTimeout(() => history("/signin"), 4000);
     }
 
     if (isAuthenticatedUser) {
