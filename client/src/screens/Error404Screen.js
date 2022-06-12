@@ -19,7 +19,7 @@ const Error404Screen = () => {
           alt="error-404"
         />
 
-        <h2>Page not found</h2>
+        <h1>Page not found</h1>
         <Link to="/" className="goback__link">
           Go to Home
         </Link>
@@ -41,7 +41,7 @@ const Error = styled.div`
     width: 36rem;
   }
 
-  h2 {
+  h1 {
     font-size: 3.6rem;
     margin: 1.5rem 0 2rem;
     color: var(--bg-light-secondary);
@@ -66,7 +66,7 @@ const Error = styled.div`
       width: 30rem;
     }
 
-    h2 {
+    h1 {
       font-size: 2.2rem;
     }
 

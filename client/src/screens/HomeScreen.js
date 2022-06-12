@@ -68,7 +68,7 @@ const WelcomeSection = styled.div`
     height: 100%;
     justify-content: center;
     flex-direction: column-reverse;
-    padding: 0 2rem;
+    padding: 2rem;
   }
 `;
 
