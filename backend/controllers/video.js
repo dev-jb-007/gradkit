@@ -435,7 +435,7 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     amount: course.price,
     status: "Pending",
   });
-
+ 
   await instance.orders.create(options, async (err, order) => {
     if (err) {
       temp.status = "Failed";
@@ -443,6 +443,13 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     } else {
       temp.orderId = order.id;
       await temp.save();
+      setInterval(3600000,async()=>{
+        let kritik=await Transaction.findById(temp._id);
+        if(kritik.status==="Pending")
+        {
+          await Transaction.findByIdAndDelete(temp._id);
+        }
+      })
       res.send(order);
     }
   });
