@@ -95,6 +95,24 @@ if (cluster.isMaster) {
       })
       .then((message) => res.send(message));
   });
+  app.post("/google",async(req,res,next)=>{
+    try{
+      console.log(req.body);
+      const responsePayload = decodeJwtResponse(req.body.credential);
+
+     console.log("ID: " + responsePayload.sub);
+     console.log('Full Name: ' + responsePayload.name);
+     console.log('Given Name: ' + responsePayload.given_name);
+     console.log('Family Name: ' + responsePayload.family_name);
+     console.log("Image URL: " + responsePayload.picture);
+     console.log("Email: " + responsePayload.email);
+      res.send({data:req.body});
+    }
+    catch(err)
+    {
+      next(err);
+    }
+  })
   app.get("/google", async (req, res, next) => {
     res.sendFile(path.join(__dirname, "/public/google.html"));
   });

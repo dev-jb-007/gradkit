@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="464319972305-p81cg2nqfs3atlfhgkis3c805a8rih49.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="google-signin-client_id" content="110878966226-25v19v108muhjcjuf7nt9n2hoh6aluhu.apps.googleusercontent.com">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Sign In</title>
 </head>
 <body>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-    <button onclick="signOut()">Signout</button>
+    <div id="g_id_onload"
+    data-client_id="110878966226-25v19v108muhjcjuf7nt9n2hoh6aluhu.apps.googleusercontent.com"
+    data-login_uri="https://localhost:5000/google"
+    data-auto_prompt="false">
+ </div>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+    </div>
 </body>
 <script>
     // onSignIn();

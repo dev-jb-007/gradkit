@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-// import Logo from "../../assets/logo.svg";
-// import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
+// import { GoogleLogin } from "react-google-login";
+
 
 import {
   login,
@@ -21,9 +21,34 @@ const SigninScreen = () => {
   );
 
   const history = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+
+  
+  /* google login */
+
+  const googleSuccess = async (googleUser) => {
+    var profile = googleUser.getBasicProfile();
+    console.log("ID: " + profile.getId());
+
+    var id_token = googleUser.getAuthResponse().id_token;
+
+    await fetch("/auth/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ profile, id_token }),
+    });
+
+    // let ans = await buffer.json();
+  };
+
+  const googleFailure = () => {
+    console.log("try again later");
+  };
+
 
   const userSignin = async (e) => {
     e.preventDefault();
@@ -42,13 +67,15 @@ const SigninScreen = () => {
     if (message) {
       setTimeout(() => dispatch(clearMessages()), 3000);
 
-      setTimeout(() => history("/signin"), 4000);
+      // setTimeout(() => history("/signin"), 4000);
     }
 
     if (isAuthenticatedUser) {
       history("/");
     }
   }, [dispatch, error, isAuthenticatedUser, history, message]);
+
+  
 
   return (
     <>
@@ -99,6 +126,42 @@ const SigninScreen = () => {
                 <Link to="/signup">Sign Up</Link>
                 <Link to="/forgot-password">Forgot Password</Link>
               </div>
+
+
+              {/* <OrConatainer>
+                <p>OR</p>
+              </OrConatainer> */}
+
+              {/* <div id="g_id_onload"
+    data-client_id="110878966226-25v19v108muhjcjuf7nt9n2hoh6aluhu.apps.googleusercontent.com"
+    data-login_uri="https://localhost:5001/google"
+    data-auto_prompt="false">
+ </div>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+    </div> */}
+    
+              {/* <GoogleLogin 
+                clientId="110878966226-25v19v108muhjcjuf7nt9n2hoh6aluhu.apps.googleusercontent.com"
+                render={(renderProps) => (
+                  <GoogleButton
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  >
+                    Continue With Google
+                  </GoogleButton>
+                )}
+                buttonText="Login"
+                onSuccess={googleSuccess}
+                onFailure={googleFailure}
+                cookiePolicy="single_host_origin"
+              /> */}
+              
               {message && <Message status="success">{message}</Message>}
               {error && <Message status="error">{error}</Message>}
             </form>
@@ -114,6 +177,26 @@ const SigninScreen = () => {
     </>
   );
 };
+
+// const GoogleButton = styled.div`
+   
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   padding: 0.4rem 0;
+//   margin: 1rem 0;
+//   border-radius: 10rem;
+//   font-weight: 500;
+//   border: 0.2rem solid #297eff;
+//   font-size: 1.6rem;
+
+//   &:hover {
+//     cursor: pointer;
+//   }
+//   @media (max-width: 768px) {
+//     font-size: 1.4rem;
+//   }
+// `;
 
 const SignInSection = styled.div`
   height: calc(100vh - 7.6rem);
@@ -262,5 +345,35 @@ const SignInContainer = styled.div`
     box-shadow: none;
   }
 `;
+
+
+
+const OrConatainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 1.4rem 0;
+
+  &:before,
+  &:after {
+    flex: 1;
+    content: "";
+    border-top: 0.2rem solid #cccccc;
+    margin-top: 0.2rem;
+  }
+
+  p {
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 1rem;
+  }
+
+  @media (max-width: 768px) {
+    p {
+      font-size: 1.4rem;
+    }
+  }
+`;
+
 
 export default SigninScreen;
