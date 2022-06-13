@@ -2,7 +2,9 @@ const Form = require("../models/form");
 const sendMail = require("../helpers/send_mail");
 const catchAsync = require("../utils/catchAsync");
 const ErrorHandler = require("../utils/errorHandler");
-
+const Transactions=require("../models/transaction");
+const User=require("../models/user");
+const Course=require("../models/course");
 exports.contact = catchAsync(async (req, res, next) => {
   const form = new Form({
     type: "Contact Request",
@@ -27,3 +29,38 @@ exports.contact = catchAsync(async (req, res, next) => {
     message: "Your message is submitted successfully",
   });
 });
+
+exports.queries=async(req,res,next)=>{
+  try{
+    //write queries;
+    console.log("hello");
+    let arr=[];
+    let temp=await Course.findById('629c8daf5b76399ae6080057').populate('enrolled','name');
+    console.log(temp);
+    // await Transactions.find({},async (err,transaction)=>{
+    //   // console.log(transaction);
+      
+    //   if(!err)
+    //   {
+    //     transaction.forEach(async(trans)=>{
+    //       // console.log(trans.course.toString());
+    //       let courses=await Course.findById(trans.course.toString());
+    //       // if(!courses)
+    //       // {
+    //       //   await Transactions.findByIdAndDelete(trans._id);
+    //       // }
+    //       // console.log(courses);
+    //       let us=await User.findById(trans.user);
+    //       res.write(courses.title+" "+us.name);
+    //       console.log(courses.title+" "+us.name);
+    //       arr.push({course:courses.title,us});
+    //     });
+    //   }
+    // }).clone();
+    res.send(temp);
+  }
+  catch(err)
+  {
+    next(err);
+  }
+}
