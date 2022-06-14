@@ -104,7 +104,7 @@ const Footer = () => {
       <p className="footer__copyright">
         &copy; DoubtCo {new Date().getFullYear()}
       </p>
-      <p className="footer__version">1.0.4</p>
+      <p className="footer__version">1.0.5</p>
     </FooterSection>
   );
 };

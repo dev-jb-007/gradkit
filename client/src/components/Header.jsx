@@ -47,6 +47,7 @@ const Header = () => {
 const Navbar = styled.div`
   height: 7.6rem;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   padding: 0 4rem;

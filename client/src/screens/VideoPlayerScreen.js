@@ -71,11 +71,11 @@ const VideoPlayerScreen = () => {
 
                 <div className="video__description">
                   {showDescription ? (
-                    <span onClick={showDescriptionHandler}>
+                    <span className="description__button" onClick={showDescriptionHandler}>
                       Hide Description
                     </span>
                   ) : (
-                    <span onClick={showDescriptionHandler}>
+                    <span className="description__button" onClick={showDescriptionHandler}>
                       Show Description
                     </span>
                   )}
@@ -167,6 +167,9 @@ const VideoDetails = styled.div`
   .video__description {
     font-size: 1.4rem;
     margin-top: 0.5rem;
+    
+    /* .description__button {
+    } */
 
     span {
       font-size: 1.2rem;

@@ -115,7 +115,7 @@ const ForgotPasswordScreen = () => {
 };
 
 const ForgotPassSection = styled.div`
-  height: calc(100vh - 7.6rem);
+  min-height: calc(100vh - 7.6rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,12 +150,12 @@ const ForgotPassContainer = styled.div`
     }
 
     .form__logo {
-      width: 24rem;
-      margin-bottom: 3.6rem;
+      width: 18rem;
+      margin-bottom: 2rem;
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 2.4rem;
       font-weight: 500;
       margin-bottom: 0.4rem;
     }
@@ -206,11 +206,11 @@ const ForgotPassContainer = styled.div`
 
     @media (max-width: 768px) {
       .form__logo {
-        width: 16rem;
+        width: 14rem;
       }
 
       h1 {
-        font-size: 2.4rem;
+        font-size: 2rem;
       }
 
       label {

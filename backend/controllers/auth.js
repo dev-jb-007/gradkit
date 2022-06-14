@@ -3,6 +3,7 @@ const Code = require("../models/codes");
 const passport = require("passport");
 const catchAsync = require("../utils/catchAsync");
 const ErrorHandler = require("../utils/errorHandler");
+const decodeJwtResponse = require("../helpers/decode_jwt.js");
 
 const {
   encryptPassword,
@@ -27,9 +28,7 @@ exports.sessionSignUp = (req, res) => {
 };
 
 exports.jwtSignUp = catchAsync(async (req, res, next) => {
-  console.log("Hello");
   let found = await User.findOne({ email: req.body.email });
-  console.log(found);
   if (found) {
     return next(new ErrorHandler("Email Already Exist", 403));
   }
@@ -46,7 +45,7 @@ exports.jwtSignUp = catchAsync(async (req, res, next) => {
   });
   console.log(user);
   await user.save();
-  console.log("hello");
+  // console.log("hello");
   // let token = await user.createAuthToken();
   // res.cookie("jwt", token, {
   //   expires: new Date(Date.now() + 5000000000),
@@ -88,43 +87,83 @@ exports.verifySignUp = catchAsync(async (req, res, next) => {
 
 exports.jwtSignIn = catchAsync(async (req, res, next) => {
   const body = req.body;
-  const user = await User.findOne({
-    email: body.email,
-  })
-    .populate("courses")
-    .populate({ path: "courses", populate: { path: "thumbnail" } });
 
-  if (!user) {
-    return next(new ErrorHandler("Enter valid Credantials", 403));
-  } else {
-    const salt = user.salt;
-    const hash = user.hash;
-    const found = validatePassword(body.password, salt, hash);
+  if (req.body.credential) {
+    const responsePayload = decodeJwtResponse(req.body.credential);
+    body.email = responsePayload.email;
+    body.name = responsePayload.name;
 
-    if (found) {
-      if (user.activationStatus === "active") {
-        if (user.tokens.length >= 1 && user.role === 0) {
-          // throw new Error("Already Signed On Another Account");
-          return next(
-            new ErrorHandler("Already Signed On Another Account", 403)
-          );
-        }
-        let token = await user.createAuthToken();
+    const findUser = await User.findOne({
+      email: body.email,
+    });
+
+    if (!findUser) {
+      const user = new User({
+        email: body.email,
+        name: body.name,
+        activationStatus: "active",
+      });
+
+      let token = await user.createAuthToken();
+      res.cookie("jwt", token, {
+        expires: new Date(Date.now() + 5000000000),
+        httpOnly: true,
+      });
+
+      await user.save();
+      res.status(201).json({ user, message: "User created successfully" });
+    } else {
+      if (findUser.tokens.length >= 1 && findUser.role === 0) {
+        return next(new ErrorHandler("Already Signed On Another Account", 403));
+      } else {
+        let token = await findUser.createAuthToken();
+
         res.cookie("jwt", token, {
           expires: new Date(Date.now() + 5000000000),
           httpOnly: true,
         });
 
+        const user = await findUser;
+
         res.status(200).json({ user, message: "Logged In Successfully" });
-      } else if (user.activationStatus !== "active") {
-        // throw new Error("Please verify account through mail.");
-        return next(
-          new ErrorHandler("Please verify account through mail.", 403)
-        );
       }
+    }
+  } else {
+    const user = await User.findOne({
+      email: body.email,
+    })
+      .populate("courses")
+      .populate({ path: "courses", populate: { path: "thumbnail" } });
+
+    if (!user || !user.salt) {
+      return next(new ErrorHandler("Enter valid Credantials", 403));
     } else {
-      // throw new Error("Enter Valid Credantials");
-      return next(new ErrorHandler("Enter Valid Credantials", 403));
+      const salt = user.salt;
+      const hash = user.hash;
+      const found = validatePassword(body.password, salt, hash);
+
+      if (found) {
+        if (user.activationStatus === "active") {
+          if (user.tokens.length >= 1 && user.role === 0) {
+            return next(
+              new ErrorHandler("Already Signed On Another Account", 403)
+            );
+          }
+          let token = await user.createAuthToken();
+          res.cookie("jwt", token, {
+            expires: new Date(Date.now() + 5000000000),
+            httpOnly: true,
+          });
+
+          res.status(200).json({ user, message: "Logged In Successfully" });
+        } else if (user.activationStatus !== "active") {
+          return next(
+            new ErrorHandler("Please verify account through mail.", 403)
+          );
+        }
+      } else {
+        return next(new ErrorHandler("Enter Valid Credantials", 403));
+      }
     }
   }
 });
@@ -172,4 +211,41 @@ exports.getUserDetails = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json({ user, message: "User Authenticated" });
+});
+
+exports.signOutFromAllDevices = catchAsync(async (req, res) => {
+  const body = req.body;
+
+  if (req.body.credential) {
+    const responsePayload = decodeJwtResponse(req.body.credential);
+    body.email = responsePayload.email;
+
+    const findUser = await User.findOne({
+      email: body.email,
+    });
+
+    if (!findUser) {
+      return next(new ErrorHandler("User not found", 404));
+    } else {
+      findUser.tokens = [];
+      await findUser.save();
+      res
+        .status(200)
+        .json({ message: "Successfully signed out from all devices" });
+    }
+  } else {
+    const user = await User.findOne({
+      email: body.email,
+    });
+
+    if (!user || !user.salt) {
+      return next(new ErrorHandler("User not found", 404));
+    } else {
+      user.tokens = [];
+      await user.save();
+      res
+        .status(200)
+        .json({ message: "Successfully signed out from all devices" });
+    }
+  }
 });

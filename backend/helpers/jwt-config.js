@@ -5,25 +5,25 @@ const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID =
   "464319972305-p81cg2nqfs3atlfhgkis3c805a8rih49.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
-// async function verify(token, user) {
-//   try {
-//     const ticket = await client.verifyIdToken({
-//       idToken: token,
-//       audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-//       // Or, if multiple clients access the backend:
-//       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-//     });
-//     const payload = ticket.getPayload();
-//     const userid = payload["sub"];
-//     // console.log(userid);
-//     user = userid;
-//     return payload;
-//     // If request specified a G Suite domain:
-//     // const domain = payload['hd'];
-//   } catch (err) {
-//     return { error: err.message };
-//   }
-// }
+async function verify(token, user) {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+    const payload = ticket.getPayload();
+    const userid = payload["sub"];
+    // console.log(userid);
+    user = userid;
+    return payload;
+    // If request specified a G Suite domain:
+    // const domain = payload['hd'];
+  } catch (err) {
+    return { error: err.message };
+  }
+}
 exports.auth = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;

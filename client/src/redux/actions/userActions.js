@@ -20,16 +20,49 @@ import {
   VERIFY_USER_REQUEST,
   VERIFY_USER_SUCCESS,
   VERIFY_USER_FAIL,
+  ALL_USER_LOGOUT_REQUEST,
+  ALL_USER_LOGOUT_SUCCESS,
+  ALL_USER_LOGOUT_FAIL,
   CLEAR_ERRORS,
   CLEAR_MESSAGES,
 } from "../constants/userConstants";
 
+// google login
+
+export const googleLogin = (credential) => async (dispatch) => {
+  dispatch({ type: USER_LOGIN_REQUEST });
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/auth/signin`,
+      { credential },
+      config
+    );
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // login user
 
 export const login = (email, password) => async (dispatch) => {
-  try {
-    dispatch({ type: USER_LOGIN_REQUEST });
+  dispatch({ type: USER_LOGIN_REQUEST });
 
+  try {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -57,9 +90,8 @@ export const login = (email, password) => async (dispatch) => {
 // register
 
 export const register = (name, email, password) => async (dispatch) => {
+  dispatch({ type: USER_REGISTER_REQUEST });
   try {
-    dispatch({ type: USER_REGISTER_REQUEST });
-
     const config = {
       headers: {
         // "Content-Type": "multipart/form-data",
@@ -88,9 +120,8 @@ export const register = (name, email, password) => async (dispatch) => {
 // verify user
 
 export const verifyUser = (code) => async (dispatch) => {
+  dispatch({ type: VERIFY_USER_REQUEST });
   try {
-    dispatch({ type: VERIFY_USER_REQUEST });
-
     const { data } = await axios.get(`/api/auth/signup/${code}`);
 
     dispatch({
@@ -110,9 +141,8 @@ export const verifyUser = (code) => async (dispatch) => {
 // load user
 
 export const loadUser = () => async (dispatch) => {
+  dispatch({ type: LOAD_USER_REQUEST });
   try {
-    dispatch({ type: LOAD_USER_REQUEST });
-
     const { data } = await axios.get(`/api/auth/profile`);
 
     dispatch({
@@ -144,11 +174,66 @@ export const logout = () => async (dispatch) => {
   }
 };
 
+export const logoutAllDevices = (email, password) => async (dispatch) => {
+  dispatch({ type: ALL_USER_LOGOUT_REQUEST });
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/auth/signout-all`,
+      { email, password },
+      config
+    );
+
+    dispatch({
+      type: ALL_USER_LOGOUT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ALL_USER_LOGOUT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const googleLogoutAllDevices = (credential) => async (dispatch) => {
+  dispatch({ type: ALL_USER_LOGOUT_REQUEST });
+
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/auth/signout-all`,
+      { credential },
+      config
+    );
+
+    dispatch({
+      type: ALL_USER_LOGOUT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ALL_USER_LOGOUT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // Forgot Password
 export const forgotPassword = (email) => async (dispatch) => {
+  dispatch({ type: FORGOT_PASSWORD_REQUEST });
   try {
-    dispatch({ type: FORGOT_PASSWORD_REQUEST });
-
     const config = {
       headers: {
         // "Content-Type": "multipart/form-data",
@@ -173,9 +258,8 @@ export const forgotPassword = (email) => async (dispatch) => {
 
 // Reset Password
 export const resetPassword = (token, password) => async (dispatch) => {
+  dispatch({ type: RESET_PASSWORD_REQUEST });
   try {
-    dispatch({ type: RESET_PASSWORD_REQUEST });
-
     const config = { headers: { "Content-Type": "application/json" } };
 
     const { data } = await axios.post(

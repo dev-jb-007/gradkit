@@ -7,6 +7,7 @@ import {
   ResetPasswordScreen,
   SigninScreen,
   SignupScreen,
+  SignOutScreen,
 } from "./screens/Authentication";
 
 import CourseScreen from "./screens/CourseScreen";
@@ -29,6 +30,7 @@ import {
 import UploadScreen from "./screens/UploadScreen";
 import Error404Screen from "./screens/Error404Screen";
 import ScrollToTop from "./utils/ScrollToTop";
+import MaintainanceScreen from "./screens/MaintainanceScreen";
 
 function App() {
   const { user, isAuthenticatedUser } = useSelector((state) => state.user);
@@ -44,56 +46,66 @@ function App() {
       <Router>
         <Fragment>
           <ScrollToTop />
-
-          {/* Header */}
           <Header />
           <Routes>
-            {isAuthenticatedUser ? (
-              <Route exact path="/" element={<ProfileScreen />} />
+            {process.env.REACT_APP_MODE === "development" ? (
+              <Route path="*" element={<MaintainanceScreen />} />
             ) : (
-              <Route exact path="/" element={<HomeScreen />} />
+              <>
+                {isAuthenticatedUser ? (
+                  <Route exact path="/" element={<ProfileScreen />} />
+                ) : (
+                  <Route exact path="/" element={<HomeScreen />} />
+                )}
+
+                <Route path="/reach-us" element={<ReachUsScreen />} />
+
+                <Route path="/signin" element={<SigninScreen />} />
+
+                <Route path="/signup" element={<SignupScreen />} />
+
+                <Route path="/signout-all" element={<SignOutScreen />} />
+
+                <Route
+                  path="/forgot-password"
+                  element={<ForgotPasswordScreen />}
+                />
+
+                <Route
+                  path="/reset-password/:token"
+                  element={<ResetPasswordScreen />}
+                />
+
+                <Route
+                  path="/verify-email/:id"
+                  element={<VerifyEmailScreen />}
+                />
+
+                <Route path="/course" element={<CourseScreen />} />
+
+                <Route path="/course/:id" element={<CourseViewScreen />} />
+
+                <Route
+                  path="/video/:vid/:cid"
+                  element={<VideoPlayerScreen />}
+                />
+
+                <Route path="/terms-conditions" element={<TermsScreen />} />
+
+                <Route
+                  path="/privacy-policy"
+                  element={<PrivacyPolicyScreen />}
+                />
+
+                <Route path="/refund-policy" element={<RefundPolicyScreen />} />
+
+                {isAuthenticatedUser && user && user.role >= 1 && (
+                  <Route path="/admin" element={<UploadScreen />} />
+                )}
+
+                <Route path="*" element={<Error404Screen />} />
+              </>
             )}
-
-            <Route path="/reach-us" element={<ReachUsScreen />} />
-
-            {/* Authentication */}
-
-            <Route path="/signin" element={<SigninScreen />} />
-
-            <Route path="/signup" element={<SignupScreen />} />
-
-            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-
-            <Route
-              path="/reset-password/:token"
-              element={<ResetPasswordScreen />}
-            />
-
-            <Route path="/verify-email/:id" element={<VerifyEmailScreen />} />
-
-            {/* <Route path="/profile" element={<ProfileScreen />} /> */}
-
-            {/* Courses */}
-
-            <Route path="/course" element={<CourseScreen />} />
-
-            <Route path="/course/:id" element={<CourseViewScreen />} />
-
-            <Route path="/video/:vid/:cid" element={<VideoPlayerScreen />} />
-
-            {/*  */}
-
-            <Route path="/terms-conditions" element={<TermsScreen />} />
-
-            <Route path="/privacy-policy" element={<PrivacyPolicyScreen />} />
-
-            <Route path="/refund-policy" element={<RefundPolicyScreen />} />
-
-            {isAuthenticatedUser && user && user.role >= 1 && (
-              <Route path="/admin" element={<UploadScreen />} />
-            )}
-
-            <Route path="*" element={<Error404Screen />} />
           </Routes>
 
           {/* Footer */}
