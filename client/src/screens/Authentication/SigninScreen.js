@@ -66,7 +66,9 @@ const SigninScreen = () => {
                 alt="gradkit"
                 className="form__logo"
               />
+
               <h1>Sign In</h1>
+
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -75,6 +77,7 @@ const SigninScreen = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+
               <label htmlFor="password">Password</label>
               <input
                 type="password"
@@ -83,17 +86,25 @@ const SigninScreen = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+
               <button type="submit" className="form__button">
                 Sign In
               </button>
+
               <div className="form__links">
-                <Link to="/signup">Sign Up</Link>
-                <Link to="/forgot-password">Forgot Password</Link>
+                <Link to="/signup">Not Registered?</Link>
+                <Link to="/forgot-password">Forgot Password?</Link>
               </div>
+              <div className="signout__link">
+                <Link to="/signout-all">Sign Out From All Devices</Link>
+              </div>
+
               <OrConatainer>
                 <p>OR</p>
               </OrConatainer>
-              <GoogleSignInButton />
+              <GoogleButton>
+                <GoogleSignInButton />
+              </GoogleButton>
 
               {message && <Message status="success">{message}</Message>}
               {error && <Message status="error">{error}</Message>}
@@ -112,7 +123,7 @@ const SigninScreen = () => {
 };
 
 const SignInSection = styled.div`
-  height: calc(100vh - 7.6rem);
+  min-height: calc(100vh - 7.6rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,6 +132,13 @@ const SignInSection = styled.div`
   @media (max-width: 768px) {
     padding: 2rem;
   }
+`;
+
+const GoogleButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 const SignInContainer = styled.div`
@@ -147,12 +165,12 @@ const SignInContainer = styled.div`
     }
 
     .form__logo {
-      width: 24rem;
-      margin-bottom: 3.6rem;
+      width: 18rem;
+      margin-bottom: 2rem;
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 2.4rem;
       font-weight: 500;
       margin-bottom: 0.4rem;
     }
@@ -187,7 +205,7 @@ const SignInContainer = styled.div`
       border-radius: 0.4rem;
       font-size: 1.6rem;
       color: white;
-      margin: 1rem 0;
+      margin-top: 1rem;
 
       &:hover {
         box-shadow: 0 0 0.4rem var(--bg-light-secondary);
@@ -201,6 +219,21 @@ const SignInContainer = styled.div`
       align-items: center;
       font-size: 1.6rem;
       font-weight: 500;
+      margin: 1rem 0;
+
+      a {
+        &:hover {
+          color: var(--bg-light-secondary);
+        }
+      }
+    }
+
+    .signout__link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 500;
 
       a {
         &:hover {
@@ -211,11 +244,11 @@ const SignInContainer = styled.div`
 
     @media (max-width: 768px) {
       .form__logo {
-        width: 16rem;
+        width: 14rem;
       }
 
       h1 {
-        font-size: 2.4rem;
+        font-size: 2rem;
       }
 
       label {
@@ -231,7 +264,8 @@ const SignInContainer = styled.div`
         font-size: 1.4rem;
       }
 
-      .form__links {
+      .form__links,
+      .signout__link {
         font-size: 1.4rem;
       }
     }
@@ -262,7 +296,7 @@ const SignInContainer = styled.div`
 const OrConatainer = styled.div`
   display: flex;
   align-items: center;
-  margin: 1.4rem 0;
+  margin: 1rem 0;
 
   &:before,
   &:after {

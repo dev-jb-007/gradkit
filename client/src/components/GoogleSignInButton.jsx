@@ -1,4 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import {
+  googleLogin,
+  googleLogoutAllDevices,
+} from "../redux/actions/userActions";
 
 const loadScript = (src) =>
   new Promise((resolve, reject) => {
@@ -10,8 +15,9 @@ const loadScript = (src) =>
     document.body.appendChild(script);
   });
 
-const GoogleAuth = () => {
+const GoogleAuth = ({ action }) => {
   const googleButton = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const src = "https://accounts.google.com/gsi/client";
@@ -21,26 +27,39 @@ const GoogleAuth = () => {
     loadScript(src)
       .then(() => {
         /*global google*/
-        console.log(google);
+        // console.log(google);
+
         google.accounts.id.initialize({
           client_id: id,
           callback: handleCredentialResponse,
         });
+        // why width of the button is not working?
+
         google.accounts.id.renderButton(googleButton.current, {
           theme: "outline",
-          size: "huge",
+          size: "large",
+          type: "standard",
+          text: "continue_with",
+          shape: "rectangular",
+          logo_alignment: "left",
         });
       })
       .catch(console.error);
 
     return () => {
       const scriptTag = document.querySelector(`script[src="${src}"]`);
-      if (scriptTag) document.body.removeChild(scriptTag);
+      if (scriptTag) scriptTag.remove();
+      // if (scriptTag)  document.body.removeChild(scriptTag);
     };
   }, []);
 
   function handleCredentialResponse(response) {
-    console.log("Encoded JWT ID token: " + response.credential);
+    // console.log("Encoded JWT ID token: " + response.credential);
+    if (action === "signout") {
+      dispatch(googleLogoutAllDevices(response.credential));
+    } else {
+      dispatch(googleLogin(response.credential));
+    }
   }
 
   return <div ref={googleButton}></div>;

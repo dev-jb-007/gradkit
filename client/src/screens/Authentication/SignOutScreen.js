@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
-// import Logo from "../../assets/logo.svg";
-// import SignImg from "../../assets/atom.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import GoogleSignInButton from "../../components/GoogleSignInButton";
+
 import {
-  register,
+  logoutAllDevices,
   clearErrors,
   clearMessages,
 } from "../../redux/actions/userActions";
+
+import { useDispatch, useSelector } from "react-redux";
 import { Loader, Message } from "../../components";
 import { Helmet } from "react-helmet";
 
-const SignupScreen = () => {
+const SignOutScreen = () => {
   const dispatch = useDispatch();
-
-  const history = useNavigate();
-
   const { error, isAuthenticatedUser, loading, message } = useSelector(
     (state) => state.user
   );
 
-  const [name, setName] = useState("");
+  const history = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const registerUser = (e) => {
+  const userSignOut = async (e) => {
     e.preventDefault();
-    dispatch(register(name, email, password));
-    setName("");
+    await dispatch(logoutAllDevices(email, password));
     setEmail("");
     setPassword("");
   };
@@ -41,11 +38,7 @@ const SignupScreen = () => {
     }
 
     if (message) {
-      setTimeout(() => {
-        dispatch(clearMessages());
-      }, 3000);
-
-      setTimeout(() => history("/signin"), 4000);
+      setTimeout(() => dispatch(clearMessages()), 3000);
     }
 
     if (isAuthenticatedUser) {
@@ -57,37 +50,23 @@ const SignupScreen = () => {
     <>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Signup</title>
+        <title>Sign out from all devices</title>
         <meta
           name="description"
-          content="Gradkit's Sign up page, Sign up to explore all courses provided by Gradkit. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
+          content="Gradkit's Sign out from all devices page, Sign in to explore all courses provided by Gradkit. Gradkit is a platform for Gujarat Technical University Computer Science and Information Technology Semester 4 courses"
         />
       </Helmet>
-      <SignUpSection>
+      <SignOutSection>
         {loading && <Loader />}
-        <SignUpContainer>
-          <div className="image__container">
-            <img
-              src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/atom.svg"
-              alt=""
-            />
-          </div>
+        <SignOutContainer>
           <div className="form__container">
-            <form onSubmit={registerUser}>
+            <form onSubmit={userSignOut}>
               <img
                 src="https://bucket-for-doubt-test.s3.ap-south-1.amazonaws.com/logo.svg"
                 alt="gradkit"
                 className="form__logo"
               />
-              <h1>Sign Up</h1>
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <h1>Verify to Sign out from all devices</h1>
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -105,22 +84,30 @@ const SignupScreen = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button type="submit" className="form__button">
-                Sign Up
+                Verify
               </button>
               <div className="form__links">
-                <Link to="/signin">Already signed up?</Link>
+                <Link to="/signin">Already Registered?</Link>
+                <Link to="/signup">Not Registered?</Link>
               </div>
-              {message && <Message status="info">{message}</Message>}
+              <OrConatainer>
+                <p>OR</p>
+              </OrConatainer>
+              <GoogleButton>
+                <GoogleSignInButton action="signout" />
+              </GoogleButton>
+
+              {message && <Message status="success">{message}</Message>}
               {error && <Message status="error">{error}</Message>}
             </form>
           </div>
-        </SignUpContainer>
-      </SignUpSection>
+        </SignOutContainer>
+      </SignOutSection>
     </>
   );
 };
 
-const SignUpSection = styled.div`
+const SignOutSection = styled.div`
   min-height: calc(100vh - 7.6rem);
   display: flex;
   justify-content: center;
@@ -132,17 +119,23 @@ const SignUpSection = styled.div`
   }
 `;
 
-const SignUpContainer = styled.div`
+const GoogleButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+`;
+
+const SignOutContainer = styled.div`
   border-radius: 0.4rem;
-  height: 48rem;
+  padding: 2rem;
+
   display: flex;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
 
   .form__container {
     width: 100%;
     height: 100%;
-    padding: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -179,6 +172,15 @@ const SignUpContainer = styled.div`
       outline: none;
     }
 
+    .check__container {
+      display: flex;
+      align-items: center;
+
+      input {
+        margin-right: 0.8rem;
+      }
+    }
+
     .form__button {
       background-color: var(--bg-light-secondary);
       padding: 0.6rem 0;
@@ -187,7 +189,7 @@ const SignUpContainer = styled.div`
       border-radius: 0.4rem;
       font-size: 1.6rem;
       color: white;
-      margin-top: 1rem;
+      margin: 1rem 0;
 
       &:hover {
         box-shadow: 0 0 0.4rem var(--bg-light-secondary);
@@ -199,7 +201,6 @@ const SignUpContainer = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 1rem;
       font-size: 1.6rem;
       font-weight: 500;
 
@@ -260,4 +261,31 @@ const SignUpContainer = styled.div`
   }
 `;
 
-export default SignupScreen;
+const OrConatainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 1.4rem 0;
+
+  &:before,
+  &:after {
+    flex: 1;
+    content: "";
+    border-top: 0.2rem solid #cccccc;
+    margin-top: 0.2rem;
+  }
+
+  p {
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 1rem;
+  }
+
+  @media (max-width: 768px) {
+    p {
+      font-size: 1.4rem;
+    }
+  }
+`;
+
+export default SignOutScreen;

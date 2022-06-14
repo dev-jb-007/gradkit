@@ -21,7 +21,7 @@ if (cluster.isMaster) {
   const cors = require("cors");
   const Code = require("./models/codes");
   const Solution = require("./models/solution");
-  
+
   const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
@@ -95,24 +95,22 @@ if (cluster.isMaster) {
       })
       .then((message) => res.send(message));
   });
-  app.post("/google",async(req,res,next)=>{
-    try{
+  app.post("/google", async (req, res, next) => {
+    try {
       console.log(req.body);
       const responsePayload = decodeJwtResponse(req.body.credential);
 
-     console.log("ID: " + responsePayload.sub);
-     console.log('Full Name: ' + responsePayload.name);
-     console.log('Given Name: ' + responsePayload.given_name);
-     console.log('Family Name: ' + responsePayload.family_name);
-     console.log("Image URL: " + responsePayload.picture);
-     console.log("Email: " + responsePayload.email);
-      res.send({data:req.body});
-    }
-    catch(err)
-    {
+      console.log("ID: " + responsePayload.sub);
+      console.log("Full Name: " + responsePayload.name);
+      console.log("Given Name: " + responsePayload.given_name);
+      console.log("Family Name: " + responsePayload.family_name);
+      console.log("Image URL: " + responsePayload.picture);
+      console.log("Email: " + responsePayload.email);
+      res.send({ data: req.body });
+    } catch (err) {
       next(err);
     }
-  })
+  });
   app.get("/google", async (req, res, next) => {
     res.sendFile(path.join(__dirname, "/public/google.html"));
   });
@@ -240,10 +238,9 @@ if (cluster.isMaster) {
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
   });
-  https.createServer(httpsOptions, app)
-      .listen(5001, () => {
-          console.log('HTTPS Server started on port 5000');
-      })
+  https.createServer(httpsOptions, app).listen(5001, () => {
+    console.log("HTTPS Server started on port 5000");
+  });
   // app.listen(5001, () => console.log(`Listening on port ${port}`));
 
   // const secureServer = https.createServer({

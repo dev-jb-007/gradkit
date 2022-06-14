@@ -13,6 +13,9 @@ import {
   LOAD_USER_FAIL,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_FAIL,
+  ALL_USER_LOGOUT_REQUEST,
+  ALL_USER_LOGOUT_SUCCESS,
+  ALL_USER_LOGOUT_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAIL,
@@ -63,6 +66,19 @@ export const userAuthReducer = (state = { user: {} }, action) => {
         user: null,
       };
 
+    case ALL_USER_LOGOUT_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ALL_USER_LOGOUT_SUCCESS:
+      return {
+        loading: false,
+        isAuthenticatedUser: false,
+        user: null,
+        message: action.payload.message,
+      };
+
     case USER_REGISTER_FAIL:
       return {
         ...state,
@@ -95,6 +111,7 @@ export const userAuthReducer = (state = { user: {} }, action) => {
       };
 
     case USER_LOGOUT_FAIL:
+    case ALL_USER_LOGOUT_FAIL:
       return {
         ...state,
         loading: false,

@@ -7,6 +7,7 @@ import {
   ResetPasswordScreen,
   SigninScreen,
   SignupScreen,
+  SignOutScreen,
 } from "./screens/Authentication";
 
 import CourseScreen from "./screens/CourseScreen";
@@ -62,6 +63,8 @@ function App() {
                 <Route path="/signin" element={<SigninScreen />} />
 
                 <Route path="/signup" element={<SignupScreen />} />
+
+                <Route path="/signout-all" element={<SignOutScreen />} />
 
                 <Route
                   path="/forgot-password"
