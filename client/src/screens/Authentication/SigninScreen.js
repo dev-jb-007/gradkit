@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleOneTapLogin  from 'react-google-one-tap-login';
-import {GoogleLogin} from "react-google-login"
-
+import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 import {
   login,
@@ -15,16 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Loader, Message } from "../../components";
 import { Helmet } from "react-helmet";
 
-// google
-
-const onLoginSuccess = () => {
-  console.log("success");
-}
-
-const onFailureSuccess = () => {
-  console.log("fail");
-}
-
 const SigninScreen = () => {
   const dispatch = useDispatch();
   const { error, isAuthenticatedUser, loading, message } = useSelector(
@@ -34,7 +22,6 @@ const SigninScreen = () => {
   const history = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const userSignin = async (e) => {
     e.preventDefault();
@@ -57,9 +44,7 @@ const SigninScreen = () => {
     if (isAuthenticatedUser) {
       history("/");
     }
-
   }, [dispatch, error, isAuthenticatedUser, history, message]);
-
 
   return (
     <>
@@ -81,9 +66,7 @@ const SigninScreen = () => {
                 alt="gradkit"
                 className="form__logo"
               />
-
               <h1>Sign In</h1>
-
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -92,7 +75,6 @@ const SigninScreen = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-
               <label htmlFor="password">Password</label>
               <input
                 type="password"
@@ -101,45 +83,18 @@ const SigninScreen = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
               <button type="submit" className="form__button">
                 Sign In
               </button>
-
               <div className="form__links">
                 <Link to="/signup">Sign Up</Link>
                 <Link to="/forgot-password">Forgot Password</Link>
               </div>
-
               <OrConatainer>
                 <p>OR</p>
-              </OrConatainer>    
+              </OrConatainer>
+              <GoogleSignInButton />
 
-{/* <div>
-  <div id="g_id_onload"
-    data-client_id="110878966226-25v19v108muhjcjuf7nt9n2hoh6aluhu.apps.googleusercontent.com"
-    data-login_uri=""
-    data-auto_prompt="false">
- </div>
-    <div className="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="continue_with"
-        data-shape="rectangular"
-        data-logo_alignment="left">
-    </div>        
-</div> */}
-
-<GoogleLogin 
-  clientId="110878966226-25v19v108muhjcjuf7nt9n2hoh6aluhu.apps.googleusercontent.com"
-  buttonText="Login"
-  onSuccess={onLoginSuccess}
-  onFailure={onFailureSuccess}
-  cookiePolicy={'single_host_origin'}
-/>
-              
-              
               {message && <Message status="success">{message}</Message>}
               {error && <Message status="error">{error}</Message>}
             </form>
@@ -155,7 +110,6 @@ const SigninScreen = () => {
     </>
   );
 };
-
 
 const SignInSection = styled.div`
   height: calc(100vh - 7.6rem);
@@ -305,8 +259,6 @@ const SignInContainer = styled.div`
   }
 `;
 
-
-
 const OrConatainer = styled.div`
   display: flex;
   align-items: center;
@@ -333,6 +285,5 @@ const OrConatainer = styled.div`
     }
   }
 `;
-
 
 export default SigninScreen;
