@@ -443,7 +443,7 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     } else {
       temp.orderId = order.id;
       await temp.save();
-      setInterval(async()=>{
+      setTimeout(async()=>{
         let kritik=await Transaction.findById(temp._id);
         if(kritik.status==="Pending")
         {
