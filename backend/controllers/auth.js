@@ -95,7 +95,8 @@ exports.jwtSignIn = catchAsync(async (req, res, next) => {
 
     const findUser = await User.findOne({
       email: body.email,
-    });
+    }).populate("courses")
+    .populate({ path: "courses", populate: { path: "thumbnail" } });
 
     if (!findUser) {
       const user = new User({
