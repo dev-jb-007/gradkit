@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 
 const ProfileScreen = () => {
   const { user, loading } = useSelector((state) => state.user);
-
+  console.log(user);
   return (
     <>
       <Helmet>
