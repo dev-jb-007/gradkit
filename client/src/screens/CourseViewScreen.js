@@ -79,6 +79,15 @@ const CourseViewScreen = () => {
                   {moment(course?.createdAt).format("MMM Do YYYY")}&nbsp;
                   {moment(course?.createdAt).format("h:mm a")}
                 </p>
+
+                <a
+                  href="https://drive.google.com/drive/folders/1H70JwXbBZRC_s1fH8tiSC4Zk_Y2PMC3M?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resources__link"
+                >
+                  <span>Resources</span>
+                </a>
               </div>
               {course && course?.videos?.length <= 4 && (
                 <div className="lock__container">
@@ -126,6 +135,23 @@ const CourseDetails = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  .resources__link {
+    display: inline-block;
+    background: var(--bg-light-secondary);
+    border: none;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-top: 0.6rem;
+    border-radius: 0.5rem;
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 0 0.4rem var(--bg-light-secondary);
+    }
+  }
 
   .course__info {
     width: 100%;
@@ -209,7 +235,8 @@ const CourseDetails = styled.div`
       .course__subject__code,
       .course__videos__number,
       .course__semister,
-      .course__date {
+      .course__date,
+      .resources__link {
         font-size: 1.4rem;
       }
     }
