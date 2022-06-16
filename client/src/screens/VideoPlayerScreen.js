@@ -71,17 +71,34 @@ const VideoPlayerScreen = () => {
 
                 <div className="video__description">
                   {showDescription ? (
-                    <span className="description__button" onClick={showDescriptionHandler}>
+                    <span
+                      className="description__button"
+                      onClick={showDescriptionHandler}
+                    >
                       Hide Description
                     </span>
                   ) : (
-                    <span className="description__button" onClick={showDescriptionHandler}>
+                    <span
+                      className="description__button"
+                      onClick={showDescriptionHandler}
+                    >
                       Show Description
                     </span>
                   )}
 
                   {showDescription && (
-                    <Linkify>
+                    <Linkify
+                      // opens link in new tab
+                      componentDecorator={(href, text) => (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {text}
+                        </a>
+                      )}
+                    >
                       <div className="video__description-wrapper">
                         {video?.videoDescription?.split("\n").map((str) => (
                           <p>{str}</p>
@@ -167,7 +184,7 @@ const VideoDetails = styled.div`
   .video__description {
     font-size: 1.4rem;
     margin-top: 0.5rem;
-    
+
     /* .description__button {
     } */
 
