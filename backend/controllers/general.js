@@ -64,3 +64,38 @@ exports.queries=async(req,res,next)=>{
     next(err);
   }
 }
+exports.courses=async(req,res,next)=>{
+  try{
+    console.log("Hello");
+    let course=await Course.find({},'enrolled title').populate("enrolled", "email");
+    let obj={
+    };
+    // obj.enrolled = course.enrolled;
+    course.forEach(element => {
+      let temp = element.title;
+      obj[temp]=element.enrolled.length;
+      temp=temp+"User"
+      obj[temp]=element.enrolled
+    });
+    let temp=await User.find({activationStatus:'active'},'_id');
+    obj.userCount=temp.length;
+    console.log(obj)
+    res.json(obj);
+  }
+  catch(err)
+  {
+    next(err);
+  }
+}
+exports.searchUser=async(req,res,next)=>{
+  try{
+    console.log(req.body.email);
+    let user=await User.findOne({email:req.body.email}, 'name email courses').populate('courses','title');
+    console.log(user);
+    res.json(user);
+  } 
+  catch(err)
+  {
+    next(err);
+  }
+}
