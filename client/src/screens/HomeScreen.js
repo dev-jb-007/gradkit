@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 import { VideoPlayer } from "../components";
@@ -6,9 +6,11 @@ import { Helmet } from "react-helmet";
 import ReactGA from "react-ga4";
 
 const HomeScreen = () => {
-  ReactGA.initialize(process.env.REACT_APP_GA_MEASUREMENT_ID);
-  // ReactGA.pageview(window.location.pathname + window.location.search);
-  ReactGA.send("pageview");
+  useEffect(()=>{
+    ReactGA.initialize(process.env.REACT_APP_GA_MEASUREMENT_ID);
+    // ReactGA.pageview(window.location.pathname + window.location.search);
+    ReactGA.send("pageview");
+  },[]);
 
   return (
     <>
