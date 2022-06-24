@@ -71,7 +71,7 @@ const CourseViewScreen = () => {
                   Subject Code - {course?.subjectCode}
                 </p>
                 <p className="course__videos__number">
-                  {course?.videos?.length} videos
+                  {course?.noOfVideos} videos
                 </p>
 
                 <p className="course__date">

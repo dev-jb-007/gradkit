@@ -356,6 +356,8 @@ exports.checkValidBuy = catchAsync(async (req, res, next) => {
     },
   ]);
 
+  const noOfVideos = course.videos.length;
+  course = { ...course._doc, noOfVideos };
   if (!course.enrolled.includes(req.user._id)) {
     let n = course.videos.length;
 
@@ -435,7 +437,7 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     amount: course.price,
     status: "Pending",
   });
- 
+
   await instance.orders.create(options, async (err, order) => {
     if (err) {
       temp.status = "Failed";
@@ -443,13 +445,12 @@ exports.generateOrderId = catchAsync(async (req, res, next) => {
     } else {
       temp.orderId = order.id;
       await temp.save();
-      setTimeout(async()=>{
-        let kritik=await Transaction.findById(temp._id);
-        if(kritik.status==="Pending")
-        {
+      setTimeout(async () => {
+        let kritik = await Transaction.findById(temp._id);
+        if (kritik.status === "Pending") {
           await Transaction.findByIdAndDelete(temp._id);
         }
-      },3600000,)
+      }, 3600000);
       res.send(order);
     }
   });
