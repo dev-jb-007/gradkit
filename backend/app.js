@@ -21,7 +21,6 @@ if (cluster.isMaster) {
   const cors = require("cors");
   const Code = require("./models/codes");
   const Solution = require("./models/solution");
-
   const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
@@ -113,6 +112,12 @@ if (cluster.isMaster) {
   });
   app.get("/google", async (req, res, next) => {
     res.sendFile(path.join(__dirname, "/public/google.html"));
+  });
+  app.get("/chat", async (req, res, next) => {
+    res.sendFile(path.join(__dirname, "/public/chat.html"));
+  });
+  app.get("/chat/:id", async (req, res, next) => {
+    res.sendFile(path.join(__dirname, "/public/chat1.html"));
   });
   app.post("/google/register", async (req, res, next) => {
     try {
