@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+</head>
+<body>
+    <input type="text" name="name" id="name">
+    <input type="text" name="user" id="user">
+    <button onclick="createRoom()">Create Room</button>
+    
+</body>
+<script>
+    const socket=io.connect('http://localhost:8000');
+    function createRoom(){
+        let nm=document.getElementById('name').value;
+        let usr=document.getElementById('user').value;
+        socket.emit("createRoom",{message:nm,user:usr});
+    }
+</script>
+</html>

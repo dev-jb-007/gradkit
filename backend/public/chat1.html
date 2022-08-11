@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+</head>
+<body>
+    <input type="text" name="text" id="text">
+    <input type="text" name="sender" id="sender">
+    <button onclick="sendMsg()">Send</button>
+    <hr>    
+    <input type="text" name="id" id="id">
+    <button onclick="deleteMsg()">Delete Room</button>
+</body>
+<script>
+     const socket=io.connect('http://localhost:8000');
+    let arr=location.href.split("/");
+    let id=arr[arr.length-1];
+    socket.emit("joinRoom",{id});
+    function sendMsg(){
+        let temp=document.getElementById("text").value;
+        let sdr=document.getElementById("sender").value;
+        socket.emit(id,{type:"send-message",text:temp,sender:sdr});
+    }
+    function deleteMsg(){
+        let val=document.getElementById("id").value;
+        socket.emit(id,{type:"delete-message",id:val})
+    }
+    socket.on(id,(obj)=>{
+        console.log(obj);
+    })
+</script>
+</html>
